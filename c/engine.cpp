@@ -86,8 +86,11 @@ void draw(Avatar * const avatar, TerrainMap * const map, int viewX, int viewY) {
     viewY = ((getRows() - MAP_HEIGHT)/2) * -1;
     viewX = ((getCols() - MAP_WIDTH)/2) * -1;
   }
+  // Clear Screen
   clear();
+  // Draw HEADER
   cout << "Rows " << rows << " Cols " << cols << " ViewX " << viewX << " ViewY " << viewY << " Px " << avatar->getX() << " Py " << avatar->getY() << endl;
+  // Draw BOARD
   char buffer[BUFFER_SIZE];
   memset(&buffer[0], 0, BUFFER_SIZE);
   char * ptr = &buffer[0];
