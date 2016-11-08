@@ -1,0 +1,24 @@
+stages:
+  - build
+  - test
+  - deploy
+  - sync
+
+before_script:
+  - apt-get update -yyq 
+
+build:
+  stage: build
+  image: gcc:6.1.0
+  script:
+    - make
+  artifacts:
+    paths:
+    - build/*.exe
+
+sync_github:
+  stage: sync
+  image: docker:1.12.1-git
+  script:
+   - git fetch --prune
+   - git push --prune git@github.com:hartcode/zombie-hunter.git +refs/remotes/origin/*:refs/heads/* +refs/tags/*:refs/tags/*
