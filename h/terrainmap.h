@@ -8,7 +8,7 @@ const int TERRAIN_GRAVESTONE = 2;
 const char CHAR_WALL = 219;  // Wall
 const char CHAR_EMPTY = 32;  // Space
 const char CHAR_TREE = 84;   // T
-const char CHAR_GRAVESTONE = 244; // Paragraph
+const char CHAR_GRAVESTONE = 35;
 
 class TerrainMap {
     unsigned int width;
@@ -19,7 +19,8 @@ class TerrainMap {
   public:
     TerrainMap(unsigned int mapWidth, unsigned int mapHeight, unsigned int treeAmount, unsigned int graveAmount);
     ~TerrainMap();
-    void getRow(int viewX, int viewY, unsigned int viewColCount, unsigned int viewRowCount, char * const buffer, unsigned int bufferSize);
+    char getAt(int X, int Y);
+
   private:
     void populateMap();
     void placeRandomObjects(unsigned int numberOfObjects, unsigned int terrain_object);

@@ -1,7 +1,6 @@
 #include <terrainmap.h>
 #include <string.h>
 #include <stdlib.h>
-#include <time.h>
 
 TerrainMap::TerrainMap(unsigned int mapWidth, unsigned int mapHeight, unsigned int treeAmount, unsigned int graveAmount)
 {
@@ -30,38 +29,31 @@ TerrainMap::~TerrainMap() {
     delete map;
 }
 
-void TerrainMap::getRow(int viewX, int viewY, unsigned int viewColCount, unsigned int viewRowCount, char * const buffer, unsigned int bufferSize)
-{
-  if (bufferSize < viewColCount)
-  {
-    // We have a big problem the buffersize should always be atleast the same size as the viewColCount;
-  } else {
-    if (viewY < 0 || viewY >= (int)height){
-      memset(buffer,CHAR_WALL,viewColCount);
+char TerrainMap::getAt(int x, int y) {
+  char retval = CHAR_EMPTY;
+  if (y < 0 || y >= (int)height){
+      retval = CHAR_WALL;
     } else {
-      for (unsigned int x = 0; x < viewColCount; x++) {
-        if (viewX + x < 0 || viewX + x >= width){
-          buffer[x] = CHAR_WALL;
+        if (x < 0 || x >= (int)width){
+          retval = CHAR_WALL;
         } else {
-          switch(map[viewX + x][viewY]) {
+          switch(map[x][y]) {
             case TERRAIN_EMPTY:
-              buffer[x] = CHAR_EMPTY;
+              retval = CHAR_EMPTY;
               break;
             case TERRAIN_TREE:
-              buffer[x] = CHAR_TREE;
+              retval = CHAR_TREE;
               break;
             case TERRAIN_GRAVESTONE:
-              buffer[x] = CHAR_GRAVESTONE;
+              retval = CHAR_GRAVESTONE;
               break;
           }
         }
-      }
     }
-  }
+    return retval;
 }
 
 void TerrainMap::populateMap() {
-  srand(time(NULL));
   placeRandomObjects(treeCount, TERRAIN_TREE);
   placeRandomObjects(graveCount, TERRAIN_GRAVESTONE);
 }
