@@ -68,3 +68,8 @@ void clear(void) {
    fprintf(stdout, "\033[1;1H");
    #endif
 }
+
+void printchar(char c)
+{
+  cout << c;
+}
