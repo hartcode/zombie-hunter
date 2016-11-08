@@ -3,6 +3,8 @@
 #ifdef WINDOWS
   #include <windows.h>
 #else
+  #include <stdio.h>
+  #include <unistd.h>
   #include <sys/ioctl.h>
 #endif
 
