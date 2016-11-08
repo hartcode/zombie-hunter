@@ -1,10 +1,6 @@
-#include <display.h>
-#include <iostream>
-using namespace std;
+#include <engine.h>
 
 int main(int argc, char** argv) {
-  int rows = getRows();
-  int cols = getCols();
-  cout << "Rows " << rows << " Cols " << cols << endl;
+  draw1();
   return 0;
 };
