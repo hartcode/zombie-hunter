@@ -1,4 +1,4 @@
-CC=g++ $(WARN)
+CC=g++ $(WARN) $(HEADERS) $(PLATFORM)
 link=
 OBJECT_DIR=$(BUILD_DIR)/obj
 BUILD_DIR=build
@@ -6,14 +6,20 @@ OUTPUT=$(BUILD_DIR)/zombie-hunter.exe
 MKDIR=mkdir
 RM=rm
 WARN=-Wall
+HEADERS=-I h
+CODE_FOLDER=c/
 
-_OBJ = main.o
+ifeq ($(OS),Windows_NT)
+  PLATFORM=-DWINDOWS
+endif
+
+_OBJ = main.o display.o
 OBJ = $(patsubst %,$(OBJECT_DIR)/%,$(_OBJ))
 
 zombie-hunter.exe: $(OBJ)
 	$(CC) -o $(OUTPUT) $(OBJ) $(link)
 
-$(OBJECT_DIR)/%.o: %.cpp buildfolder
+$(OBJECT_DIR)/%.o: $(CODE_FOLDER)%.cpp buildfolder
 	$(CC) -c -o $@ $<
 
 buildfolder:
