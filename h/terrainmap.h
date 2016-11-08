@@ -2,14 +2,26 @@
 #define TERRAINMAP_H
 
 const int TERRAIN_EMPTY = 0;
+const int TERRAIN_TREE = 1;
+const int TERRAIN_GRAVESTONE = 2;
+
+const char CHAR_WALL = 219;  // Wall
+const char CHAR_EMPTY = 32;  // Space
+const char CHAR_TREE = 84;   // T
+const char CHAR_GRAVESTONE = 244; // Paragraph
 
 class TerrainMap {
     unsigned int width;
     unsigned int height;
-    int ** map;
+    unsigned int treeCount;
+    unsigned int graveCount;
+    unsigned int ** map;
   public:
-    TerrainMap(unsigned int width, unsigned int height);
+    TerrainMap(unsigned int mapWidth, unsigned int mapHeight, unsigned int treeAmount, unsigned int graveAmount);
     ~TerrainMap();
     void getRow(int viewX, int viewY, unsigned int viewColCount, unsigned int viewRowCount, char * const buffer, unsigned int bufferSize);
+  private:
+    void populateMap();
+    void placeRandomObjects(unsigned int numberOfObjects, unsigned int terrain_object);
 };
 #endif

@@ -15,9 +15,11 @@ int viewY = 0;
 #define BUFFER_SIZE 256
 #define MAP_WIDTH 20
 #define MAP_HEIGHT 20
+#define TREE_COUNT 10
+#define GRAVE_COUNT 10
 
 void game_loop(void) {
-  TerrainMap map = TerrainMap(MAP_WIDTH,MAP_HEIGHT);
+  TerrainMap map = TerrainMap(MAP_WIDTH, MAP_HEIGHT, TREE_COUNT, GRAVE_COUNT);
   draw(&map, viewX, viewY);
   int key = getkey();
   while (key != ESCAPE_KEY) {
