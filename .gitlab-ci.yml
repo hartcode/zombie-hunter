@@ -4,9 +4,6 @@ stages:
   - deploy
   - sync
 
-before_script:
-  - apt-get update -yyq 
-
 build:
   stage: build
   image: gcc:6.1.0
