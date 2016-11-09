@@ -3,6 +3,7 @@
 #include <terrainmap.h>
 #include <input.h>
 #include <avatar.h>
+#include <baddie.h>
 
 #include <string.h>
 #include <iostream>
@@ -31,6 +32,7 @@ void game_loop(void) {
   viewY = ((getRows() - MAP_HEIGHT)/2) * -1;
   viewX = ((getCols() - MAP_WIDTH)/2) * -1;
 
+  Baddie baddie = Baddie(MAP_WIDTH/2, MAP_HEIGHT/2);
   Avatar player = Avatar(MAP_WIDTH/2, MAP_HEIGHT/2);
 
   draw(&player, &map, viewX, viewY);
