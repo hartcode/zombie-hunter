@@ -5,5 +5,5 @@
 #define ENGINE_H
 
 void game_loop(void);
-void draw(Avatar * const avatar, TerrainMap * const map, int viewX, int viewY);
+void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, int viewX, int viewY);
 #endif

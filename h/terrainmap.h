@@ -4,6 +4,9 @@
 const int TERRAIN_EMPTY = 0;
 const int TERRAIN_TREE = 1;
 const int TERRAIN_GRAVESTONE = 2;
+const int TERRAIN_PLAYER = 3;
+const int TERRAIN_BADDIE = 4;
+const int TERRAIN_WALL = 5;
 
 const char CHAR_WALL = 219;  // Wall
 const char CHAR_EMPTY = 32;  // Space
@@ -19,7 +22,9 @@ class TerrainMap {
   public:
     TerrainMap(unsigned int mapWidth, unsigned int mapHeight, unsigned int treeAmount, unsigned int graveAmount);
     ~TerrainMap();
-    char getAt(int X, int Y);
+    void setAt(unsigned int x, unsigned int y, unsigned int ch);
+    unsigned int getAt(int X, int Y);
+    char getCharacterAt(int X, int Y);
 
   private:
     void populateMap();

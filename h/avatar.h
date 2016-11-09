@@ -10,6 +10,7 @@ class Avatar {
     char character;
   public:
     Avatar(unsigned int initialPosX, unsigned int initialPosY);
+    virtual ~Avatar();
     unsigned int getX();
     unsigned int getY();
     void setX(unsigned int x);

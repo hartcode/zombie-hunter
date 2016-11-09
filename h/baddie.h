@@ -19,6 +19,7 @@ class Baddie : public Avatar {
   unsigned int state;
   public:
     Baddie(unsigned int initialPosX, unsigned int initialPosY);
+    virtual ~Baddie();
     char getCharacter();
 };
 

@@ -4,6 +4,7 @@ Baddie::Baddie(unsigned int initialPosX, unsigned int initialPosY) : Avatar(init
   state = BADDIE_STATE_UNDERGROUND;
 }
 
+Baddie::~Baddie() {}
 
 char Baddie::getCharacter() {
   char retval = CHAR_BADDIE_DEAD;

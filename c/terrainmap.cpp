@@ -29,12 +29,27 @@ TerrainMap::~TerrainMap() {
     delete map;
 }
 
-char TerrainMap::getAt(int x, int y) {
+void TerrainMap::setAt(unsigned int x, unsigned int y, unsigned int ch)
+{
+   //if (x >= 0 && x < height && y >= 0 && y < width) {
+     map[x][y] = ch;
+   //}
+}
+
+unsigned int TerrainMap::getAt(int x, int y) {
+  unsigned int retval = TERRAIN_WALL;
+  if (y >= 0 && y < (int)width && x >= 0 && x < (int)height){
+    retval = map[x][y];
+  }
+  return retval;
+}
+
+char TerrainMap::getCharacterAt(int x, int y) {
   char retval = CHAR_EMPTY;
-  if (y < 0 || y >= (int)height){
+  if (y < 0 || y >= (int)width){
       retval = CHAR_WALL;
     } else {
-        if (x < 0 || x >= (int)width){
+        if (x < 0 || x >= (int)height){
           retval = CHAR_WALL;
         } else {
           switch(map[x][y]) {

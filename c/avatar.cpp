@@ -5,6 +5,9 @@ Avatar::Avatar(unsigned int initialPosX, unsigned int initialPosY) {
   setY(initialPosY);
   character = CHAR_AVATAR;
 }
+
+Avatar::~Avatar() {}
+
 void Avatar::setX(unsigned int x) {
 
   posX = x;
