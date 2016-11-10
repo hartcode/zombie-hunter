@@ -1,3 +1,5 @@
+#include <terrainmap.h>
+
 #ifndef AVATAR_H
 #define AVATAR_H
 
@@ -25,7 +27,7 @@ class Avatar {
     void setDirection(unsigned int newDirection);
     unsigned int getDirection();
     virtual char getCharacter();
-    virtual bool update();
+    virtual bool update(TerrainMap * const map);
 };
 
 #endif

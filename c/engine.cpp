@@ -115,9 +115,9 @@ void game_loop(void) {
       cancel = key == ESCAPE_KEY;
     }
     inputStep++;
-    if (inputStep == 9) {
+    if (inputStep >= 9) {
       for (unsigned int avatarIndex = 0; avatarIndex < AVATAR_COUNT; avatarIndex++) {
-        change |= avatars[avatarIndex]->update();
+        change |= avatars[avatarIndex]->update(&map);
       }
       inputStep = 0;
     }

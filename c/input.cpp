@@ -17,7 +17,7 @@ int getkey(void) {
     INPUT_RECORD irInput;
     // disable mouse and window input
     GetConsoleMode(hInput, &fdwOldMode);
-    fdwMode = fdwOldMode ^ ENABLE_MOUSE_INPUT ^ ENABLE_WINDOW_INPUT;
+    fdwMode = fdwOldMode && ENABLE_MOUSE_INPUT && ENABLE_WINDOW_INPUT;
     SetConsoleMode(hInput, fdwMode);
     FlushConsoleInputBuffer(hInput);
 

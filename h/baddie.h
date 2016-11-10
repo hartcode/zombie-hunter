@@ -1,17 +1,20 @@
 #include <avatar.h>
+#include <terrainmap.h>
 
 #ifndef BADDIE_H
 #define BADDIE_H
 
 const char CHAR_BADDIE_UNDERGROUND[] = {(char)45,(char)126,(char)45,(char)126,(char)45,(char)126,(char)94};
 
-const char CHAR_BADDIE_MOBILE = 2;
+const char CHAR_BADDIE_ZOMBIE = 1;
+
+const char CHAR_BADDIE_HUMAN = 2;
 
 const char CHAR_BADDIE_DEAD = 120;
 
 const unsigned int BADDIE_STATE_UNDERGROUND = 0;
-const unsigned int BADDIE_STATE_MOBILE = 1;
-const unsigned int BADDIE_STATE_DEAD = 2;
+const unsigned int BADDIE_STATE_ZOMBIE = 1;
+const unsigned int BADDIE_STATE_HUMAN = 2;
 
 
 class Baddie : public Avatar {
@@ -21,7 +24,7 @@ class Baddie : public Avatar {
     Baddie(unsigned int initialPosX, unsigned int initialPosY);
     virtual ~Baddie();
     char getCharacter();
-    bool update();
+    bool update(TerrainMap * const map);
 };
 
 #endif

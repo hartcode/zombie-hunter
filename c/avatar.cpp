@@ -1,4 +1,5 @@
 #include <avatar.h>
+#include <terrainmap.h>
 
 Avatar::Avatar(unsigned int initialPosX, unsigned int initialPosY) {
   setX(initialPosX);
@@ -28,7 +29,7 @@ char Avatar::getCharacter() {
   return character;
 }
 
-bool Avatar::update() {
+bool Avatar::update(TerrainMap * const map) {
   return false;
 }
 
