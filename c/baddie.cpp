@@ -5,7 +5,8 @@
 Baddie::Baddie(unsigned int initialPosX, unsigned int initialPosY) : Avatar(initialPosX, initialPosY) {
   state = BADDIE_STATE_UNDERGROUND;
   charUndergroundIndex = 0;
-  movementFrameStep = MOVEMENT_FRAME;
+  movementFrameStep = 0;
+  movomentFrame = MOVEMENT_FRAME_UNDERGROUND;
 }
 
 Baddie::~Baddie() {}
@@ -30,7 +31,7 @@ char Baddie::getCharacter() {
 bool Baddie::update( TerrainMap * const map) {
   bool retval = false;
   movementFrameStep++;
-  if (movementFrameStep >= MOVEMENT_FRAME)
+  if (movementFrameStep >= movomentFrame)
   {
     switch(state){
       case BADDIE_STATE_UNDERGROUND:
@@ -38,6 +39,7 @@ bool Baddie::update( TerrainMap * const map) {
           charUndergroundIndex++;
         } else {
           state = BADDIE_STATE_ZOMBIE;
+          movomentFrame = MOVEMENT_FRAME_ZOMBIE;
         }
         retval = true;
       break;
@@ -73,5 +75,6 @@ bool Baddie::update( TerrainMap * const map) {
 void Baddie::turnHuman() {
   if (state == BADDIE_STATE_ZOMBIE) {
     state = BADDIE_STATE_HUMAN;
+    movomentFrame = MOVEMENT_FRAME_HUMAN;
   }
 }
