@@ -1,4 +1,3 @@
-
 #include <display.h>
 #include <stdio.h>
 #include <iostream>

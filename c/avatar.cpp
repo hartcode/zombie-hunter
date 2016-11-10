@@ -9,7 +9,6 @@ Avatar::Avatar(unsigned int initialPosX, unsigned int initialPosY) {
 Avatar::~Avatar() {}
 
 void Avatar::setX(unsigned int x) {
-
   posX = x;
 }
 

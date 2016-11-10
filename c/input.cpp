@@ -6,8 +6,6 @@ using namespace std;
   #include <windows.h>
 #endif
 
-
-
 int getkey(void) {
   int retval = 0;
   #ifdef WINDOWS
@@ -47,6 +45,8 @@ int getkey(void) {
         }
       }
     }
+  #else
+    // TODO:  Need To implement input controls for linux
   #endif
   return retval;
 }
