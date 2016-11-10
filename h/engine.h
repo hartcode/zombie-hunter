@@ -5,6 +5,6 @@
 #define ENGINE_H
 
 void game_loop(void);
-void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, int viewX, int viewY);
-void recalculateViewPosition(void);
+void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, int * viewX, int * viewY);
+void recalculateViewPosition(int * viewX, int * viewY);
 #endif

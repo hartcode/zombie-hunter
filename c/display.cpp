@@ -72,3 +72,9 @@ void printchar(char c)
 {
   cout << c;
 }
+
+void sleep(unsigned int milliSeconds) {
+  #if WINDOWS
+    Sleep(milliSeconds);
+  #endif
+}
