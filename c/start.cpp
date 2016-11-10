@@ -29,7 +29,8 @@ void start_screen() {
     }
     cout << endl;
   }
-  getkey();
+  while (getkey() != FIRE_KEY); {
+  }
   clear();
 
   cout << "The year is 2016 and the human race has fallen to zombies." << endl << endl;
@@ -43,6 +44,5 @@ void start_screen() {
   cout << "As a Zombie Hunter it's up to YOU to save humanity." << endl;
   cout << endl << "Press Space to Continue" << endl;
   while (getkey() != FIRE_KEY); {
-    sleep(100);
   }
 }

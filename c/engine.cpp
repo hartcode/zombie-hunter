@@ -53,7 +53,9 @@ void game_loop(void) {
 
   int key = getkey();
   bool change = false;
-  while (key != ESCAPE_KEY) {
+  bool cancel = false;
+  int inputStep = 0;
+  while (!cancel) {
     if (key > 0) {
        switch(key) {
          case LEFT_KEY:
@@ -110,14 +112,18 @@ void game_loop(void) {
            }
          break;
        }
-
+      cancel = key == ESCAPE_KEY;
+    }
+    inputStep++;
+    if (inputStep == 9) {
       for (unsigned int avatarIndex = 0; avatarIndex < AVATAR_COUNT; avatarIndex++) {
         change |= avatars[avatarIndex]->update();
       }
-      if (change) {
-        change = false;
-       draw(avatars, AVATAR_COUNT, &map, &viewX, &viewY);
-      }
+      inputStep = 0;
+    }
+    if (change) {
+     change = false;
+     draw(avatars, AVATAR_COUNT, &map, &viewX, &viewY);
     }
     key = getkey();
   }
