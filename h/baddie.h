@@ -16,15 +16,18 @@ const unsigned int BADDIE_STATE_UNDERGROUND = 0;
 const unsigned int BADDIE_STATE_ZOMBIE = 1;
 const unsigned int BADDIE_STATE_HUMAN = 2;
 
+const unsigned int MOVEMENT_FRAME = 10;
 
 class Baddie : public Avatar {
   unsigned int state;
   unsigned int charUndergroundIndex;
+  unsigned int movementFrameStep;
   public:
     Baddie(unsigned int initialPosX, unsigned int initialPosY);
     virtual ~Baddie();
     char getCharacter();
     bool update(TerrainMap * const map);
+    void turnHuman();
 };
 
 #endif

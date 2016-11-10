@@ -5,6 +5,7 @@
 Baddie::Baddie(unsigned int initialPosX, unsigned int initialPosY) : Avatar(initialPosX, initialPosY) {
   state = BADDIE_STATE_UNDERGROUND;
   charUndergroundIndex = 0;
+  movementFrameStep = MOVEMENT_FRAME;
 }
 
 Baddie::~Baddie() {}
@@ -28,38 +29,49 @@ char Baddie::getCharacter() {
 
 bool Baddie::update( TerrainMap * const map) {
   bool retval = false;
-  switch(state){
-    case BADDIE_STATE_UNDERGROUND:
-      if (charUndergroundIndex < sizeof(CHAR_BADDIE_UNDERGROUND)) {
-        charUndergroundIndex++;
-      } else {
-        state = BADDIE_STATE_ZOMBIE;
-      }
-      retval = true;
-    break;
-    case BADDIE_STATE_ZOMBIE:
-    case BADDIE_STATE_HUMAN:
-     int vx = (rand()%3) - 1;  //-1, 0, 1
-     int vy = (rand()%3) - 1;  //-1, 0, 1
-     if (vx != 0)
-     {
-        if (map->getAt(getX() + vx, getY()) == TERRAIN_EMPTY) {
-           map->setAt(getX(), getY(), TERRAIN_EMPTY);
-           setX(getX() + vx);
-           map->setAt(getX(), getY(), TERRAIN_BADDIE);
+  movementFrameStep++;
+  if (movementFrameStep >= MOVEMENT_FRAME)
+  {
+    switch(state){
+      case BADDIE_STATE_UNDERGROUND:
+        if (charUndergroundIndex < sizeof(CHAR_BADDIE_UNDERGROUND)) {
+          charUndergroundIndex++;
+        } else {
+          state = BADDIE_STATE_ZOMBIE;
         }
         retval = true;
-     }
-     if (vy != 0)
-     {
-       if (map->getAt(getX(), getY() + vy) == TERRAIN_EMPTY) {
-         map->setAt(getX(), getY(), TERRAIN_EMPTY);
-         setY(getY() + vy);
-         map->setAt(getX(), getY(), TERRAIN_BADDIE);
+      break;
+      case BADDIE_STATE_ZOMBIE:
+      case BADDIE_STATE_HUMAN:
+       int vx = (rand()%3) - 1;  //-1, 0, 1
+       int vy = (rand()%3) - 1;  //-1, 0, 1
+       if (vx != 0)
+       {
+          if (map->getAt(getX() + vx, getY()) == TERRAIN_EMPTY) {
+             map->setAt(getX(), getY(), TERRAIN_EMPTY);
+             setX(getX() + vx);
+             map->setAt(getX(), getY(), TERRAIN_BADDIE);
+          }
+          retval = true;
        }
-       retval = true;
-     }
-    break;
+       if (vy != 0)
+       {
+         if (map->getAt(getX(), getY() + vy) == TERRAIN_EMPTY) {
+           map->setAt(getX(), getY(), TERRAIN_EMPTY);
+           setY(getY() + vy);
+           map->setAt(getX(), getY(), TERRAIN_BADDIE);
+         }
+         retval = true;
+       }
+      break;
+    }
+    movementFrameStep = 0;
   }
   return retval;
+}
+
+void Baddie::turnHuman() {
+  if (state == BADDIE_STATE_ZOMBIE) {
+    state = BADDIE_STATE_HUMAN;
+  }
 }

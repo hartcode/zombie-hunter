@@ -22,14 +22,23 @@ unsigned int lastcols = 0;
 #define TREE_COUNT MAP_WIDTH
 #define GRAVE_COUNT MAP_HEIGHT
 
-#define BADDIE_COUNT 10
-#define AVATAR_COUNT 1 + BADDIE_COUNT
+#define BADDIE_INITIAL_COUNT 10
+#define BADDIE_MAX_COUNT 100
+#define AVATAR_COUNT 1 + BADDIE_MAX_COUNT
 #define AVATAR_START_X MAP_HEIGHT/2
 #define AVATAR_START_Y MAP_WIDTH/2
+
+const int BADDIE_SPAWN_STEP = 100; // 1 new Baddie spawns every 10 seconds 
+
+unsigned int avatar_count = 0;
 
 void game_loop(void) {
   int viewX = 0;
   int viewY = 0;
+  bool change = false;
+  bool cancel = false;
+  int key = 0;
+  int baddieStep = 0;
 
   // setup random numbers
   srand(time(NULL));
@@ -41,27 +50,51 @@ void game_loop(void) {
 
   Avatar ** avatars = new Avatar*[AVATAR_COUNT];
 
-  avatars[0] = new Avatar(AVATAR_START_X, AVATAR_START_Y);
-  for (int baddieIndex = 0; baddieIndex < BADDIE_COUNT; baddieIndex++)
+
+  // Create player
+  avatar_count = 0;
+  avatars[avatar_count] = new Avatar(AVATAR_START_X, AVATAR_START_Y);
+  map.setAt(avatars[avatar_count]->getX(), avatars[avatar_count]->getY(), TERRAIN_PLAYER);
+  Avatar *player = avatars[avatar_count];
+  avatar_count++;
+
+  // Create Baddies
+  for (int baddieIndex = 0; baddieIndex < BADDIE_INITIAL_COUNT; baddieIndex++)
   {
-    int baddieX = (rand()%30)-15;
-    int baddieY = (rand()%30)-15;
-    avatars[baddieIndex+1] = new Baddie(AVATAR_START_X + baddieX, AVATAR_START_Y + baddieY);
+    if (avatar_count < AVATAR_COUNT) {
+      int baddieX = player->getX() + (rand()%30)-15;
+      int baddieY = player->getY() + (rand()%30)-15;
+      while(map.getAt(baddieX,baddieY) != TERRAIN_EMPTY)
+      {
+        baddieX = player->getX() + (rand()%30)-15;
+        baddieY = player->getY() + (rand()%30)-15;
+      }
+      avatars[avatar_count] = new Baddie(baddieX, baddieY);
+      map.setAt(avatars[avatar_count]->getX(), avatars[avatar_count]->getY(), TERRAIN_BADDIE);
+      avatar_count++;
+    }
   }
 
-  //Baddie baddie = Baddie(MAP_WIDTH/2, MAP_HEIGHT/2);
-  Avatar *player = avatars[0];
+  // Draw initial screen
+  draw(avatars, avatar_count, &map, &viewX, &viewY);
 
-  map.setAt(player->getX(), player->getY(), TERRAIN_PLAYER);
-  map.setAt(avatars[1]->getX(), avatars[1]->getY(), TERRAIN_BADDIE);
-
-  draw(avatars, AVATAR_COUNT, &map, &viewX, &viewY);
-
-  int key = getkey();
-  bool change = false;
-  bool cancel = false;
-  int inputStep = 0;
+  // Main Loop
   while (!cancel) {
+    baddieStep++;
+    if (baddieStep >= BADDIE_SPAWN_STEP && avatar_count < AVATAR_COUNT) {
+      int baddieX = player->getX() + (rand()%30)-15;
+      int baddieY = player->getY() + (rand()%30)-15;
+      while(map.getAt(baddieX,baddieY) != TERRAIN_EMPTY)
+      {
+        baddieX = player->getX() + (rand()%30)-15;
+        baddieY = player->getY() + (rand()%30)-15;
+      }
+      avatars[avatar_count] = new Baddie(baddieX, baddieY);
+      map.setAt(avatars[avatar_count]->getX(), avatars[avatar_count]->getY(), TERRAIN_BADDIE);
+      avatar_count++;
+      baddieStep = 0;
+    }
+    key = getkey();
     if (key > 0) {
        switch(key) {
          case LEFT_KEY:
@@ -108,32 +141,54 @@ void game_loop(void) {
            switch(player->getDirection())
            {
              case AVATAR_DIRECTION_LEFT:
+               for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
+                 if(avatars[avatarIndex]->getX() == player->getX() && avatars[avatarIndex]->getY() == player->getY() - 1) {
+                   ((Baddie*)avatars[avatarIndex])->turnHuman();
+                   change = true;
+                 }
+               }
              break;
              case AVATAR_DIRECTION_RIGHT:
+               for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
+                 if(avatars[avatarIndex]->getX() == player->getX() && avatars[avatarIndex]->getY() == player->getY() + 1) {
+                   ((Baddie*)avatars[avatarIndex])->turnHuman();
+                   change = true;
+                 }
+               }
              break;
              case AVATAR_DIRECTION_UP:
+             for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
+               if(avatars[avatarIndex]->getX() == player->getX() - 1 && avatars[avatarIndex]->getY() == player->getY()) {
+                 ((Baddie*)avatars[avatarIndex])->turnHuman();
+                 change = true;
+               }
+             }
              break;
              case AVATAR_DIRECTION_DOWN:
+             for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
+               if(avatars[avatarIndex]->getX() == player->getX() + 1 && avatars[avatarIndex]->getY() == player->getY()) {
+                 ((Baddie*)avatars[avatarIndex])->turnHuman();
+                 change = true;
+               }
+             }
              break;
            }
          break;
        }
       cancel = key == ESCAPE_KEY;
     }
-    inputStep++;
-    if (inputStep >= 9) {
-      for (unsigned int avatarIndex = 0; avatarIndex < AVATAR_COUNT; avatarIndex++) {
-        change |= avatars[avatarIndex]->update(&map);
-      }
-      inputStep = 0;
+    for (unsigned int avatarIndex = 0; avatarIndex < avatar_count; avatarIndex++) {
+      change |= avatars[avatarIndex]->update(&map);
     }
     if (change) {
      change = false;
-     draw(avatars, AVATAR_COUNT, &map, &viewX, &viewY);
+     draw(avatars, avatar_count, &map, &viewX, &viewY);
     }
-    key = getkey();
-  }
-  for (unsigned int avatarIndex = 0; avatarIndex < AVATAR_COUNT; avatarIndex++) {
+  } // Main loop
+
+
+  // Cleanup avatars
+  for (unsigned int avatarIndex = 0; avatarIndex < avatar_count; avatarIndex++) {
     delete avatars[avatarIndex];
   }
   delete avatars;
@@ -162,7 +217,7 @@ void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, in
     ptr++;
       for (unsigned int y = 1; y < cols-1; y++) {
         char terrainChar = map->getCharacterAt(*viewX + x, *viewY + y);
-        for (unsigned int avatarIndex = 0; avatarIndex < AVATAR_COUNT; avatarIndex++) {
+        for (unsigned int avatarIndex = 0; avatarIndex < avatarCount; avatarIndex++) {
           if(avatar[avatarIndex]->getX() == x + *viewX && avatar[avatarIndex]->getY() == y + *viewY) {
             terrainChar = avatar[avatarIndex]->getCharacter();
           }
