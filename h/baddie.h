@@ -3,9 +3,9 @@
 #ifndef BADDIE_H
 #define BADDIE_H
 
-const char CHAR_BADDIE_UNDERGROUND[] = {(char)45,(char)126,(char)94};
+const char CHAR_BADDIE_UNDERGROUND[] = {(char)45,(char)126,(char)45,(char)126,(char)45,(char)126,(char)94};
 
-const char CHAR_BADDIE_MOBILE = 1;
+const char CHAR_BADDIE_MOBILE = 2;
 
 const char CHAR_BADDIE_DEAD = 120;
 

@@ -17,27 +17,28 @@ unsigned int lastcols = 0;
 int viewX = 0;
 int viewY = 0;
 
-#define MAP_WIDTH 10
-#define MAP_HEIGHT 10
+#define MAP_WIDTH 100
+#define MAP_HEIGHT 100
 #define BUFFER_SIZE 65536
 
 #define TREE_COUNT MAP_WIDTH
 #define GRAVE_COUNT MAP_HEIGHT
 
 #define AVATAR_COUNT 2
+#define AVATAR_START_X MAP_HEIGHT/2
+#define AVATAR_START_Y MAP_WIDTH/2
 
 void game_loop(void) {
   // setup random numbers
   srand(time(NULL));
 
   TerrainMap map = TerrainMap(MAP_WIDTH, MAP_HEIGHT, TREE_COUNT, GRAVE_COUNT);
-  viewY = ((getRows() - MAP_HEIGHT)/2) * -1;
-  viewX = ((getCols() - MAP_WIDTH)/2) * -1;
+
+  recalculateView();
 
   Avatar ** avatars = new Avatar*[AVATAR_COUNT];
 
-  //Avatar avatars[AVATAR_COUNT] = Avatar(MAP_WIDTH/2, MAP_HEIGHT/2);
-  avatars[0] = new Avatar(MAP_WIDTH/2, MAP_HEIGHT/2);
+  avatars[0] = new Avatar(AVATAR_START_X, AVATAR_START_Y);
   avatars[1] = new Baddie(0, 0);
 
   //Baddie baddie = Baddie(MAP_WIDTH/2, MAP_HEIGHT/2);
@@ -54,25 +55,7 @@ void game_loop(void) {
     if (key > 0) {
        switch(key) {
          case LEFT_KEY:
-           if (map.getAt(player->getY(), player->getX() - 1) == TERRAIN_EMPTY) {
-             viewX--;
-             map.setAt(player->getX(), player->getY(), TERRAIN_EMPTY);
-             player->setX(player->getX() - 1);
-             map.setAt(player->getX(), player->getY(), TERRAIN_PLAYER);
-             change = true;
-           }
-         break;
-         case RIGHT_KEY:
-           if (map.getAt(player->getY(), player->getX() + 1) == TERRAIN_EMPTY) {
-             viewX++;
-             map.setAt(player->getX(), player->getY(), TERRAIN_EMPTY);
-             player->setX(player->getX() + 1);
-             map.setAt(player->getX(), player->getY(), TERRAIN_PLAYER);
-             change = true;
-           }
-         break;
-         case UP_KEY:
-           if (map.getAt(player->getY() - 1, player->getX()) == TERRAIN_EMPTY) {
+           if (map.getAt(player->getX(), player->getY() - 1) == TERRAIN_EMPTY) {
              viewY--;
              map.setAt(player->getX(), player->getY(), TERRAIN_EMPTY);
              player->setY(player->getY() - 1);
@@ -80,11 +63,29 @@ void game_loop(void) {
              change = true;
            }
          break;
-         case DOWN_KEY:
-           if (map.getAt(player->getY() + 1, player->getX()) == TERRAIN_EMPTY) {
+         case RIGHT_KEY:
+           if (map.getAt(player->getX(), player->getY() + 1) == TERRAIN_EMPTY) {
              viewY++;
              map.setAt(player->getX(), player->getY(), TERRAIN_EMPTY);
              player->setY(player->getY() + 1);
+             map.setAt(player->getX(), player->getY(), TERRAIN_PLAYER);
+             change = true;
+           }
+         break;
+         case UP_KEY:
+           if (map.getAt(player->getX() - 1, player->getY()) == TERRAIN_EMPTY) {
+             viewX--;
+             map.setAt(player->getX(), player->getY(), TERRAIN_EMPTY);
+             player->setX(player->getX() - 1);
+             map.setAt(player->getX(), player->getY(), TERRAIN_PLAYER);
+             change = true;
+           }
+         break;
+         case DOWN_KEY:
+           if (map.getAt(player->getX() + 1, player->getY()) == TERRAIN_EMPTY) {
+             viewX++;
+             map.setAt(player->getX(), player->getY(), TERRAIN_EMPTY);
+             player->setX(player->getX() + 1);
              map.setAt(player->getX(), player->getY(), TERRAIN_PLAYER);
              change = true;
            }
@@ -113,9 +114,9 @@ void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, in
   unsigned int cols = getCols();
   unsigned int viewableRows = rows-2;
   if (rows != lastrows || cols != lastcols) {
-    viewY = ((getRows() - MAP_HEIGHT)/2) * -1;
-    viewX = ((getCols() - MAP_WIDTH)/2) * -1;
+    recalculateView();
   }
+
   // Clear Screen
   clear();
   // Draw HEADER
@@ -124,11 +125,11 @@ void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, in
   char buffer[BUFFER_SIZE];
   memset(&buffer[0], 0, BUFFER_SIZE);
   char * ptr = &buffer[0];
-  for(unsigned int y = 0; y < viewableRows; y++) {
+  for(unsigned int x = 0; x < viewableRows; x++) {
     *ptr = CHAR_EMPTY;
     ptr++;
-      for (unsigned int x = 1; x < cols-1; x++) {
-        char terrainChar = map->getCharacterAt(viewY + y, viewX + x);
+      for (unsigned int y = 1; y < cols-1; y++) {
+        char terrainChar = map->getCharacterAt(viewX + x, viewY + y);
         for (unsigned int avatarIndex = 0; avatarIndex < AVATAR_COUNT; avatarIndex++) {
           if(avatar[avatarIndex]->getX() == x + viewX && avatar[avatarIndex]->getY() == y + viewY) {
             terrainChar = avatar[avatarIndex]->getCharacter();
@@ -143,4 +144,18 @@ void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, in
   cout << buffer;
   lastrows = rows;
   lastcols = cols;
+}
+
+void recalculateView(void)
+{
+  if ((int)getRows() - MAP_HEIGHT > 0) {
+    viewX = (((int)getRows() - MAP_HEIGHT)/2) * -1;
+  } else {
+    viewX =  AVATAR_START_X - (int)getRows()/2;
+  }
+  if ((int)getCols() - MAP_WIDTH > 0) {
+    viewY = (((int)getCols() - MAP_WIDTH)/2) * -1;
+  } else {
+    viewY = AVATAR_START_Y - (int)getCols()/2;
+  }
 }

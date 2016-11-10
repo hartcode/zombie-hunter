@@ -1,7 +1,7 @@
 #ifndef AVATAR_H
 #define AVATAR_H
 
-const char CHAR_AVATAR = 2;
+const char CHAR_AVATAR = 228;
 
 class Avatar {
     unsigned int posX;

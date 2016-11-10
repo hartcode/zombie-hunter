@@ -6,4 +6,5 @@
 
 void game_loop(void);
 void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, int viewX, int viewY);
+void recalculateView(void);
 #endif
