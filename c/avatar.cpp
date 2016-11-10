@@ -4,6 +4,7 @@ Avatar::Avatar(unsigned int initialPosX, unsigned int initialPosY) {
   setX(initialPosX);
   setY(initialPosY);
   character = CHAR_AVATAR;
+  direction = AVATAR_DIRECTION_UNKNOWN;
 }
 
 Avatar::~Avatar() {}
@@ -29,4 +30,12 @@ char Avatar::getCharacter() {
 
 bool Avatar::update() {
   return false;
+}
+
+void Avatar::setDirection(unsigned int newDirection) {
+  direction = newDirection;
+}
+
+unsigned int Avatar::getDirection() {
+  return direction;
 }

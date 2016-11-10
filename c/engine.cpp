@@ -64,6 +64,7 @@ void game_loop(void) {
              map.setAt(player->getX(), player->getY(), TERRAIN_PLAYER);
              change = true;
            }
+           player->setDirection(AVATAR_DIRECTION_LEFT);
          break;
          case RIGHT_KEY:
            if (map.getAt(player->getX(), player->getY() + 1) == TERRAIN_EMPTY) {
@@ -73,6 +74,7 @@ void game_loop(void) {
              map.setAt(player->getX(), player->getY(), TERRAIN_PLAYER);
              change = true;
            }
+           player->setDirection(AVATAR_DIRECTION_RIGHT);
          break;
          case UP_KEY:
            if (map.getAt(player->getX() - 1, player->getY()) == TERRAIN_EMPTY) {
@@ -82,6 +84,7 @@ void game_loop(void) {
              map.setAt(player->getX(), player->getY(), TERRAIN_PLAYER);
              change = true;
            }
+           player->setDirection(AVATAR_DIRECTION_UP);
          break;
          case DOWN_KEY:
            if (map.getAt(player->getX() + 1, player->getY()) == TERRAIN_EMPTY) {
@@ -90,6 +93,20 @@ void game_loop(void) {
              player->setX(player->getX() + 1);
              map.setAt(player->getX(), player->getY(), TERRAIN_PLAYER);
              change = true;
+           }
+           player->setDirection(AVATAR_DIRECTION_DOWN);
+         break;
+         case FIRE_KEY:
+           switch(player->getDirection())
+           {
+             case AVATAR_DIRECTION_LEFT:
+             break;
+             case AVATAR_DIRECTION_RIGHT:
+             break;
+             case AVATAR_DIRECTION_UP:
+             break;
+             case AVATAR_DIRECTION_DOWN:
+             break;
            }
          break;
        }
