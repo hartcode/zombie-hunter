@@ -13,7 +13,7 @@ ifeq ($(OS),Windows_NT)
   PLATFORM=-DWINDOWS
 endif
 
-_OBJ = start.o baddie.o avatar.o terrainmap.o input.o display.o engine.o main.o
+_OBJ = main.o start.o engine.o avatar.o baddie.o terrainmap.o input.o display.o
 OBJ = $(patsubst %,$(OBJECT_DIR)/%,$(_OBJ))
 
 zombie-hunter.exe: $(OBJ)
