@@ -22,7 +22,8 @@ unsigned int lastcols = 0;
 #define TREE_COUNT MAP_WIDTH
 #define GRAVE_COUNT MAP_HEIGHT
 
-#define AVATAR_COUNT 2
+#define BADDIE_COUNT 10
+#define AVATAR_COUNT 1 + BADDIE_COUNT
 #define AVATAR_START_X MAP_HEIGHT/2
 #define AVATAR_START_Y MAP_WIDTH/2
 
@@ -41,7 +42,12 @@ void game_loop(void) {
   Avatar ** avatars = new Avatar*[AVATAR_COUNT];
 
   avatars[0] = new Avatar(AVATAR_START_X, AVATAR_START_Y);
-  avatars[1] = new Baddie(AVATAR_START_X-2, AVATAR_START_Y);
+  for (int baddieIndex = 0; baddieIndex < BADDIE_COUNT; baddieIndex++)
+  {
+    int baddieX = (rand()%30)-15;
+    int baddieY = (rand()%30)-15;
+    avatars[baddieIndex+1] = new Baddie(AVATAR_START_X + baddieX, AVATAR_START_Y + baddieY);
+  }
 
   //Baddie baddie = Baddie(MAP_WIDTH/2, MAP_HEIGHT/2);
   Avatar *player = avatars[0];
