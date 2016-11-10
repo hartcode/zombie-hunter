@@ -6,7 +6,7 @@ extern "C" {
   unsigned int getCols(void);
   void clear(void);
   void printchar(char c);
-  void sleep(unsigned int milliSeconds);
+  void sleepy(unsigned int milliSeconds);
 }
 
 #endif

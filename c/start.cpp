@@ -29,20 +29,18 @@ void start_screen() {
     }
     cout << endl;
   }
-  while (getkey() != FIRE_KEY); {
-  }
+  while (getkey() != FIRE_KEY);
   clear();
 
   cout << "The year is 2016 and the human race has fallen to zombies." << endl << endl;
-  sleep(1000);
+  sleepy(1000);
   cout << "In a desperate attempt to save humanity an advanced Artificial Intelligence was developed in hopes of finding a cure." << endl << endl;
-  sleep(2000);
+  sleepy(2000);
   cout << "A cure was found, but it was too late, the last humans have become mindless zombies." << endl << endl;
-  sleep(1000);
+  sleepy(1000);
   cout << "With the humans gone, the Artificial Intelligence created 'Zombie Hunter' class robots to deliver the cure to the humans." << endl << endl;
-  sleep(2000);
+  sleepy(2000);
   cout << "As a Zombie Hunter it's up to YOU to save humanity." << endl;
   cout << endl << "Press Space to Continue" << endl;
-  while (getkey() != FIRE_KEY); {
-  }
+  while (getkey() != FIRE_KEY);
 }
