@@ -34,7 +34,8 @@ void game_loop(void) {
 
   TerrainMap map = TerrainMap(MAP_WIDTH, MAP_HEIGHT, TREE_COUNT, GRAVE_COUNT);
 
-  recalculateView();
+  // this is the first calculation :)
+  recalculateViewPosition();
 
   Avatar ** avatars = new Avatar*[AVATAR_COUNT];
 
@@ -55,7 +56,8 @@ void game_loop(void) {
     if (key > 0) {
        switch(key) {
          case LEFT_KEY:
-           if (map.getAt(player->getX(), player->getY() - 1) == TERRAIN_EMPTY) {
+           if (map.getAt(player->getX(), player->getY() - 1) == TER
+           RAIN_EMPTY) {
              viewY--;
              map.setAt(player->getX(), player->getY(), TERRAIN_EMPTY);
              player->setY(player->getY() - 1);
@@ -114,7 +116,7 @@ void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, in
   unsigned int cols = getCols();
   unsigned int viewableRows = rows-2;
   if (rows != lastrows || cols != lastcols) {
-    recalculateView();
+    recalculateViewPosition();
   }
 
   // Clear Screen
@@ -146,7 +148,7 @@ void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, in
   lastcols = cols;
 }
 
-void recalculateView(void)
+void recalculateViewPosition(void)
 {
   if ((int)getRows() - MAP_HEIGHT > 0) {
     viewX = (((int)getRows() - MAP_HEIGHT)/2) * -1;
