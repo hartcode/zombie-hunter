@@ -90,6 +90,10 @@ void game_loop(void) {
            }
          break;
        }
+
+      for (unsigned int avatarIndex = 0; avatarIndex < AVATAR_COUNT; avatarIndex++) {
+        change |= avatars[avatarIndex]->update();
+      }
       if (change) {
         change = false;
        draw(avatars, AVATAR_COUNT, &map, viewX, viewY);

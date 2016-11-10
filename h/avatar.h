@@ -16,6 +16,7 @@ class Avatar {
     void setX(unsigned int x);
     void setY(unsigned int y);
     virtual char getCharacter();
+    virtual bool update();
 };
 
 #endif

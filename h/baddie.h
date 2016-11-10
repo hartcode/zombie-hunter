@@ -9,7 +9,6 @@ const char CHAR_BADDIE_MOBILE = 1;
 
 const char CHAR_BADDIE_DEAD = 120;
 
-
 const unsigned int BADDIE_STATE_UNDERGROUND = 0;
 const unsigned int BADDIE_STATE_MOBILE = 1;
 const unsigned int BADDIE_STATE_DEAD = 2;
@@ -17,10 +16,12 @@ const unsigned int BADDIE_STATE_DEAD = 2;
 
 class Baddie : public Avatar {
   unsigned int state;
+  unsigned int charUndergroundIndex;
   public:
     Baddie(unsigned int initialPosX, unsigned int initialPosY);
     virtual ~Baddie();
     char getCharacter();
+    bool update();
 };
 
 #endif

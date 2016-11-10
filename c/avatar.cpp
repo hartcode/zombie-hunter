@@ -26,3 +26,7 @@ unsigned int Avatar::getY() {
 char Avatar::getCharacter() {
   return character;
 }
+
+bool Avatar::update() {
+  return false;
+}
