@@ -1,3 +1,4 @@
+#include <avatar.h>
 #include <baddie.h>
 #include <terrainmap.h>
 #include <stdlib.h>
@@ -77,6 +78,14 @@ void Baddie::turnHuman() {
   if (state == BADDIE_STATE_ZOMBIE) {
     state = BADDIE_STATE_HUMAN;
     movomentFrame = MOVEMENT_FRAME_HUMAN;
+    movementFrameStep = 0;
+  }
+}
+
+void Baddie::turnZombie() {
+  if (state == BADDIE_STATE_HUMAN) {
+    state = BADDIE_STATE_ZOMBIE;
+    movomentFrame = MOVEMENT_FRAME_ZOMBIE;
     movementFrameStep = 0;
   }
 }
