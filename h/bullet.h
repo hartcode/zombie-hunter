@@ -7,17 +7,20 @@
 const char CHAR_BULLET = '*';
 
 
-const unsigned int MOVEMENT_FRAME_BULLET = 10;
+const unsigned int MOVEMENT_FRAME_BULLET = 1;
 
 
 class Bullet : public Avatar {
   unsigned int movementFrameStep;
   unsigned int movomentFrame;
+  bool fired;
   public:
     Bullet(unsigned int initialPosX, unsigned int initialPosY);
     virtual ~Bullet();
     char getCharacter();
     bool update(TerrainMap * const map);
+    void setFired(bool b);
+    bool getFired();
 };
 
 #endif

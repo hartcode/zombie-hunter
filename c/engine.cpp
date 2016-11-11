@@ -4,6 +4,7 @@
 #include <input.h>
 #include <avatar.h>
 #include <baddie.h>
+#include <bullet.h>
 
 #include <string.h>
 #include <iostream>
@@ -28,9 +29,11 @@ unsigned int lastcols = 0;
 #define AVATAR_START_X MAP_HEIGHT/2
 #define AVATAR_START_Y MAP_WIDTH/2
 
-const int BADDIE_SPAWN_STEP = 100; // 1 new Baddie spawns every 10 seconds 
+const int BADDIE_SPAWN_STEP = 100; // 1 new Baddie spawns every 10 seconds
 
 unsigned int avatar_count = 0;
+
+Bullet bullet = Bullet(0, 0);
 
 void game_loop(void) {
   int viewX = 0;
@@ -49,7 +52,6 @@ void game_loop(void) {
   recalculateViewPosition(&viewX, &viewY);
 
   Avatar ** avatars = new Avatar*[AVATAR_COUNT];
-
 
   // Create player
   avatar_count = 0;
@@ -138,38 +140,39 @@ void game_loop(void) {
            player->setDirection(AVATAR_DIRECTION_DOWN);
          break;
          case FIRE_KEY:
+           bullet.setDirection(player->getDirection());
            switch(player->getDirection())
            {
              case AVATAR_DIRECTION_LEFT:
                for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
-                 if(avatars[avatarIndex]->getX() == player->getX() && avatars[avatarIndex]->getY() == player->getY() - 1) {
-                   ((Baddie*)avatars[avatarIndex])->turnHuman();
-                   change = true;
-                 }
+                bullet.setX(player->getX());
+                bullet.setY(player->getY() - 1);
+                bullet.setFired(true);
+                change = true;
                }
              break;
              case AVATAR_DIRECTION_RIGHT:
                for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
-                 if(avatars[avatarIndex]->getX() == player->getX() && avatars[avatarIndex]->getY() == player->getY() + 1) {
-                   ((Baddie*)avatars[avatarIndex])->turnHuman();
-                   change = true;
-                 }
+                 bullet.setX(player->getX());
+                 bullet.setY(player->getY() + 1);
+                 bullet.setFired(true);
+                 change = true;
                }
              break;
              case AVATAR_DIRECTION_UP:
              for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
-               if(avatars[avatarIndex]->getX() == player->getX() - 1 && avatars[avatarIndex]->getY() == player->getY()) {
-                 ((Baddie*)avatars[avatarIndex])->turnHuman();
-                 change = true;
-               }
+               bullet.setX(player->getX() - 1);
+               bullet.setY(player->getY());
+               bullet.setFired(true);
+               change = true;
              }
              break;
              case AVATAR_DIRECTION_DOWN:
              for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
-               if(avatars[avatarIndex]->getX() == player->getX() + 1 && avatars[avatarIndex]->getY() == player->getY()) {
-                 ((Baddie*)avatars[avatarIndex])->turnHuman();
-                 change = true;
-               }
+               bullet.setX(player->getX() + 1);
+               bullet.setY(player->getY());
+               bullet.setFired(true);
+               change = true;
              }
              break;
            }
@@ -177,9 +180,21 @@ void game_loop(void) {
        }
       cancel = key == ESCAPE_KEY;
     }
+
     for (unsigned int avatarIndex = 0; avatarIndex < avatar_count; avatarIndex++) {
       change |= avatars[avatarIndex]->update(&map);
     }
+
+    if (bullet.getFired()) {
+        change |= bullet.update(&map);
+        for (unsigned int avatarIndex = 0; avatarIndex < avatar_count; avatarIndex++) {
+          if (bullet.getX() == avatars[avatarIndex]->getX() && bullet.getY() == avatars[avatarIndex]->getY()) {
+            bullet.setFired(false);
+            ((Baddie *)avatars[avatarIndex])->turnHuman();
+          }
+        }
+    }
+
     if (change) {
      change = false;
      draw(avatars, avatar_count, &map, &viewX, &viewY);
@@ -222,6 +237,10 @@ void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, in
             terrainChar = avatar[avatarIndex]->getCharacter();
           }
         }
+        if (bullet.getX() == x + *viewX && bullet.getY() == y + *viewY) {
+          terrainChar = bullet.getCharacter();
+        }
+
         *ptr = terrainChar;
         ptr++;
       }
