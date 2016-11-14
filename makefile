@@ -1,5 +1,5 @@
 CC=g++ $(WARN) $(HEADERS) $(PLATFORM)
-link=
+link=-lncurses
 OBJECT_DIR=$(BUILD_DIR)/obj
 BUILD_DIR=build
 OUTPUT=$(BUILD_DIR)/zombie-hunter.exe

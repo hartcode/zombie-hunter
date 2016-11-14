@@ -4,7 +4,7 @@
 #ifndef BULLET_H
 #define BULLET_H
 
-const char CHAR_BULLET = '*';
+char const * const CHAR_BULLET = "\u002A";
 
 
 const unsigned int MOVEMENT_FRAME_BULLET = 1;
@@ -17,7 +17,7 @@ class Bullet : public Avatar {
   public:
     Bullet(unsigned int initialPosX, unsigned int initialPosY);
     virtual ~Bullet();
-    char getCharacter();
+    char const * getCharacter();
     bool update(TerrainMap * const map);
     void setFired(bool b);
     bool getFired();

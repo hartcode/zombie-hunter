@@ -11,8 +11,8 @@ Bullet::Bullet(unsigned int initialPosX, unsigned int initialPosY) : Avatar(init
 
 Bullet::~Bullet() {}
 
-char Bullet::getCharacter() {
-  char retval = CHAR_EMPTY;
+char const * Bullet::getCharacter() {
+  char const * retval = CHAR_EMPTY;
   if (getFired())
   {
     retval = CHAR_BULLET;

@@ -3,7 +3,7 @@
 #ifndef AVATAR_H
 #define AVATAR_H
 
-const char CHAR_AVATAR = 228;
+char const * const CHAR_AVATAR = "\u263A";
 
 const unsigned int AVATAR_DIRECTION_UNKNOWN = 0;
 const unsigned int AVATAR_DIRECTION_UP = 1;
@@ -16,7 +16,7 @@ class Avatar {
     unsigned int posY;
     unsigned int direction;
   protected:
-    char character;
+    char const * character;
   public:
     Avatar(unsigned int initialPosX, unsigned int initialPosY);
     virtual ~Avatar();
@@ -26,7 +26,7 @@ class Avatar {
     void setY(unsigned int y);
     void setDirection(unsigned int newDirection);
     unsigned int getDirection();
-    virtual char getCharacter();
+    virtual char const * getCharacter();
     virtual bool update(TerrainMap * const map);
 };
 

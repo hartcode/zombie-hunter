@@ -3,12 +3,22 @@
 
 #define CONSOLE_OUT wcout
 
-extern "C" {
+class Display {
+  unsigned int rows;
+  unsigned int cols;
+public:
+  Display();
+  virtual ~Display();
   unsigned int getRows(void);
   unsigned int getCols(void);
-  void clear(void);
-  void printchar(char c);
-  void sleepy(unsigned int milliSeconds);
+  void clear();
+  void print(const char * string,...);
+  void getanykey();
+  void draw();
+};
+
+extern "C" {
+    void sleepy(unsigned int milliSeconds);
 }
 
 #endif

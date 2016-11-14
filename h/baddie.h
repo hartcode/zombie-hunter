@@ -4,13 +4,13 @@
 #ifndef BADDIE_H
 #define BADDIE_H
 
-const char CHAR_BADDIE_UNDERGROUND[] = {(char)45,(char)126,(char)45,(char)126,(char)45,(char)126,(char)94};
+char const * const CHAR_BADDIE_UNDERGROUND[] = {"\u002D","\u007E","\u002D","\u007E","\u002D","\u007E","\u005E"};
 
-const char CHAR_BADDIE_ZOMBIE = 1;
+char const * const CHAR_BADDIE_ZOMBIE = "\u263B";
 
-const char CHAR_BADDIE_HUMAN = 2;
+char const * const CHAR_BADDIE_HUMAN = "\u263A";
 
-const char CHAR_BADDIE_DEAD = 120;
+char const * const CHAR_BADDIE_DEAD = "\u0078";
 
 const unsigned int BADDIE_STATE_UNDERGROUND = 0;
 const unsigned int BADDIE_STATE_ZOMBIE = 1;
@@ -29,7 +29,7 @@ class Baddie : public Avatar {
   public:
     Baddie(unsigned int initialPosX, unsigned int initialPosY);
     virtual ~Baddie();
-    char getCharacter();
+    char const * getCharacter();
     bool update(TerrainMap * const map);
     void turnHuman();
     void turnZombie();

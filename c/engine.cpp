@@ -35,7 +35,7 @@ unsigned int avatar_count = 0;
 
 Bullet bullet = Bullet(0, 0);
 
-void game_loop(void) {
+void game_loop(Display * const display) {
   int viewX = 0;
   int viewY = 0;
   bool change = false;
@@ -49,7 +49,7 @@ void game_loop(void) {
   TerrainMap map = TerrainMap(MAP_WIDTH, MAP_HEIGHT, TREE_COUNT, GRAVE_COUNT);
 
   // this is the first calculation :)
-  recalculateViewPosition(&viewX, &viewY);
+  recalculateViewPosition(&viewX, &viewY, display);
 
   Avatar ** avatars = new Avatar*[AVATAR_COUNT];
 
@@ -78,7 +78,7 @@ void game_loop(void) {
   }
 
   // Draw initial screen
-  draw(avatars, avatar_count, &map, &viewX, &viewY);
+  draw(avatars, avatar_count, &map, &viewX, &viewY, display);
 
   // Main Loop
   while (!cancel) {
@@ -197,7 +197,7 @@ void game_loop(void) {
 
     if (change) {
      change = false;
-     draw(avatars, avatar_count, &map, &viewX, &viewY);
+     draw(avatars, avatar_count, &map, &viewX, &viewY, display);
     }
   } // Main loop
 
@@ -207,31 +207,29 @@ void game_loop(void) {
     delete avatars[avatarIndex];
   }
   delete avatars;
-  clear();
+  display->clear();
 }
 
-void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, int * viewX, int * viewY) {
-  unsigned int rows = getRows();
-  unsigned int cols = getCols();
+void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, int * viewX, int * viewY, Display * const display) {
+  unsigned int rows = display->getRows();
+  unsigned int cols = display->getCols();
   unsigned int viewableRows = rows-2;
 
   if (rows != lastrows || cols != lastcols) {
-    recalculateViewPosition(viewX, viewY);
+    recalculateViewPosition(viewX, viewY, display);
   }
 
   // Clear Screen
-  clear();
+  display->clear();
   // Draw HEADER
-  CONSOLE_OUT << "Rows " << rows << " Cols " << cols << " ViewX " << *viewX << " ViewY " << *viewY << " Px " << avatar[0]->getX() << " Py " << avatar[0]->getY() << endl;
+  display->print("Rows %i Cols %i ViewX %i ViewY %i Px %i Py %i", rows, cols, *viewX, *viewY, avatar[0]->getX(), avatar[0]->getY());
   // Draw BOARD
   char buffer[BUFFER_SIZE];
   memset(&buffer[0], 0, BUFFER_SIZE);
-  char * ptr = &buffer[0];
+  
   for(unsigned int x = 0; x < viewableRows; x++) {
-    *ptr = CHAR_EMPTY;
-    ptr++;
       for (unsigned int y = 1; y < cols-1; y++) {
-        char terrainChar = map->getCharacterAt(*viewX + x, *viewY + y);
+        char const * terrainChar = map->getCharacterAt(*viewX + x, *viewY + y);
         for (unsigned int avatarIndex = 0; avatarIndex < avatarCount; avatarIndex++) {
           if(avatar[avatarIndex]->getX() == x + *viewX && avatar[avatarIndex]->getY() == y + *viewY) {
             terrainChar = avatar[avatarIndex]->getCharacter();
@@ -241,27 +239,26 @@ void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, in
           terrainChar = bullet.getCharacter();
         }
 
-        *ptr = terrainChar;
-        ptr++;
+        display->print(terrainChar);
       }
-      *ptr = '\n';
-      ptr++;
+    display->print("\n");
   }
-  CONSOLE_OUT << buffer;
+  display->print(buffer);
+  display->draw();
   lastrows = rows;
   lastcols = cols;
 }
 
-void recalculateViewPosition(int * viewX, int * viewY)
+void recalculateViewPosition(int * viewX, int * viewY, Display * const display)
 {
-  if ((int)getRows() - MAP_HEIGHT > 0) {
-    *viewX = (((int)getRows() - MAP_HEIGHT)/2) * -1;
+  if ((int)display->getRows() - MAP_HEIGHT > 0) {
+    *viewX = (((int)display->getRows() - MAP_HEIGHT)/2) * -1;
   } else {
-    *viewX =  AVATAR_START_X - (int)getRows()/2;
+    *viewX =  AVATAR_START_X - (int)display->getRows()/2;
   }
-  if ((int)getCols() - MAP_WIDTH > 0) {
-    *viewY = (((int)getCols() - MAP_WIDTH)/2) * -1;
+  if ((int)display->getCols() - MAP_WIDTH > 0) {
+    *viewY = (((int)display->getCols() - MAP_WIDTH)/2) * -1;
   } else {
-    *viewY = AVATAR_START_Y - (int)getCols()/2;
+    *viewY = AVATAR_START_Y - (int)display->getCols()/2;
   }
 }

@@ -8,10 +8,10 @@ const int TERRAIN_PLAYER = 3;
 const int TERRAIN_BADDIE = 4;
 const int TERRAIN_WALL = 5;
 
-const char CHAR_WALL = 219;  // Wall
-const char CHAR_EMPTY = 32;  // Space
-const char CHAR_TREE = 84;   // T
-const char CHAR_GRAVESTONE = 35;
+char const * const CHAR_WALL = "\u2588";//219;  // Wall
+char const * const CHAR_EMPTY = "\u0020";//32;  // Space
+char const * const CHAR_TREE = "\u0054";//84;   // T
+char const * const CHAR_GRAVESTONE = "\u03A9";//35;
 
 class TerrainMap {
     unsigned int width;
@@ -24,7 +24,7 @@ class TerrainMap {
     ~TerrainMap();
     void setAt(unsigned int x, unsigned int y, unsigned int ch);
     unsigned int getAt(int X, int Y);
-    char getCharacterAt(int X, int Y);
+    char const * getCharacterAt(int X, int Y);
 
   private:
     void populateMap();

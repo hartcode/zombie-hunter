@@ -25,7 +25,7 @@ unsigned int Avatar::getY() {
   return posY;
 }
 
-char Avatar::getCharacter() {
+char const * Avatar::getCharacter() {
   return character;
 }
 
