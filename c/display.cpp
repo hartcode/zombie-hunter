@@ -76,5 +76,7 @@ void printchar(char c)
 void sleepy(unsigned int milliSeconds) {
   #if WINDOWS
     Sleep(milliSeconds);
+  #else
+    sleep(milliSeconds);
   #endif
 }
