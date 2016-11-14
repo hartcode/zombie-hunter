@@ -70,7 +70,7 @@ void clear(void) {
 
 void printchar(char c)
 {
-  cout << c;
+  CONSOLE_OUT << c;
 }
 
 void sleepy(unsigned int milliSeconds) {

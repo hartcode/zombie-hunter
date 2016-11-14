@@ -222,7 +222,7 @@ void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, in
   // Clear Screen
   clear();
   // Draw HEADER
-  cout << "Rows " << rows << " Cols " << cols << " ViewX " << *viewX << " ViewY " << *viewY << " Px " << avatar[0]->getX() << " Py " << avatar[0]->getY() << endl;
+  CONSOLE_OUT << "Rows " << rows << " Cols " << cols << " ViewX " << *viewX << " ViewY " << *viewY << " Px " << avatar[0]->getX() << " Py " << avatar[0]->getY() << endl;
   // Draw BOARD
   char buffer[BUFFER_SIZE];
   memset(&buffer[0], 0, BUFFER_SIZE);
@@ -247,7 +247,7 @@ void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, in
       *ptr = '\n';
       ptr++;
   }
-  cout << buffer;
+  CONSOLE_OUT << buffer;
   lastrows = rows;
   lastcols = cols;
 }
