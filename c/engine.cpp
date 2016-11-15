@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <ncurses/ncurses.h>
 using namespace std;
 
 unsigned int lastrows = 0;
@@ -222,11 +223,11 @@ void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, in
   // Clear Screen
   display->clear();
   // Draw HEADER
-  display->print("Rows %i Cols %i ViewX %i ViewY %i Px %i Py %i", rows, cols, *viewX, *viewY, avatar[0]->getX(), avatar[0]->getY());
+  display->print("Rows %u Cols %u ViewX %i ViewY %i Px %i Py %i", rows, cols, *viewX, *viewY, avatar[0]->getX(), avatar[0]->getY());
   // Draw BOARD
   char buffer[BUFFER_SIZE];
   memset(&buffer[0], 0, BUFFER_SIZE);
-  
+
   for(unsigned int x = 0; x < viewableRows; x++) {
       for (unsigned int y = 1; y < cols-1; y++) {
         char const * terrainChar = map->getCharacterAt(*viewX + x, *viewY + y);
@@ -239,11 +240,11 @@ void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, in
           terrainChar = bullet.getCharacter();
         }
 
-        display->print(terrainChar);
+        display->print("%S", terrainChar);
       }
     display->print("\n");
   }
-  display->print(buffer);
+
   display->draw();
   lastrows = rows;
   lastcols = cols;

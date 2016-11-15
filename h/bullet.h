@@ -4,7 +4,7 @@
 #ifndef BULLET_H
 #define BULLET_H
 
-char const * const CHAR_BULLET = "\u002A";
+char const * const CHAR_BULLET = "\u002A\x00";
 
 
 const unsigned int MOVEMENT_FRAME_BULLET = 1;

@@ -3,7 +3,7 @@
 #ifndef AVATAR_H
 #define AVATAR_H
 
-char const * const CHAR_AVATAR = "\u263A";
+char const * const CHAR_AVATAR = "\u263A\x00";
 
 const unsigned int AVATAR_DIRECTION_UNKNOWN = 0;
 const unsigned int AVATAR_DIRECTION_UP = 1;

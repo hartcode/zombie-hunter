@@ -12,7 +12,7 @@ public:
   unsigned int getRows(void);
   unsigned int getCols(void);
   void clear();
-  void print(const char * string,...);
+  void print(const char * string, ...);
   void getanykey();
   void draw();
 };

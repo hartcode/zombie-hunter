@@ -8,10 +8,10 @@ const int TERRAIN_PLAYER = 3;
 const int TERRAIN_BADDIE = 4;
 const int TERRAIN_WALL = 5;
 
-char const * const CHAR_WALL = "\u2588";//219;  // Wall
-char const * const CHAR_EMPTY = "\u0020";//32;  // Space
-char const * const CHAR_TREE = "\u0054";//84;   // T
-char const * const CHAR_GRAVESTONE = "\u03A9";//35;
+char const * const CHAR_WALL = "\u2588\x00";//219;  // Wall
+char const * const CHAR_EMPTY = "\u0020\x00";//32;  // Space
+char const * const CHAR_TREE = "\u0054\x00";//84;   // T
+char const * const CHAR_GRAVESTONE = "\u03A9\x00";//35;
 
 class TerrainMap {
     unsigned int width;

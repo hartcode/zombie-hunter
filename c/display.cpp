@@ -1,6 +1,8 @@
 #include <wchar.h>
 #include <display.h>
+#include <stdarg.h>
 #include <stdio.h>
+#include <locale.h>
 #include <iostream>
 using namespace std;
 
@@ -15,8 +17,12 @@ using namespace std;
 
 Display::Display()
 {
+  setlocale(LC_CTYPE,"C-UTF-8");
+  SetConsoleOutputCP(CP_UTF8);
   initscr();
-  getmaxyx(stdscr, rows,cols);
+  cols = 0;
+  rows = 0;
+  getmaxyx(stdscr, rows, cols);
 }
 
 Display::~Display() {
@@ -35,10 +41,10 @@ void Display::clear() {
   erase();
 }
 
-void Display::print(const char * string,...) {
+void Display::print(const char * string, ...) {
   va_list args;
-  va_start(args,string);
-  printw(string,args);
+  va_start(args, string);
+  vwprintw(stdscr, string, args);
   va_end(args);
 }
 
