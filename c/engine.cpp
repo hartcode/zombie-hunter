@@ -147,43 +147,50 @@ void game_loop(Display * const display) {
            player->setDirection(AVATAR_DIRECTION_DOWN);
          break;
          case FIRE_KEY:
+           int vx = 0;
+           int vy = 0;
+           switch(player->getDirection())
+           {
+             case AVATAR_DIRECTION_LEFT:
+                vy = -1;
+             break;
+             case AVATAR_DIRECTION_RIGHT:
+                vy = 1;
+             break;
+             case AVATAR_DIRECTION_UP:
+                vx = -1;
+             break;
+             case AVATAR_DIRECTION_DOWN:
+                vx = 1;
+             break;
+           }
+           switch(map.getAt(player->getX() + vx, player->getY() + vy)) {
+             case TERRAIN_TREE:
+                display->printConversation("Birch Tree", "Shh! I'm sleeping.");
+             break;
+             case TERRAIN_GRAVESTONE:
+                display->printConversation("Gravestone", "Here Lies Steven Baker");
+             break;
+             case TERRAIN_BADDIE:
+               for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
+                 if (player->getX() + vx == avatars[avatarIndex]->getX() && player->getY() + vy == avatars[avatarIndex]->getY()  && ((Baddie*)avatars[avatarIndex])->getState() == BADDIE_STATE_HUMAN) {
+                    display->printConversation("Random Human", "yo!");
+                 }
+               }
+             break;
+             case TERRAIN_WALL:
+                 display->printConversation("Wall", "* The Wall doesn't say anything *"); 
+             break;
+           }
+           // Humans
+
+           // fire a bullet
            if (!bullet.getFired()) {
              bullet.setDirection(player->getDirection());
-             switch(player->getDirection())
-             {
-               case AVATAR_DIRECTION_LEFT:
-                 for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
-                  bullet.setX(player->getX());
-                  bullet.setY(player->getY() - 1);
-                  bullet.setFired(true);
-                  change = true;
-                 }
-               break;
-               case AVATAR_DIRECTION_RIGHT:
-                 for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
-                   bullet.setX(player->getX());
-                   bullet.setY(player->getY() + 1);
-                   bullet.setFired(true);
-                   change = true;
-                 }
-               break;
-               case AVATAR_DIRECTION_UP:
-               for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
-                 bullet.setX(player->getX() - 1);
-                 bullet.setY(player->getY());
-                 bullet.setFired(true);
-                 change = true;
-               }
-               break;
-               case AVATAR_DIRECTION_DOWN:
-               for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
-                 bullet.setX(player->getX() + 1);
-                 bullet.setY(player->getY());
-                 bullet.setFired(true);
-                 change = true;
-               }
-               break;
-             }
+             bullet.setX(player->getX() + vx);
+             bullet.setY(player->getY() + vy);
+             bullet.setFired(true);
+             change |= true;
            }
          break;
        }
@@ -194,12 +201,13 @@ void game_loop(Display * const display) {
       change |= avatars[avatarIndex]->update(&map);
     }
 
-
     if (bullet.getFired()) {
       if (map.getAt(bullet.getX(), bullet.getY()) != TERRAIN_EMPTY) {
          bullet.setFired(false);
+         change |= true;
       }
-      for (unsigned int avatarIndex = 0; avatarIndex < avatar_count; avatarIndex++) {
+
+      for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
         if (bullet.getX() == avatars[avatarIndex]->getX() && bullet.getY() == avatars[avatarIndex]->getY()) {
           bullet.setFired(false);
           ((Baddie *)avatars[avatarIndex])->turnHuman();
@@ -207,7 +215,6 @@ void game_loop(Display * const display) {
         }
       }
     }
-
 
     if (change) {
      change = false;

@@ -16,6 +16,7 @@ public:
   void printChar(char);
   void getanykey();
   void draw();
+  void printConversation(const char *, const char *);
 };
 
 extern "C" {

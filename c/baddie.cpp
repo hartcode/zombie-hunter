@@ -28,6 +28,10 @@ const char  Baddie::getCharacter() {
   }
   return retval;
 }
+unsigned int Baddie::getState() {
+  return state;
+}
+
 
 bool Baddie::update( TerrainMap * const map) {
   bool retval = false;

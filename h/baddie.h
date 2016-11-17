@@ -31,6 +31,7 @@ class Baddie : public Avatar {
     virtual ~Baddie();
     const char getCharacter();
     bool update(TerrainMap * const map);
+    unsigned int getState();
     void turnHuman();
     void turnZombie();
 };
