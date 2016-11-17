@@ -43,17 +43,10 @@ bool Bullet::update( TerrainMap * const map) {
         vy++;
         break;
       }
-      if (map->getAt(getX() + vx, getY() + vy) == TERRAIN_EMPTY) {
-         map->setAt(getX(), getY(), TERRAIN_EMPTY);
-         setX(getX() + vx);
-         setY(getY() + vy);
-      } else {
-        setFired(false);
-        map->setAt(getX(), getY(), TERRAIN_EMPTY);
-        // still need to change postion to see if collision
-        setX(getX() + vx);
-        setY(getY() + vy);
-      }
+      map->setAt(getX(), getY(), TERRAIN_EMPTY);
+      setX(getX() + vx);
+      setY(getY() + vy);
+      
       retval = true;
       movementFrameStep = 0;
   }

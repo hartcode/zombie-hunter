@@ -17,8 +17,6 @@ using namespace std;
 
 Display::Display()
 {
-  setlocale(LC_CTYPE,"C-UTF-8");
-  SetConsoleOutputCP(CP_UTF8);
   initscr();
   cols = 0;
   rows = 0;
@@ -46,6 +44,11 @@ void Display::print(const char * string, ...) {
   va_start(args, string);
   vwprintw(stdscr, string, args);
   va_end(args);
+}
+
+void Display::printChar(char c)
+{
+  print("%c", c);
 }
 
 void Display::getanykey() {

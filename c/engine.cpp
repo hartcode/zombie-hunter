@@ -97,6 +97,12 @@ void game_loop(Display * const display) {
       avatar_count++;
       baddieStep = 0;
     }
+
+    if (bullet.getFired()) {
+        change |= bullet.update(&map);
+    }
+
+    // Input
     key = getkey();
     if (key > 0) {
        switch(key) {
@@ -141,41 +147,43 @@ void game_loop(Display * const display) {
            player->setDirection(AVATAR_DIRECTION_DOWN);
          break;
          case FIRE_KEY:
-           bullet.setDirection(player->getDirection());
-           switch(player->getDirection())
-           {
-             case AVATAR_DIRECTION_LEFT:
+           if (!bullet.getFired()) {
+             bullet.setDirection(player->getDirection());
+             switch(player->getDirection())
+             {
+               case AVATAR_DIRECTION_LEFT:
+                 for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
+                  bullet.setX(player->getX());
+                  bullet.setY(player->getY() - 1);
+                  bullet.setFired(true);
+                  change = true;
+                 }
+               break;
+               case AVATAR_DIRECTION_RIGHT:
+                 for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
+                   bullet.setX(player->getX());
+                   bullet.setY(player->getY() + 1);
+                   bullet.setFired(true);
+                   change = true;
+                 }
+               break;
+               case AVATAR_DIRECTION_UP:
                for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
-                bullet.setX(player->getX());
-                bullet.setY(player->getY() - 1);
-                bullet.setFired(true);
-                change = true;
-               }
-             break;
-             case AVATAR_DIRECTION_RIGHT:
-               for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
-                 bullet.setX(player->getX());
-                 bullet.setY(player->getY() + 1);
+                 bullet.setX(player->getX() - 1);
+                 bullet.setY(player->getY());
                  bullet.setFired(true);
                  change = true;
                }
-             break;
-             case AVATAR_DIRECTION_UP:
-             for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
-               bullet.setX(player->getX() - 1);
-               bullet.setY(player->getY());
-               bullet.setFired(true);
-               change = true;
+               break;
+               case AVATAR_DIRECTION_DOWN:
+               for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
+                 bullet.setX(player->getX() + 1);
+                 bullet.setY(player->getY());
+                 bullet.setFired(true);
+                 change = true;
+               }
+               break;
              }
-             break;
-             case AVATAR_DIRECTION_DOWN:
-             for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
-               bullet.setX(player->getX() + 1);
-               bullet.setY(player->getY());
-               bullet.setFired(true);
-               change = true;
-             }
-             break;
            }
          break;
        }
@@ -186,16 +194,20 @@ void game_loop(Display * const display) {
       change |= avatars[avatarIndex]->update(&map);
     }
 
+
     if (bullet.getFired()) {
-        change |= bullet.update(&map);
-          for (unsigned int avatarIndex = 0; avatarIndex < avatar_count; avatarIndex++) {
-            if (bullet.getX() == avatars[avatarIndex]->getX() && bullet.getY() == avatars[avatarIndex]->getY()) {
-              bullet.setFired(false);
-              ((Baddie *)avatars[avatarIndex])->turnHuman();
-              change |= true;
-            }
-          }
+      if (map.getAt(bullet.getX(), bullet.getY()) != TERRAIN_EMPTY) {
+         bullet.setFired(false);
+      }
+      for (unsigned int avatarIndex = 0; avatarIndex < avatar_count; avatarIndex++) {
+        if (bullet.getX() == avatars[avatarIndex]->getX() && bullet.getY() == avatars[avatarIndex]->getY()) {
+          bullet.setFired(false);
+          ((Baddie *)avatars[avatarIndex])->turnHuman();
+          change |= true;
+        }
+      }
     }
+
 
     if (change) {
      change = false;
@@ -224,12 +236,13 @@ void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, in
   // Clear Screen
   display->clear();
   // Draw HEADER
-  display->print("Rows %u Cols %u ViewX %i ViewY %i Px %i Py %i", rows, cols, *viewX, *viewY, avatar[0]->getX(), avatar[0]->getY());
+  display->print("Rows %u Cols %u ViewX %i ViewY %i Px %i Py %i\n", rows, cols, *viewX, *viewY, avatar[0]->getX(), avatar[0]->getY());
   // Draw BOARD
   char buffer[BUFFER_SIZE];
   memset(&buffer[0], 0, BUFFER_SIZE);
 
   for(unsigned int x = 0; x < viewableRows; x++) {
+     display->printChar(CHAR_EMPTY);
       for (unsigned int y = 1; y < cols-1; y++) {
         char terrainChar = map->getCharacterAt(*viewX + x, *viewY + y);
         for (unsigned int avatarIndex = 0; avatarIndex < avatarCount; avatarIndex++) {
@@ -240,10 +253,9 @@ void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, in
         if (bullet.getFired() && bullet.getX() == x + *viewX && bullet.getY() == y + *viewY) {
           terrainChar = bullet.getCharacter();
         }
-
-        display->print("%c", terrainChar);
+       display->printChar(terrainChar);
       }
-    display->print("\n");
+    display->printChar('\n');
   }
 
   display->draw();

@@ -13,6 +13,7 @@ public:
   unsigned int getCols(void);
   void clear();
   void print(const char * string, ...);
+  void printChar(char);
   void getanykey();
   void draw();
 };
