@@ -3,6 +3,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <locale.h>
+#include <input.h>
 #include <iostream>
 using namespace std;
 
@@ -17,11 +18,13 @@ using namespace std;
 WINDOW *create_newwin(int height, int width, int starty, int startx);
 void destroy_win(WINDOW *local_win);
 
-Display::Display()
+Display::Display(Input * const in)
 {
   initscr();
+  curs_set(0);
   cols = 0;
   rows = 0;
+  input = in;
   getmaxyx(stdscr, rows, cols);
 }
 
@@ -63,12 +66,14 @@ void Display::printConversation(const char * title, const char * string) {
   mvwprintw(win, 1, (width - namesize)/2, title);
   mvwprintw(win, 3, (width - stringsize)/2, string);
   wrefresh(win);
-  getch();
+  getanykey();
   destroy_win(win);
 }
 
 void Display::getanykey() {
-  getch();
+  double milliseconds;
+  while (input->getkey(&milliseconds) == 0)
+  {}  // getkey has a built in 100 millisecond wait
 }
 
 void Display::draw() {

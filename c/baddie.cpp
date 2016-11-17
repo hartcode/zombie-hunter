@@ -93,3 +93,7 @@ void Baddie::turnZombie() {
     movementFrameStep = 0;
   }
 }
+
+char const * Baddie::getName() {
+  return "Test Human";
+}

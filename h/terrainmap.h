@@ -8,7 +8,7 @@ const int TERRAIN_PLAYER = 3;
 const int TERRAIN_BADDIE = 4;
 const int TERRAIN_WALL = 5;
 
-const char CHAR_WALL = 219; //"\u2588\x00";//219;  // Wall
+const char CHAR_WALL = 219;  // Wall
 const char CHAR_EMPTY = ' '; //"\u0020\x00";//32;  // Space
 const char CHAR_TREE = 'T'; //"\u0054\x00";//84;   // T
 const char CHAR_GRAVESTONE = '#'; //"\u03A9\x00";//35;

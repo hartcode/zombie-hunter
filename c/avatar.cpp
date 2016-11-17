@@ -40,3 +40,7 @@ void Avatar::setDirection(unsigned int newDirection) {
 unsigned int Avatar::getDirection() {
   return direction;
 }
+
+char const * Avatar::getName() {
+  return "Player";
+}

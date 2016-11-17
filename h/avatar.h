@@ -28,6 +28,7 @@ class Avatar {
     unsigned int getDirection();
     virtual const char getCharacter();
     virtual bool update(TerrainMap * const map);
+    virtual char const * getName();
 };
 
 #endif

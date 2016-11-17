@@ -34,6 +34,7 @@ class Baddie : public Avatar {
     unsigned int getState();
     void turnHuman();
     void turnZombie();
+    char const * getName();
 };
 
 #endif

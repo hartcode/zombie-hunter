@@ -36,13 +36,14 @@ unsigned int avatar_count = 0;
 
 Bullet bullet = Bullet(0, 0);
 
-void game_loop(Display * const display) {
+void game_loop(Display * const display, Input * const in) {
   int viewX = 0;
   int viewY = 0;
   bool change = false;
   bool cancel = false;
   int key = 0;
   int baddieStep = 0;
+  double milliseconds;
 
   // setup random numbers
   srand(time(NULL));
@@ -103,7 +104,7 @@ void game_loop(Display * const display) {
     }
 
     // Input
-    key = getkey();
+    key = in->getkey(&milliseconds);
     if (key > 0) {
        switch(key) {
          case LEFT_KEY:
@@ -174,15 +175,14 @@ void game_loop(Display * const display) {
              case TERRAIN_BADDIE:
                for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
                  if (player->getX() + vx == avatars[avatarIndex]->getX() && player->getY() + vy == avatars[avatarIndex]->getY()  && ((Baddie*)avatars[avatarIndex])->getState() == BADDIE_STATE_HUMAN) {
-                    display->printConversation("Random Human", "yo!");
+                    display->printConversation(avatars[avatarIndex]->getName(), "yo!");
                  }
                }
              break;
              case TERRAIN_WALL:
-                 display->printConversation("Wall", "* The Wall doesn't say anything *"); 
+                 display->printConversation("Wall", "* The wall gives you a hard stare. *");
              break;
            }
-           // Humans
 
            // fire a bullet
            if (!bullet.getFired()) {
@@ -220,6 +220,7 @@ void game_loop(Display * const display) {
      change = false;
      draw(avatars, avatar_count, &map, &viewX, &viewY, display);
     }
+    sleepy(milliseconds);
   } // Main loop
 
 
@@ -243,11 +244,11 @@ void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, in
   // Clear Screen
   display->clear();
   // Draw HEADER
-  display->print("Rows %u Cols %u ViewX %i ViewY %i Px %i Py %i\n", rows, cols, *viewX, *viewY, avatar[0]->getX(), avatar[0]->getY());
+  //display->print("Rows %u Cols %u ViewX %i ViewY %i Px %i Py %i\n", rows, cols, *viewX, *viewY, avatar[0]->getX(), avatar[0]->getY());
   // Draw BOARD
   char buffer[BUFFER_SIZE];
   memset(&buffer[0], 0, BUFFER_SIZE);
-
+  display->printChar('\n');
   for(unsigned int x = 0; x < viewableRows; x++) {
      display->printChar(CHAR_EMPTY);
       for (unsigned int y = 1; y < cols-1; y++) {

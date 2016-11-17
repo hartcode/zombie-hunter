@@ -1,28 +1,46 @@
 #include <input.h>
 #include <stdio.h>
+#include <time.h>
 using namespace std;
 
 #ifdef WINDOWS
   #include <windows.h>
 #endif
 
-int getkey(void) {
-  int retval = 0;
+Input::Input() {
   #ifdef WINDOWS
-    HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
-    DWORD fdwOldMode;
+    hInput = GetStdHandle(STD_INPUT_HANDLE);
     DWORD fdwMode;
-    DWORD NumInputs = 0;
-    DWORD InputsRead = 0;
-    INPUT_RECORD irInput;
-    // disable mouse and window input
+  // disable mouse and window input
     GetConsoleMode(hInput, &fdwOldMode);
     fdwMode = fdwOldMode && ENABLE_MOUSE_INPUT && ENABLE_WINDOW_INPUT;
     SetConsoleMode(hInput, fdwMode);
     FlushConsoleInputBuffer(hInput);
+  #endif
+}
+
+Input::~Input() {
+  #ifdef WINDOWS
+    // reset console mode
+    SetConsoleMode(hInput, fdwOldMode);
+  #endif
+}
+
+int Input::getkey(double * milliseconds) {
+  int retval = 0;
+  #ifdef WINDOWS
+  DWORD NumInputs = 0;
+  DWORD InputsRead = 0;
+  INPUT_RECORD irInput;
+
+    time_t now;
+    time_t later;
+    time(&now);
 
     if (WaitForSingleObject(hInput,100) == WAIT_OBJECT_0)
     {
+      time(&later);
+      *milliseconds = 100 - (double)(later - now);
       GetNumberOfConsoleInputEvents(hInput, &NumInputs);
       ReadConsoleInput(hInput, &irInput, 1, &InputsRead);
       for (DWORD i = 0; i < InputsRead; i++) {
@@ -56,10 +74,7 @@ int getkey(void) {
         }
       }
     }
-    // reset console mode
-    SetConsoleMode(hInput, fdwOldMode);
-  #else
-    // TODO:  Need To implement input controls for linux
+
   #endif
   return retval;
 }

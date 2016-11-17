@@ -3,9 +3,10 @@
 #include <engine.h>
 
 int main(int argc, char** argv) {
-Display display = Display();
+  Input input = Input();
+  Display display = Display(&input);
   //start_screen(&display);
-  game_loop(&display);
+  game_loop(&display, &input);
 
   return 0;
 };

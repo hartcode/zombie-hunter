@@ -1,3 +1,5 @@
+#include <input.h>
+
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
@@ -6,8 +8,9 @@
 class Display {
   unsigned int rows;
   unsigned int cols;
+  Input * input;
 public:
-  Display();
+  Display(Input * const in);
   virtual ~Display();
   unsigned int getRows(void);
   unsigned int getCols(void);
