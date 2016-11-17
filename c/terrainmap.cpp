@@ -44,8 +44,8 @@ unsigned int TerrainMap::getAt(int x, int y) {
   return retval;
 }
 
-char const * TerrainMap::getCharacterAt(int x, int y) {
-  char const * retval = CHAR_EMPTY;
+const char TerrainMap::getCharacterAt(int x, int y) {
+  char retval = CHAR_EMPTY;
   if (y < 0 || y >= (int)width){
       retval = CHAR_WALL;
     } else {

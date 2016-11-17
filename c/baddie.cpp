@@ -12,8 +12,8 @@ Baddie::Baddie(unsigned int initialPosX, unsigned int initialPosY) : Avatar(init
 
 Baddie::~Baddie() {}
 
-char const * Baddie::getCharacter() {
-  char const * retval = CHAR_BADDIE_ZOMBIE;
+const char  Baddie::getCharacter() {
+  char retval = CHAR_BADDIE_ZOMBIE;
   switch(state) {
     case BADDIE_STATE_UNDERGROUND:
       retval = CHAR_BADDIE_UNDERGROUND[charUndergroundIndex];

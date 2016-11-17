@@ -188,12 +188,13 @@ void game_loop(Display * const display) {
 
     if (bullet.getFired()) {
         change |= bullet.update(&map);
-        for (unsigned int avatarIndex = 0; avatarIndex < avatar_count; avatarIndex++) {
-          if (bullet.getX() == avatars[avatarIndex]->getX() && bullet.getY() == avatars[avatarIndex]->getY()) {
-            bullet.setFired(false);
-            ((Baddie *)avatars[avatarIndex])->turnHuman();
+          for (unsigned int avatarIndex = 0; avatarIndex < avatar_count; avatarIndex++) {
+            if (bullet.getX() == avatars[avatarIndex]->getX() && bullet.getY() == avatars[avatarIndex]->getY()) {
+              bullet.setFired(false);
+              ((Baddie *)avatars[avatarIndex])->turnHuman();
+              change |= true;
+            }
           }
-        }
     }
 
     if (change) {
@@ -230,17 +231,17 @@ void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, in
 
   for(unsigned int x = 0; x < viewableRows; x++) {
       for (unsigned int y = 1; y < cols-1; y++) {
-        char const * terrainChar = map->getCharacterAt(*viewX + x, *viewY + y);
+        char terrainChar = map->getCharacterAt(*viewX + x, *viewY + y);
         for (unsigned int avatarIndex = 0; avatarIndex < avatarCount; avatarIndex++) {
           if(avatar[avatarIndex]->getX() == x + *viewX && avatar[avatarIndex]->getY() == y + *viewY) {
             terrainChar = avatar[avatarIndex]->getCharacter();
           }
         }
-        if (bullet.getX() == x + *viewX && bullet.getY() == y + *viewY) {
+        if (bullet.getFired() && bullet.getX() == x + *viewX && bullet.getY() == y + *viewY) {
           terrainChar = bullet.getCharacter();
         }
 
-        display->print("%S", terrainChar);
+        display->print("%c", terrainChar);
       }
     display->print("\n");
   }
