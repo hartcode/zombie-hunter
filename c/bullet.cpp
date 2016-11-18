@@ -46,7 +46,7 @@ bool Bullet::update( TerrainMap * const map) {
       map->setAt(getX(), getY(), TERRAIN_EMPTY);
       setX(getX() + vx);
       setY(getY() + vy);
-      
+
       retval = true;
       movementFrameStep = 0;
   }
