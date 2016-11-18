@@ -248,7 +248,7 @@ void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, in
   // Draw BOARD
   char buffer[BUFFER_SIZE];
   memset(&buffer[0], 0, BUFFER_SIZE);
-  display->printChar('\n');
+  display->printChar(NEWLINE_CHAR);
   for(unsigned int x = 0; x < viewableRows; x++) {
      display->printChar(CHAR_EMPTY);
       for (unsigned int y = 1; y < cols-1; y++) {
@@ -263,7 +263,7 @@ void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, in
         }
        display->printChar(terrainChar);
       }
-    display->printChar('\n');
+    display->printChar(NEWLINE_CHAR);
   }
 
   display->draw();

@@ -4,6 +4,7 @@
 #define DISPLAY_H
 
 #define CONSOLE_OUT wcout
+#define NEWLINE_CHAR '\n'
 
 class Display {
   unsigned int rows;
