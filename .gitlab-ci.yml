@@ -4,14 +4,17 @@ stages:
   - deploy
   - sync
 
+
+
 build:
   stage: build
   image: gcc:6.1.0
   script:
-    - make
+    - apt-get update && apt-get install -y libncurses-dev
+    - make build-release
   artifacts:
     paths:
-    - build/*.exe
+    - build/release/*.exe
 
 sync_github:
   stage: sync
