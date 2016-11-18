@@ -1,9 +1,8 @@
-CC=g++ $(WARN) $(HEADERS) $(PLATFORM) $(DEBUG)
+CC=g++ $(WARN) $(HEADERS) $(PLATFORM)
 link=-lncurses
 DEBUG=-g
 OBJECT_DIR=$(BUILD_DIR)/obj
 BUILD_DIR=build
-OUTPUT=$(BUILD_DIR)/zombie-hunter.exe
 MKDIR=mkdir
 RM=rm
 WARN=-Wall
@@ -15,17 +14,32 @@ ifeq ($(OS),Windows_NT)
 endif
 
 _OBJ = main.o start.o engine.o avatar.o baddie.o terrainmap.o input.o display.o bullet.o
-OBJ = $(patsubst %,$(OBJECT_DIR)/%,$(_OBJ))
+DEBUG_OBJ = $(patsubst %,$(OBJECT_DIR)/debug/%,$(_OBJ))
+RELEASE_OBJ = $(patsubst %,$(OBJECT_DIR)/release/%,$(_OBJ))
 
-zombie-hunter.exe: $(OBJ)
-	$(CC) -o $(OUTPUT) $(OBJ) $(link)
+build-debug: $(DEBUG_OBJ)
+	$(CC) $(DEBUG) -o $(BUILD_DIR)/debug/zombie-hunter.exe $(DEBUG_OBJ) $(link)
 
-$(OBJECT_DIR)/%.o: $(CODE_FOLDER)%.cpp buildfolder
+$(OBJECT_DIR)/debug/%.o: $(CODE_FOLDER)%.cpp buildfolder-debug
+		$(CC) $(DEBUG) -c -o $@ $<
+
+build-release: $(RELEASE_OBJ)
+	$(CC) -o $(BUILD_DIR)/release/zombie-hunter.exe $(RELEASE_OBJ) $(link)
+
+$(OBJECT_DIR)/release/%.o: $(CODE_FOLDER)%.cpp buildfolder-release
 	$(CC) -c -o $@ $<
 
 buildfolder:
 	$(MKDIR) -p $(BUILD_DIR)
 	$(MKDIR) -p $(OBJECT_DIR)
+
+buildfolder-debug: buildfolder
+	$(MKDIR) -p $(BUILD_DIR)/debug
+	$(MKDIR) -p $(OBJECT_DIR)/debug
+
+buildfolder-release: buildfolder
+		$(MKDIR) -p $(BUILD_DIR)/release
+		$(MKDIR) -p $(OBJECT_DIR)/release
 
 clean:
 	$(RM) -r $(BUILD_DIR)
