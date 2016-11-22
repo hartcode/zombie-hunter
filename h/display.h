@@ -23,8 +23,4 @@ public:
   void printConversation(const char *, const char *);
 };
 
-extern "C" {
-    void sleepy(unsigned int milliSeconds);
-}
-
 #endif

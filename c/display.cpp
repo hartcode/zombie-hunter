@@ -1,20 +1,20 @@
-#include <wchar.h>
 #include <display.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <locale.h>
 #include <input.h>
 #include <iostream>
+#include <string.h>
 using namespace std;
 
 #ifdef WINDOWS
-  #include <windows.h>
+  //#include <windows.h>
 #else
   #include <unistd.h>
   #include <sys/ioctl.h>
 #endif
 
-#include <ncurses/ncurses.h>
+#include <ncurses.h>
 WINDOW *create_newwin(int height, int width, int starty, int startx);
 void destroy_win(WINDOW *local_win);
 
@@ -78,14 +78,6 @@ void Display::getanykey() {
 
 void Display::draw() {
   refresh();
-}
-
-void sleepy(unsigned int milliSeconds) {
-  #if WINDOWS
-    Sleep(milliSeconds);
-  #else
-    sleep(milliSeconds);
-  #endif
 }
 
 WINDOW *create_newwin(int height, int width, int starty, int startx)

@@ -1,5 +1,6 @@
 #ifdef WINDOWS
-  #include <windows.h>
+  typedef unsigned long DWORD;
+  typedef void * HANDLE;
 #endif
 
 #ifndef INPUT_H
@@ -21,5 +22,6 @@ public:
   Input();
   virtual ~Input();
   int getkey(double * milliseconds);
+  void sleepy(unsigned int milliSeconds);
 };
 #endif

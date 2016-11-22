@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <ncurses/ncurses.h>
+
 using namespace std;
 
 unsigned int lastrows = 0;
@@ -220,7 +220,7 @@ void game_loop(Display * const display, Input * const in) {
      change = false;
      draw(avatars, avatar_count, &map, &viewX, &viewY, display);
     }
-    sleepy(milliseconds);
+    in->sleepy(milliseconds);
   } // Main loop
 
 

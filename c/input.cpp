@@ -78,3 +78,11 @@ int Input::getkey(double * milliseconds) {
   #endif
   return retval;
 }
+
+void Input::sleepy(unsigned int milliSeconds) {
+  #if WINDOWS
+    Sleep(milliSeconds);
+  #else
+    sleep(milliSeconds);
+  #endif
+}
