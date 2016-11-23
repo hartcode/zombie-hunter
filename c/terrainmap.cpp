@@ -1,5 +1,8 @@
 #include <terrainmap.h>
 #include <terrainobject.h>
+#include <tree.h>
+#include <wall.h>
+#include <gravestone.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -9,24 +12,29 @@ TerrainMap::TerrainMap(unsigned int mapWidth, unsigned int mapHeight, unsigned i
     height = mapHeight;
     treeCount = treeAmount;
     graveCount = graveAmount;
+    wall = new Wall(0,0);
     // initialize map
     map = new TerrainObject **[height];
     for (unsigned int x = 0; x < height; x++)
     {
       map[x] = new TerrainObject *[width];
       for (unsigned int y = 0; y < width; y++) {
-        map[x][y] = new TerrainObject(x, y);
+        map[x][y] = 0;
       }
     }
     populateMap();
 }
 
 TerrainMap::~TerrainMap() {
+    delete wall;
     // destroy map
     for (unsigned int x = 0; x < height; x++)
     {
       for (unsigned int y = 0; y < width; y++) {
-        delete map[x][y];
+        if (map[x][y] != 0) {
+          delete map[x][y];
+          map[x][y] = 0;
+        }
       }
       delete map[x];
     }
@@ -36,31 +44,26 @@ TerrainMap::~TerrainMap() {
 void TerrainMap::setAt(unsigned int x, unsigned int y, TerrainObject * ch)
 {
    //if (x >= 0 && x < height && y >= 0 && y < width) {
-   delete map[x][y];
+   if (map[x][y] != 0) {
+     delete map[x][y];
+     map[x][y] = 0;
+   }
    map[x][y] = ch;
-   //}
+}
+
+void TerrainMap::moveObject(unsigned int newX, unsigned int newY, TerrainObject * ch) {
+  map[ch->getX()][ch->getY()] = 0;
+  ch->setX(newX);
+  ch->setY(newY);
+  map[ch->getX()][ch->getY()] = ch;
 }
 
 TerrainObject * TerrainMap::getAt(int x, int y) {
-  TerrainObject * retval;
+  TerrainObject * retval = wall;
   if (y >= 0 && y < (int)width && x >= 0 && x < (int)height){
     retval = map[x][y];
   }
   return retval;
-}
-
-const char TerrainMap::getCharacterAt(int x, int y) {
-  char retval = CHAR_EMPTY;
-  if (y < 0 || y >= (int)width){
-      retval = CHAR_WALL;
-    } else {
-        if (x < 0 || x >= (int)height){
-          retval = CHAR_WALL;
-        } else {
-          retval = map[x][y]->getCharacter();
-        }
-    }
-    return retval;
 }
 
 void TerrainMap::populateMap() {
@@ -75,7 +78,18 @@ void TerrainMap::placeRandomObjects(unsigned int numberOfObjects, unsigned int t
   {
     x = rand()%height;
     y = rand()%width;
-    delete map[x][y];
-    map[x][y] = new TerrainObject(x, y);
+    if (terrain_object == TERRAIN_TREE) {
+      if (map[x][y] != 0) {
+        delete map[x][y];
+        map[x][y] = 0;
+      }
+      map[x][y] = new Tree(x,y);
+    } else if (terrain_object == TERRAIN_GRAVESTONE) {
+      if (map[x][y] != 0) {
+        delete map[x][y];
+        map[x][y] = 0;
+      }
+      map[x][y] = new Gravestone(x,y);
+    }
   }
 }

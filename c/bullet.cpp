@@ -43,7 +43,7 @@ bool Bullet::update( TerrainMap * const map) {
         vy++;
         break;
       }
-      map->setAt(getX(), getY(), TERRAIN_EMPTY);
+      map->setAt(getX(), getY(), NULL);
       setX(getX() + vx);
       setY(getY() + vy);
 

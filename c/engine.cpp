@@ -110,9 +110,7 @@ void game_loop(Display * const display, Input * const in) {
          case LEFT_KEY:
            if (map.getAt(player->getX(), player->getY() - 1) == 0) {
              viewY--;
-             map.setAt(player->getX(), player->getY(), new TerrainObject(player->getX(), player->getY()));
-             player->setY(player->getY() - 1);
-             map.setAt(player->getX(), player->getY(), player);
+             map.moveObject(player->getX(), player->getY() - 1, player);
              change = true;
            }
            player->setDirection(AVATAR_DIRECTION_LEFT);
@@ -120,9 +118,7 @@ void game_loop(Display * const display, Input * const in) {
          case RIGHT_KEY:
            if (map.getAt(player->getX(), player->getY() + 1) == 0) {
              viewY++;
-             map.setAt(player->getX(), player->getY(), new TerrainObject(player->getX(), player->getY()));
-             player->setY(player->getY() + 1);
-             map.setAt(player->getX(), player->getY(), player);
+             map.moveObject(player->getX(), player->getY() + 1, player);
              change = true;
            }
            player->setDirection(AVATAR_DIRECTION_RIGHT);
@@ -130,9 +126,7 @@ void game_loop(Display * const display, Input * const in) {
          case UP_KEY:
            if (map.getAt(player->getX() - 1, player->getY()) == 0) {
              viewX--;
-             map.setAt(player->getX(), player->getY(), new TerrainObject(player->getX(), player->getY()));
-             player->setX(player->getX() - 1);
-             map.setAt(player->getX(), player->getY(), player);
+             map.moveObject(player->getX() - 1, player->getY() , player);
              change = true;
            }
            player->setDirection(AVATAR_DIRECTION_UP);
@@ -140,9 +134,7 @@ void game_loop(Display * const display, Input * const in) {
          case DOWN_KEY:
            if (map.getAt(player->getX() + 1, player->getY()) == 0) {
              viewX++;
-             map.setAt(player->getX(), player->getY(), new TerrainObject(player->getX(), player->getY()));
-             player->setX(player->getX() + 1);
-             map.setAt(player->getX(), player->getY(), player);
+             map.moveObject(player->getX() + 1, player->getY() , player);
              change = true;
            }
            player->setDirection(AVATAR_DIRECTION_DOWN);
@@ -170,10 +162,7 @@ void game_loop(Display * const display, Input * const in) {
            if (obj != 0)
            {
              display->printConversation(obj->getName(), obj->getConversation());
-           } else {
-             display->printConversation("Wall", "* The wall gives you a hard stare. *");
            }
-
            // fire a bullet
            if (!bullet.getFired()) {
              bullet.setDirection(player->getDirection());
@@ -192,7 +181,7 @@ void game_loop(Display * const display, Input * const in) {
     }
 
     if (bullet.getFired()) {
-      if (map.getAt(bullet.getX(), bullet.getY()) != TERRAIN_EMPTY) {
+      if (map.getAt(bullet.getX(), bullet.getY()) != 0) {
          bullet.setFired(false);
          change |= true;
       }
@@ -215,9 +204,6 @@ void game_loop(Display * const display, Input * const in) {
 
 
   // Cleanup avatars
-  for (unsigned int avatarIndex = 0; avatarIndex < avatar_count; avatarIndex++) {
-    delete avatars[avatarIndex];
-  }
   delete avatars;
   display->clear();
 }
@@ -242,7 +228,11 @@ void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, in
   for(unsigned int x = 0; x < viewableRows; x++) {
      display->printChar(CHAR_EMPTY);
       for (unsigned int y = 1; y < cols-1; y++) {
-        char terrainChar = map->getCharacterAt(*viewX + x, *viewY + y);
+        TerrainObject *obj = map->getAt(*viewX + x, *viewY + y);
+        char terrainChar = CHAR_EMPTY;
+        if (obj != 0) {
+          terrainChar = obj->getCharacter();
+        }
         for (unsigned int avatarIndex = 0; avatarIndex < avatarCount; avatarIndex++) {
           if(avatar[avatarIndex]->getX() == x + *viewX && avatar[avatarIndex]->getY() == y + *viewY) {
             terrainChar = avatar[avatarIndex]->getCharacter();

@@ -55,19 +55,15 @@ bool Baddie::update( TerrainMap * const map) {
        int vy = (rand()%3) - 1;  //-1, 0, 1
        if (vx != 0)
        {
-          if (map->getAt(getX() + vx, getY()) == TERRAIN_EMPTY) {
-             map->setAt(getX(), getY(), TERRAIN_EMPTY);
-             setX(getX() + vx);
-             map->setAt(getX(), getY(), TERRAIN_BADDIE);
+          if (map->getAt(getX() + vx, getY()) == 0) {
+             map->moveObject(getX() + vx, getY(), map->getAt(getX(),getY()));
           }
           retval = true;
        }
        if (vy != 0)
        {
-         if (map->getAt(getX(), getY() + vy) == TERRAIN_EMPTY) {
-           map->setAt(getX(), getY(), TERRAIN_EMPTY);
-           setY(getY() + vy);
-           map->setAt(getX(), getY(), TERRAIN_BADDIE);
+         if (map->getAt(getX(), getY() + vy) == 0) {
+           map->moveObject(getX(), getY() + vy, map->getAt(getX(),getY()));
          }
          retval = true;
        }
