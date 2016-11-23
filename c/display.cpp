@@ -7,10 +7,7 @@
 #include <string.h>
 using namespace std;
 
-#ifdef WINDOWS
-  //#include <windows.h>
-#else
-  #include <unistd.h>
+#ifndef WINDOWS
   #include <sys/ioctl.h>
 #endif
 

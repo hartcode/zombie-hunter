@@ -5,6 +5,8 @@ using namespace std;
 
 #ifdef WINDOWS
   #include <windows.h>
+#else
+  #include <unistd.h>
 #endif
 
 Input::Input() {
@@ -74,7 +76,8 @@ int Input::getkey(double * milliseconds) {
         }
       }
     }
-
+  #else
+  *milliseconds = 100;
   #endif
   return retval;
 }
