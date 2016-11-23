@@ -1,2 +1,4 @@
 build/
 dockerstart.sh
+logs/
+node_modules/
