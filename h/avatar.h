@@ -5,6 +5,7 @@
 #define AVATAR_H
 
 const char CHAR_AVATAR = '@';  //"\u263A\x00";
+const int TERRAIN_PLAYER = 3;
 
 const unsigned int AVATAR_DIRECTION_UNKNOWN = 0;
 const unsigned int AVATAR_DIRECTION_UP = 1;

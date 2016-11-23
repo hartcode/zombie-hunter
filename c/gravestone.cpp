@@ -1,7 +1,7 @@
 #include <gravestone.h>
 #include <terrainobject.h>
 
-Gravestone::Gravestone(unsigned int initialPosX, unsigned int initialPosY) : TerrainObject(initialPosX, initialPosY) {
+Gravestone::Gravestone(unsigned int initialPosX, unsigned int initialPosY) : TerrainObject(initialPosX, initialPosY, TERRAIN_GRAVESTONE) {
   character = CHAR_GRAVESTONE;
 }
 

@@ -53,14 +53,9 @@ void game_loop(Display * const display, Input * const in) {
   // this is the first calculation :)
   recalculateViewPosition(&viewX, &viewY, display);
 
-  Avatar ** avatars = new Avatar*[AVATAR_COUNT];
-
   // Create player
-  avatar_count = 0;
-  avatars[avatar_count] = new Avatar(AVATAR_START_X, AVATAR_START_Y);
-  map.setAt(avatars[avatar_count]->getX(), avatars[avatar_count]->getY(), avatars[avatar_count]);
-  Avatar *player = avatars[avatar_count];
-  avatar_count++;
+  Avatar *player = new Avatar(AVATAR_START_X, AVATAR_START_Y);
+  map.setAt(player->getX(), player->getY(), player);
 
   // Create Baddies
   for (int baddieIndex = 0; baddieIndex < BADDIE_INITIAL_COUNT; baddieIndex++)
@@ -73,14 +68,12 @@ void game_loop(Display * const display, Input * const in) {
         baddieX = player->getX() + (rand()%30)-15;
         baddieY = player->getY() + (rand()%30)-15;
       }
-      avatars[avatar_count] = new Baddie(baddieX, baddieY);
-      map.setAt(avatars[avatar_count]->getX(), avatars[avatar_count]->getY(), avatars[avatar_count]);
-      avatar_count++;
+      map.setAt(baddieX, baddieY, new Baddie(baddieX, baddieY));
     }
   }
 
   // Draw initial screen
-  draw(avatars, avatar_count, &map, &viewX, &viewY, display);
+  draw(&map, &viewX, &viewY, display);
 
   // Main Loop
   while (!cancel) {
@@ -93,9 +86,7 @@ void game_loop(Display * const display, Input * const in) {
         baddieX = player->getX() + (rand()%30)-15;
         baddieY = player->getY() + (rand()%30)-15;
       }
-      avatars[avatar_count] = new Baddie(baddieX, baddieY);
-      map.setAt(avatars[avatar_count]->getX(), avatars[avatar_count]->getY(), avatars[avatar_count]);
-      avatar_count++;
+      map.setAt(baddieX, baddieY, new Baddie(baddieX, baddieY));
       baddieStep = 0;
     }
 
@@ -176,39 +167,28 @@ void game_loop(Display * const display, Input * const in) {
       cancel = key == ESCAPE_KEY;
     }
 
-    for (unsigned int avatarIndex = 0; avatarIndex < avatar_count; avatarIndex++) {
-      change |= avatars[avatarIndex]->update(&map);
-    }
+    map.update();
 
     if (bullet.getFired()) {
-      if (map.getAt(bullet.getX(), bullet.getY()) != 0) {
+      TerrainObject * to = map.getAt(bullet.getX(), bullet.getY());
+      if (to != 0) {
+         ((Baddie *)to)->turnHuman();
          bullet.setFired(false);
          change |= true;
-      }
-
-      for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
-        if (bullet.getX() == avatars[avatarIndex]->getX() && bullet.getY() == avatars[avatarIndex]->getY()) {
-          bullet.setFired(false);
-          ((Baddie *)avatars[avatarIndex])->turnHuman();
-          change |= true;
-        }
       }
     }
 
     if (change) {
      change = false;
-     draw(avatars, avatar_count, &map, &viewX, &viewY, display);
+     draw(&map, &viewX, &viewY, display);
     }
     in->sleepy(milliseconds);
   } // Main loop
 
-
-  // Cleanup avatars
-  delete avatars;
   display->clear();
 }
 
-void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, int * viewX, int * viewY, Display * const display) {
+void draw(TerrainMap * const map, int * viewX, int * viewY, Display * const display) {
   unsigned int rows = display->getRows();
   unsigned int cols = display->getCols();
   unsigned int viewableRows = rows-2;
@@ -232,11 +212,6 @@ void draw(Avatar ** avatar, unsigned int avatarCount, TerrainMap * const map, in
         char terrainChar = CHAR_EMPTY;
         if (obj != 0) {
           terrainChar = obj->getCharacter();
-        }
-        for (unsigned int avatarIndex = 0; avatarIndex < avatarCount; avatarIndex++) {
-          if(avatar[avatarIndex]->getX() == x + *viewX && avatar[avatarIndex]->getY() == y + *viewY) {
-            terrainChar = avatar[avatarIndex]->getCharacter();
-          }
         }
         if (bullet.getFired() && bullet.getX() == x + *viewX && bullet.getY() == y + *viewY) {
           terrainChar = bullet.getCharacter();

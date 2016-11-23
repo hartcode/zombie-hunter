@@ -93,3 +93,14 @@ void TerrainMap::placeRandomObjects(unsigned int numberOfObjects, unsigned int t
     }
   }
 }
+
+void TerrainMap::Update() {
+  for (unsigned int x = 0; x < height; x++)
+  {
+    for (unsigned int y = 0; y < width; y++) {
+      if (map[x][y] != 0) {
+         map[x][y]->update(&this);
+      }
+    }
+  }
+}

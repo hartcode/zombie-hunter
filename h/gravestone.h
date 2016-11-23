@@ -3,6 +3,7 @@
 #define GRAVESTONE_H
 
 const char CHAR_GRAVESTONE = '#'; //"\u03A9\x00";//35;
+const int TERRAIN_GRAVESTONE = 2;
 
 class Gravestone : public TerrainObject {
   public:

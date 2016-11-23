@@ -1,13 +1,6 @@
-#include <terrainobject.h>
 #ifndef TERRAINMAP_H
 #define TERRAINMAP_H
-
-const int TERRAIN_EMPTY = 0;
-const int TERRAIN_TREE = 1;
-const int TERRAIN_GRAVESTONE = 2;
-const int TERRAIN_PLAYER = 3;
-const int TERRAIN_BADDIE = 4;
-const int TERRAIN_WALL = 5;
+#include <terrainobject.h>
 
 const char CHAR_EMPTY = ' '; //"\u0020\x00";//32;  // Space
 
@@ -24,6 +17,7 @@ class TerrainMap {
     void setAt(unsigned int x, unsigned int y, TerrainObject * ch);
     void moveObject(unsigned int newX, unsigned int newY, TerrainObject * ch);
     TerrainObject * getAt(int X, int Y);
+    void Update();
   private:
     void populateMap();
     void placeRandomObjects(unsigned int numberOfObjects, unsigned int terrain_object);

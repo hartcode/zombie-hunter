@@ -1,7 +1,7 @@
 #include <wall.h>
 #include <terrainobject.h>
 
-Wall::Wall(unsigned int initialPosX, unsigned int initialPosY) : TerrainObject(initialPosX, initialPosY) {
+Wall::Wall(unsigned int initialPosX, unsigned int initialPosY) : TerrainObject(initialPosX, initialPosY, TERRAIN_WALL) {
   character = CHAR_WALL;
 }
 

@@ -1,10 +1,11 @@
-#include <terrainobject.h>
 #include <terrainmap.h>
+#include <terrainobject.h>
 
-TerrainObject::TerrainObject(unsigned int initialPosX, unsigned int initialPosY) {
+TerrainObject::TerrainObject(unsigned int initialPosX, unsigned int initialPosY, unsigned int ids) {
   setX(initialPosX);
   setY(initialPosY);
   character = CHAR_TERRAINOBJECT;
+  id = ids;
 }
 
 TerrainObject::~TerrainObject() {}
@@ -15,6 +16,10 @@ void TerrainObject::setX(unsigned int x) {
 
 void TerrainObject::setY(unsigned int y) {
   posY = y;
+}
+
+virtual unsigned int getID(){
+  return id;
 }
 
 unsigned int TerrainObject::getX() {

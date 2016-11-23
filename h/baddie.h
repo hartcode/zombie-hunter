@@ -5,6 +5,7 @@
 #define BADDIE_H
 
 const char CHAR_BADDIE_UNDERGROUND[] = {'-','~','-','~','-','~','^'}; //{"\u002D\x00","\u007E\x00","\u002D\x00","\u007E\x00","\u002D\x00","\u007E\x00","\u005E\x00"};
+const int TERRAIN_BADDIE = 4;
 
 const char CHAR_BADDIE_ZOMBIE = 'Z'; //"\u263B\x00";
 

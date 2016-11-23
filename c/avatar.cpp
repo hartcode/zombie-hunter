@@ -2,7 +2,7 @@
 #include <terrainmap.h>
 #include <terrainobject.h>
 
-Avatar::Avatar(unsigned int initialPosX, unsigned int initialPosY) : TerrainObject(initialPosX, initialPosY) {
+Avatar::Avatar(unsigned int initialPosX, unsigned int initialPosY) : TerrainObject(initialPosX, initialPosY, TERRAIN_PLAYER) {
   character = CHAR_AVATAR;
   direction = AVATAR_DIRECTION_UNKNOWN;
 }

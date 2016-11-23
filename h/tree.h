@@ -3,6 +3,7 @@
 #define TREE_H
 
 const char CHAR_TREE = 'T';  //"\u263A\x00";
+const int TERRAIN_TREE = 1;
 
 class Tree : public TerrainObject {
   public:
