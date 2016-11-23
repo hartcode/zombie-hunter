@@ -1,33 +1,13 @@
 #include <avatar.h>
 #include <terrainmap.h>
+#include <terrainobject.h>
 
-Avatar::Avatar(unsigned int initialPosX, unsigned int initialPosY) {
-  setX(initialPosX);
-  setY(initialPosY);
+Avatar::Avatar(unsigned int initialPosX, unsigned int initialPosY) : TerrainObject(initialPosX, initialPosY) {
   character = CHAR_AVATAR;
   direction = AVATAR_DIRECTION_UNKNOWN;
 }
 
 Avatar::~Avatar() {}
-
-void Avatar::setX(unsigned int x) {
-  posX = x;
-}
-
-void Avatar::setY(unsigned int y) {
-  posY = y;
-}
-
-unsigned int Avatar::getX() {
-  return posX;
-}
-unsigned int Avatar::getY() {
-  return posY;
-}
-
-const char Avatar::getCharacter() {
-  return character;
-}
 
 bool Avatar::update(TerrainMap * const map) {
   return false;
@@ -43,4 +23,8 @@ unsigned int Avatar::getDirection() {
 
 char const * Avatar::getName() {
   return "Player";
+}
+
+char const * Avatar::getConversation() {
+  return "Talking to yourself again?";
 }

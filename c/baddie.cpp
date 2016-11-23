@@ -95,5 +95,36 @@ void Baddie::turnZombie() {
 }
 
 char const * Baddie::getName() {
-  return "Test Human";
+  char const * retval;
+  switch(state) {
+    case BADDIE_STATE_UNDERGROUND:
+      retval = "A Strange Mound";
+    break;
+    case BADDIE_STATE_ZOMBIE:
+      retval = "A Random Zombie";
+    break;
+    default:
+    case BADDIE_STATE_HUMAN:
+      retval = "A Random Human";
+    break;
+  }
+  return retval;
+}
+
+char const * Baddie::getConversation() {
+  char const * retval;
+
+  switch(state) {
+    case BADDIE_STATE_UNDERGROUND:
+      retval = "Almost as if something is digging up from underground.";
+    break;
+    case BADDIE_STATE_ZOMBIE:
+      retval = "Moan ... Brains ...";
+    break;
+    default:
+    case BADDIE_STATE_HUMAN:
+      retval = "Hey there";
+    break;
+  }
+  return retval;
 }

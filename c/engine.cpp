@@ -58,7 +58,7 @@ void game_loop(Display * const display, Input * const in) {
   // Create player
   avatar_count = 0;
   avatars[avatar_count] = new Avatar(AVATAR_START_X, AVATAR_START_Y);
-  map.setAt(avatars[avatar_count]->getX(), avatars[avatar_count]->getY(), TERRAIN_PLAYER);
+  map.setAt(avatars[avatar_count]->getX(), avatars[avatar_count]->getY(), avatars[avatar_count]);
   Avatar *player = avatars[avatar_count];
   avatar_count++;
 
@@ -74,7 +74,7 @@ void game_loop(Display * const display, Input * const in) {
         baddieY = player->getY() + (rand()%30)-15;
       }
       avatars[avatar_count] = new Baddie(baddieX, baddieY);
-      map.setAt(avatars[avatar_count]->getX(), avatars[avatar_count]->getY(), TERRAIN_BADDIE);
+      map.setAt(avatars[avatar_count]->getX(), avatars[avatar_count]->getY(), avatars[avatar_count]);
       avatar_count++;
     }
   }
@@ -88,13 +88,13 @@ void game_loop(Display * const display, Input * const in) {
     if (baddieStep >= BADDIE_SPAWN_STEP && avatar_count < AVATAR_COUNT) {
       int baddieX = player->getX() + (rand()%30)-15;
       int baddieY = player->getY() + (rand()%30)-15;
-      while(map.getAt(baddieX,baddieY) != TERRAIN_EMPTY)
+      while(map.getAt(baddieX,baddieY) != 0)
       {
         baddieX = player->getX() + (rand()%30)-15;
         baddieY = player->getY() + (rand()%30)-15;
       }
       avatars[avatar_count] = new Baddie(baddieX, baddieY);
-      map.setAt(avatars[avatar_count]->getX(), avatars[avatar_count]->getY(), TERRAIN_BADDIE);
+      map.setAt(avatars[avatar_count]->getX(), avatars[avatar_count]->getY(), avatars[avatar_count]);
       avatar_count++;
       baddieStep = 0;
     }
@@ -108,41 +108,41 @@ void game_loop(Display * const display, Input * const in) {
     if (key > 0) {
        switch(key) {
          case LEFT_KEY:
-           if (map.getAt(player->getX(), player->getY() - 1) == TERRAIN_EMPTY) {
+           if (map.getAt(player->getX(), player->getY() - 1) == 0) {
              viewY--;
-             map.setAt(player->getX(), player->getY(), TERRAIN_EMPTY);
+             map.setAt(player->getX(), player->getY(), new TerrainObject(player->getX(), player->getY()));
              player->setY(player->getY() - 1);
-             map.setAt(player->getX(), player->getY(), TERRAIN_PLAYER);
+             map.setAt(player->getX(), player->getY(), player);
              change = true;
            }
            player->setDirection(AVATAR_DIRECTION_LEFT);
          break;
          case RIGHT_KEY:
-           if (map.getAt(player->getX(), player->getY() + 1) == TERRAIN_EMPTY) {
+           if (map.getAt(player->getX(), player->getY() + 1) == 0) {
              viewY++;
-             map.setAt(player->getX(), player->getY(), TERRAIN_EMPTY);
+             map.setAt(player->getX(), player->getY(), new TerrainObject(player->getX(), player->getY()));
              player->setY(player->getY() + 1);
-             map.setAt(player->getX(), player->getY(), TERRAIN_PLAYER);
+             map.setAt(player->getX(), player->getY(), player);
              change = true;
            }
            player->setDirection(AVATAR_DIRECTION_RIGHT);
          break;
          case UP_KEY:
-           if (map.getAt(player->getX() - 1, player->getY()) == TERRAIN_EMPTY) {
+           if (map.getAt(player->getX() - 1, player->getY()) == 0) {
              viewX--;
-             map.setAt(player->getX(), player->getY(), TERRAIN_EMPTY);
+             map.setAt(player->getX(), player->getY(), new TerrainObject(player->getX(), player->getY()));
              player->setX(player->getX() - 1);
-             map.setAt(player->getX(), player->getY(), TERRAIN_PLAYER);
+             map.setAt(player->getX(), player->getY(), player);
              change = true;
            }
            player->setDirection(AVATAR_DIRECTION_UP);
          break;
          case DOWN_KEY:
-           if (map.getAt(player->getX() + 1, player->getY()) == TERRAIN_EMPTY) {
+           if (map.getAt(player->getX() + 1, player->getY()) == 0) {
              viewX++;
-             map.setAt(player->getX(), player->getY(), TERRAIN_EMPTY);
+             map.setAt(player->getX(), player->getY(), new TerrainObject(player->getX(), player->getY()));
              player->setX(player->getX() + 1);
-             map.setAt(player->getX(), player->getY(), TERRAIN_PLAYER);
+             map.setAt(player->getX(), player->getY(), player);
              change = true;
            }
            player->setDirection(AVATAR_DIRECTION_DOWN);
@@ -165,23 +165,13 @@ void game_loop(Display * const display, Input * const in) {
                 vx = 1;
              break;
            }
-           switch(map.getAt(player->getX() + vx, player->getY() + vy)) {
-             case TERRAIN_TREE:
-                display->printConversation("Birch Tree", "Shh! I'm sleeping.");
-             break;
-             case TERRAIN_GRAVESTONE:
-                display->printConversation("Gravestone", "Here Lies Steven Baker");
-             break;
-             case TERRAIN_BADDIE:
-               for (unsigned int avatarIndex = 1; avatarIndex < avatar_count; avatarIndex++) {
-                 if (player->getX() + vx == avatars[avatarIndex]->getX() && player->getY() + vy == avatars[avatarIndex]->getY()  && ((Baddie*)avatars[avatarIndex])->getState() == BADDIE_STATE_HUMAN) {
-                    display->printConversation(avatars[avatarIndex]->getName(), "yo!");
-                 }
-               }
-             break;
-             case TERRAIN_WALL:
-                 display->printConversation("Wall", "* The wall gives you a hard stare. *");
-             break;
+
+           TerrainObject * obj = map.getAt(player->getX() + vx, player->getY() + vy);
+           if (obj != 0)
+           {
+             display->printConversation(obj->getName(), obj->getConversation());
+           } else {
+             display->printConversation("Wall", "* The wall gives you a hard stare. *");
            }
 
            // fire a bullet

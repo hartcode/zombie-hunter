@@ -1,3 +1,4 @@
+#include <terrainobject.h>
 #ifndef TERRAINMAP_H
 #define TERRAINMAP_H
 
@@ -18,14 +19,13 @@ class TerrainMap {
     unsigned int height;
     unsigned int treeCount;
     unsigned int graveCount;
-    unsigned int ** map;
+    TerrainObject *** map;
   public:
     TerrainMap(unsigned int mapWidth, unsigned int mapHeight, unsigned int treeAmount, unsigned int graveAmount);
     ~TerrainMap();
-    void setAt(unsigned int x, unsigned int y, unsigned int ch);
-    unsigned int getAt(int X, int Y);
+    void setAt(unsigned int x, unsigned int y, TerrainObject * ch);
+    TerrainObject * getAt(int X, int Y);
     const char getCharacterAt(int X, int Y);
-
   private:
     void populateMap();
     void placeRandomObjects(unsigned int numberOfObjects, unsigned int terrain_object);

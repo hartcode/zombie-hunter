@@ -1,4 +1,5 @@
 #include <terrainmap.h>
+#include <terrainobject.h>
 
 #ifndef AVATAR_H
 #define AVATAR_H
@@ -11,24 +12,16 @@ const unsigned int AVATAR_DIRECTION_DOWN = 2;
 const unsigned int AVATAR_DIRECTION_LEFT = 3;
 const unsigned int AVATAR_DIRECTION_RIGHT = 4;
 
-class Avatar {
-    unsigned int posX;
-    unsigned int posY;
+class Avatar : public TerrainObject {
     unsigned int direction;
-  protected:
-    char character;
   public:
     Avatar(unsigned int initialPosX, unsigned int initialPosY);
     virtual ~Avatar();
-    unsigned int getX();
-    unsigned int getY();
-    void setX(unsigned int x);
-    void setY(unsigned int y);
     void setDirection(unsigned int newDirection);
     unsigned int getDirection();
-    virtual const char getCharacter();
     virtual bool update(TerrainMap * const map);
     virtual char const * getName();
+    virtual char const * getConversation();
 };
 
 #endif

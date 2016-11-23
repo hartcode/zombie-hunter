@@ -35,6 +35,7 @@ class Baddie : public Avatar {
     void turnHuman();
     void turnZombie();
     char const * getName();
+    virtual char const * getConversation();
 };
 
 #endif
