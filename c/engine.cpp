@@ -159,6 +159,7 @@ void game_loop(Display * const display, Input * const in) {
              bullet.setDirection(player->getDirection());
              bullet.setX(player->getX() + vx);
              bullet.setY(player->getY() + vy);
+             // don't fire if we are right next to another object
              if (map.getAt(bullet.getX(), bullet.getY()) == 0) {
                bullet.setFired(true);
              }
