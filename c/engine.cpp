@@ -167,7 +167,7 @@ void game_loop(Display * const display, Input * const in) {
       cancel = key == ESCAPE_KEY;
     }
 
-    map.update();
+    change |= map.update();
 
     if (bullet.getFired()) {
       TerrainObject * to = map.getAt(bullet.getX(), bullet.getY());

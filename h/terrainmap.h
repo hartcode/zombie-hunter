@@ -17,7 +17,7 @@ class TerrainMap {
     void setAt(unsigned int x, unsigned int y, TerrainObject * ch);
     void moveObject(unsigned int newX, unsigned int newY, TerrainObject * ch);
     TerrainObject * getAt(int X, int Y);
-    void Update();
+    bool update();
   private:
     void populateMap();
     void placeRandomObjects(unsigned int numberOfObjects, unsigned int terrain_object);

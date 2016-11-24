@@ -18,7 +18,7 @@ void TerrainObject::setY(unsigned int y) {
   posY = y;
 }
 
-virtual unsigned int getID(){
+unsigned int TerrainObject::getID(){
   return id;
 }
 
@@ -35,6 +35,10 @@ const char TerrainObject::getCharacter() {
 
 char const * TerrainObject::getName() {
   return "Empty Space";
+}
+
+bool TerrainObject::update(TerrainMap * const map) {
+  return false;
 }
 
 char const * TerrainObject::getConversation() {

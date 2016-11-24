@@ -1,10 +1,10 @@
 #ifndef TERRAINOBJECT_H
 #define TERRAINOBJECT_H
-#include <terrainmap.h>
+
 
 const char CHAR_TERRAINOBJECT = ' ';  //"\u263A\x00";
 const int TERRAIN_EMPTY = 0;
-
+class TerrainMap;
 class TerrainObject {
     unsigned int posX;
     unsigned int posY;
@@ -18,7 +18,7 @@ class TerrainObject {
     unsigned int getY();
     void setX(unsigned int x);
     void setY(unsigned int y);
-    virtual bool update(TerrainMap * const map) = 0;
+    virtual bool update(TerrainMap * const map);
     virtual unsigned int getID();
     virtual const char getCharacter();
     virtual char const * getName();

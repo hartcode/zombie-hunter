@@ -94,13 +94,15 @@ void TerrainMap::placeRandomObjects(unsigned int numberOfObjects, unsigned int t
   }
 }
 
-void TerrainMap::Update() {
+bool TerrainMap::update() {
+  bool retval = false;
   for (unsigned int x = 0; x < height; x++)
   {
     for (unsigned int y = 0; y < width; y++) {
       if (map[x][y] != 0) {
-         map[x][y]->update(&this);
+         retval |= map[x][y]->update(this);
       }
     }
   }
+  return retval;
 }
