@@ -4,19 +4,21 @@
 
 Tree::Tree(unsigned int initialPosX, unsigned int initialPosY) : TerrainObject(initialPosX, initialPosY, TERRAIN_TREE) {
   character = CHAR_TREE;
-  id = rand() % 3;
+  id = rand() % 4;
 }
 
 Tree::~Tree() {}
 
 char const * Tree::names[] = {
+"The Larch (Larix decidua)",
+"Sugar Mapple (Acer saccharum)",
 "A Tree",
-"Another Tree",
 "This other Tree"
 };
 
 char const * Tree::conversations[] = {
-"This tree looks barky.",
+"There is a large python in it's branches.",
+"Eww, it's all sticky.",
 "This tree looks ready to leave.",
 "This tree has lost it's bark, but not it's bite."
 };
