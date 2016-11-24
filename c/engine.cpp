@@ -194,6 +194,10 @@ void game_loop(Display * const display, Input * const in) {
   } // Main loop
 
   display->clear();
+
+  if (player != 0) {
+    delete player;
+  }
 }
 
 void draw(TerrainMap * const map, int * viewX, int * viewY, Display * const display) {
