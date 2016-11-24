@@ -8,6 +8,7 @@ Baddie::Baddie(unsigned int initialPosX, unsigned int initialPosY) : Avatar(init
   charUndergroundIndex = 0;
   movementFrameStep = (rand()%3)*10;  // Start at 0, 10, 20
   movomentFrame = MOVEMENT_FRAME_UNDERGROUND;
+  id = rand() % 1;
 }
 
 Baddie::~Baddie() {}
@@ -31,7 +32,6 @@ const char  Baddie::getCharacter() {
 unsigned int Baddie::getState() {
   return state;
 }
-
 
 bool Baddie::update( TerrainMap * const map) {
   bool retval = false;
@@ -124,3 +124,11 @@ char const * Baddie::getConversation() {
   }
   return retval;
 }
+
+char const * Baddie::names[] = {
+"Player"
+};
+
+char const * Baddie::conversations[] = {
+"Talking to yourself again?"
+};

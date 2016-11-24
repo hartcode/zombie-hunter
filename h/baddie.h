@@ -27,6 +27,8 @@ class Baddie : public Avatar {
   unsigned int charUndergroundIndex;
   unsigned int movementFrameStep;
   unsigned int movomentFrame;
+  static char const * names[];
+  static char const * conversations[];
   public:
     Baddie(unsigned int initialPosX, unsigned int initialPosY);
     virtual ~Baddie();
@@ -36,7 +38,7 @@ class Baddie : public Avatar {
     void turnHuman();
     void turnZombie();
     char const * getName();
-    virtual char const * getConversation();
+    char const * getConversation();
 };
 
 #endif

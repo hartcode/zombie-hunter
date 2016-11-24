@@ -1,15 +1,18 @@
 #include <avatar.h>
 #include <terrainmap.h>
 #include <terrainobject.h>
+#include <stdlib.h>
 
 Avatar::Avatar(unsigned int initialPosX, unsigned int initialPosY) : TerrainObject(initialPosX, initialPosY, TERRAIN_PLAYER) {
   character = CHAR_AVATAR;
   direction = AVATAR_DIRECTION_UNKNOWN;
+  id = rand() % 1;
 }
 
 Avatar::Avatar(unsigned int initialPosX, unsigned int initialPosY, unsigned int ids) : TerrainObject(initialPosX, initialPosY, ids) {
   character = CHAR_AVATAR;
   direction = AVATAR_DIRECTION_UNKNOWN;
+  id = rand() % 1;
 }
 
 Avatar::~Avatar() {}
@@ -27,9 +30,17 @@ unsigned int Avatar::getDirection() {
 }
 
 char const * Avatar::getName() {
-  return "Player";
+  return names[getID()];
 }
 
 char const * Avatar::getConversation() {
-  return "Talking to yourself again?";
+  return conversations[getID()];
 }
+
+char const * Avatar::names[] = {
+"Player"
+};
+
+char const * Avatar::conversations[] = {
+"Talking to yourself again?"
+};

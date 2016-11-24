@@ -9,13 +9,17 @@ class TerrainObject {
     unsigned int posX;
     unsigned int posY;
     unsigned int terrainid;
+    static char const * names[];
+    static char const * conversations[];
   protected:
     char character;
+    unsigned int id;
   public:
     TerrainObject(unsigned int initialPosX, unsigned int initialPosY, unsigned int ids);
     virtual ~TerrainObject();
     unsigned int getX();
     unsigned int getY();
+    unsigned int getID();
     void setX(unsigned int x);
     void setY(unsigned int y);
     virtual bool update(TerrainMap * const map);

@@ -15,6 +15,8 @@ const unsigned int AVATAR_DIRECTION_RIGHT = 4;
 
 class Avatar : public TerrainObject {
     unsigned int direction;
+    static char const * names[];
+    static char const * conversations[];
   public:
     Avatar(unsigned int initialPosX, unsigned int initialPosY);
     Avatar(unsigned int initialPosX, unsigned int initialPosY, unsigned int ids);

@@ -1,11 +1,13 @@
 #include <terrainmap.h>
 #include <terrainobject.h>
+#include <stdlib.h>
 
 TerrainObject::TerrainObject(unsigned int initialPosX, unsigned int initialPosY, unsigned int ids) {
   setX(initialPosX);
   setY(initialPosY);
   character = CHAR_TERRAINOBJECT;
   terrainid = ids;
+  id = rand() % 1;
 }
 
 TerrainObject::~TerrainObject() {}
@@ -29,18 +31,30 @@ unsigned int TerrainObject::getY() {
   return posY;
 }
 
-const char TerrainObject::getCharacter() {
-  return character;
+unsigned int TerrainObject::getID() {
+  return id;
 }
 
-char const * TerrainObject::getName() {
-  return "Empty Space";
+const char TerrainObject::getCharacter() {
+  return character;
 }
 
 bool TerrainObject::update(TerrainMap * const map) {
   return false;
 }
 
+char const * TerrainObject::names[] = {
+"Empty Space"
+};
+
+char const * TerrainObject::conversations[] = {
+"There is nothing here"
+};
+
+char const * TerrainObject::getName() {
+  return names[getID()];
+}
+
 char const * TerrainObject::getConversation() {
-  return "There is nothing here";
+  return conversations[getID()];
 }
