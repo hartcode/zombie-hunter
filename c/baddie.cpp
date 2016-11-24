@@ -3,7 +3,7 @@
 #include <terrainmap.h>
 #include <stdlib.h>
 
-Baddie::Baddie(unsigned int initialPosX, unsigned int initialPosY) : Avatar(initialPosX, initialPosY) {
+Baddie::Baddie(unsigned int initialPosX, unsigned int initialPosY) : Avatar(initialPosX, initialPosY, TERRAIN_BADDIE) {
   state = BADDIE_STATE_UNDERGROUND;
   charUndergroundIndex = 0;
   movementFrameStep = (rand()%3)*10;  // Start at 0, 10, 20

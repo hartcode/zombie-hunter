@@ -5,7 +5,7 @@ TerrainObject::TerrainObject(unsigned int initialPosX, unsigned int initialPosY,
   setX(initialPosX);
   setY(initialPosY);
   character = CHAR_TERRAINOBJECT;
-  id = ids;
+  terrainid = ids;
 }
 
 TerrainObject::~TerrainObject() {}
@@ -18,8 +18,8 @@ void TerrainObject::setY(unsigned int y) {
   posY = y;
 }
 
-unsigned int TerrainObject::getID(){
-  return id;
+unsigned int TerrainObject::getTerrainID(){
+  return terrainid;
 }
 
 unsigned int TerrainObject::getX() {

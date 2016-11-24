@@ -17,6 +17,7 @@ class Avatar : public TerrainObject {
     unsigned int direction;
   public:
     Avatar(unsigned int initialPosX, unsigned int initialPosY);
+    Avatar(unsigned int initialPosX, unsigned int initialPosY, unsigned int ids);
     virtual ~Avatar();
     void setDirection(unsigned int newDirection);
     unsigned int getDirection();

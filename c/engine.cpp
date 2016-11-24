@@ -159,7 +159,9 @@ void game_loop(Display * const display, Input * const in) {
              bullet.setDirection(player->getDirection());
              bullet.setX(player->getX() + vx);
              bullet.setY(player->getY() + vy);
-             bullet.setFired(true);
+             if (map.getAt(bullet.getX(), bullet.getY()) == 0) {
+               bullet.setFired(true);
+             }
              change |= true;
            }
          break;
@@ -172,7 +174,12 @@ void game_loop(Display * const display, Input * const in) {
     if (bullet.getFired()) {
       TerrainObject * to = map.getAt(bullet.getX(), bullet.getY());
       if (to != 0) {
-         ((Baddie *)to)->turnHuman();
+         if (to->getTerrainID() == TERRAIN_BADDIE) {
+           Baddie * baddie = (Baddie *)to;
+           if (baddie->getState() == BADDIE_STATE_ZOMBIE) {
+             baddie->turnHuman();
+           }
+         }
          bullet.setFired(false);
          change |= true;
       }

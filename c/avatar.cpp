@@ -7,6 +7,11 @@ Avatar::Avatar(unsigned int initialPosX, unsigned int initialPosY) : TerrainObje
   direction = AVATAR_DIRECTION_UNKNOWN;
 }
 
+Avatar::Avatar(unsigned int initialPosX, unsigned int initialPosY, unsigned int ids) : TerrainObject(initialPosX, initialPosY, ids) {
+  character = CHAR_AVATAR;
+  direction = AVATAR_DIRECTION_UNKNOWN;
+}
+
 Avatar::~Avatar() {}
 
 bool Avatar::update(TerrainMap * const map) {
