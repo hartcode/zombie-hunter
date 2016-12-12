@@ -6,6 +6,10 @@
 #define CONSOLE_OUT wcout
 #define NEWLINE_CHAR '\n'
 
+#define MENU_CANCEL 0
+#define MENU_ACHIEVEMENTS 1
+#define MENU_EXIT 2
+
 class Display {
   unsigned int rows;
   unsigned int cols;
@@ -21,6 +25,7 @@ public:
   void getanykey();
   void draw();
   void printConversation(const char *, const char *);
+  int displayMenu();
 };
 
 #endif

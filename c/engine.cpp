@@ -131,6 +131,7 @@ void game_loop(Display * const display, Input * const in) {
            player->setDirection(AVATAR_DIRECTION_DOWN);
          break;
          case FIRE_KEY:
+          {
            int vx = 0;
            int vy = 0;
            switch(player->getDirection())
@@ -165,11 +166,26 @@ void game_loop(Display * const display, Input * const in) {
              }
              change |= true;
            }
+         }
+         break;
+         case ESCAPE_KEY:
+         display->printConversation("Menu", "obj->getConversation()");
+        /*  int menuoption = display->displayMenu();
+          switch(menuoption) {
+            case MENU_EXIT:
+            cancel = true;
+            break;
+            default:
+            case MENU_CANCEL:
+            break;
+            case MENU_ACHIEVEMENTS:
+            break;
+          }*/
+            cancel = true;
          break;
        }
-      cancel = key == ESCAPE_KEY;
     }
-
+    if (!cancel) {
     change |= map.update();
 
     if (bullet.getFired()) {
@@ -191,6 +207,7 @@ void game_loop(Display * const display, Input * const in) {
      draw(&map, &viewX, &viewY, display);
     }
     in->sleepy(milliseconds);
+   }
   } // Main loop
 
   display->clear();

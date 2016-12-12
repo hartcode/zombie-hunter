@@ -1,15 +1,14 @@
 CC=g++ $(WARN) $(HEADERS) $(PLATFORM)
-link=-lncurses
+link=-lmenuw -lncursesw
 DEBUG=-g
 OBJECT_DIR=$(BUILD_DIR)/obj
 BUILD_DIR=build
 MKDIR=mkdir
 RM=rm
 WARN=-Wall
-HEADERS=-Ih -I$(MINGWINCLUDE)\ncurses
+HEADERS=-Ih -I$(MINGWINCLUDE)\ncursesw
 CODE_FOLDER=c/
 MINGWINCLUDE=C:\MinGW\include
-
 
 ifeq ($(OS),Windows_NT)
   PLATFORM=-DWINDOWS
