@@ -1,6 +1,6 @@
 # Zombie Hunter 100
 
-The year is 2016 and the human race has fallen to zombies.
+The human race has fallen to a zombie apocalypse.
 
 In a desperate attempt to save humanity an advanced Artificial Intelligence was developed
 in hopes of finding a cure.
