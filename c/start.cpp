@@ -11,7 +11,7 @@ void start_screen(Display * const display, Input * const input) {
   display->getanykey();
 
   display->clear();
-  display->print("The year is 2016 and the human race has fallen to zombies.\n\n");
+  display->print("The human race has fallen to a zombie apocalypse.\n\n");
   display->draw();
   input->sleepy(1000);
   display->print("In a desperate attempt to save humanity an advanced Artificial Intelligence was developed in hopes of finding a cure.\n\n");
