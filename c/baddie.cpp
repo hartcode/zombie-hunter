@@ -42,7 +42,8 @@ bool Baddie::update( TerrainMap * const map) {
       case BADDIE_STATE_UNDERGROUND:
         if (charUndergroundIndex < sizeof(CHAR_BADDIE_UNDERGROUND)) {
           charUndergroundIndex++;
-        } else {
+        }
+        if (charUndergroundIndex >= sizeof(CHAR_BADDIE_UNDERGROUND)) {
           state = BADDIE_STATE_ZOMBIE;
           movomentFrame = MOVEMENT_FRAME_ZOMBIE;
           movementFrameStep = 0;
