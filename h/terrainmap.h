@@ -11,13 +11,17 @@ class TerrainMap {
     unsigned int graveCount;
     TerrainObject *** map;
     TerrainObject * wall;
+    unsigned int version;
   public:
     TerrainMap(unsigned int mapWidth, unsigned int mapHeight, unsigned int treeAmount, unsigned int graveAmount);
     ~TerrainMap();
+    void removeObjectAt(unsigned int x, unsigned int y);
+    void deleteObjectAt(unsigned int x, unsigned int y);
     void setAt(unsigned int x, unsigned int y, TerrainObject * ch);
     void moveObject(unsigned int newX, unsigned int newY, TerrainObject * ch);
     TerrainObject * getAt(int X, int Y);
     bool update();
+    unsigned int getVersion();
   private:
     void populateMap();
     void placeRandomObjects(unsigned int numberOfObjects, unsigned int terrain_object);

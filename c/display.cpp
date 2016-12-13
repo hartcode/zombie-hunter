@@ -81,8 +81,8 @@ int Display::displayMenu(){
                           "Quit",
                           (char *)NULL,
                     };
-
-
+  int height = 10;
+  int width = 20;
   ITEM **my_items;
   int c;
 	MENU *my_menu;
@@ -90,33 +90,33 @@ int Display::displayMenu(){
   WINDOW* subwin;
 	int n_choices, i;
 	ITEM *cur_item;
-  win = create_newwin(10, 40, 4, 4);
-  //keypad(win, TRUE);// Set main window and sub window
-/*
+  win = create_newwin(height, width, (rows - height) /2, (cols - width)/2);
+  keypad(win, TRUE);// Set main window and sub window
+
   // Create items
   n_choices = ARRAY_SIZE(choices);
   my_items = (ITEM **)calloc(n_choices, sizeof(ITEM *));
   for(i = 0; i < n_choices; ++i)
-     my_items[i] = new_item(choices[i], choices[i]);
+     my_items[i] = new_item(choices[i], "");
 
 	// Crate menu
 	my_menu = new_menu((ITEM **)my_items);
 
   set_menu_win(my_menu, win);
-  subwin = derwin(win, 6, 38, 3, 1);
+  subwin = derwin(win, 6, width-2, 3, 1);
   set_menu_sub(my_menu, subwin);
 
 	// Set menu mark to the string " * "
   set_menu_mark(my_menu, " * ");
 
 	// Print a border around the main window and print a title
-  */
-	//print_in_middle(win, 1, 0, 40, "Menu", COLOR_PAIR(1));
-	//mvwaddch(win, 2, 0, ACS_LTEE);
-	//mvwhline(win, 2, 1, ACS_HLINE, 38);
-	//mvwaddch(win, 2, 39, ACS_RTEE);
-	//wrefresh(win);
-/*
+
+	print_in_middle(win, 1, 0, width, "Menu", COLOR_PAIR(1));
+	mvwaddch(win, 2, 0, ACS_LTEE);
+	mvwhline(win, 2, 1, ACS_HLINE, width-2);
+	mvwaddch(win, 2, width-1, ACS_RTEE);
+	wrefresh(win);
+
 	post_menu(my_menu);
 	wrefresh(win);
 	while(c != KEY_F(1))
@@ -137,20 +137,20 @@ int Display::displayMenu(){
 				menu_driver(my_menu, REQ_SCR_UPAGE);
 				break;
       case 10:
-				const ITEM * p;
-        const char * iname;
+			  const char * iname;
 				cur_item = current_item(my_menu);
-				p = (const ITEM *)item_userptr(cur_item);
-        iname = item_name(p);
-        if (strncmp(iname,choices[2],sizeof(*choices[1])) == 0)
+        iname = item_name(cur_item);
+        if (strncmp(iname,choices[0],sizeof(*choices[0])) == 0)
+        {
+          retval = MENU_CANCEL;
+        }else if (strncmp(iname,choices[1],sizeof(*choices[1])) == 0)
         {
           retval = MENU_ACHIEVEMENTS;
         } else if (strncmp(iname,choices[2],sizeof(*choices[2])) == 0)
         {
           retval = MENU_EXIT;
         }
-				pos_menu_cursor(my_menu);
-
+          c = KEY_F(1);
 				break;
 		  }
     wrefresh(win);
@@ -158,14 +158,8 @@ int Display::displayMenu(){
 
     unpost_menu(my_menu);
     free_menu(my_menu);
-
-
-
     for(i = 0; i < n_choices; ++i)
         free_item(my_items[i]);
-        */
-    //keypad(stdscr, TRUE);// Set main window and sub window
-      getanykey();
     destroy_win(win); // and delete
 
   return retval;

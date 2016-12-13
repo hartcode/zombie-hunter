@@ -31,10 +31,7 @@ TerrainMap::~TerrainMap() {
     for (unsigned int x = 0; x < height; x++)
     {
       for (unsigned int y = 0; y < width; y++) {
-        if (map[x][y] != 0) {
-          delete map[x][y];
-          map[x][y] = 0;
-        }
+        deleteObjectAt(x,y);
       }
       delete map[x];
     }
@@ -44,11 +41,23 @@ TerrainMap::~TerrainMap() {
 void TerrainMap::setAt(unsigned int x, unsigned int y, TerrainObject * ch)
 {
    //if (x >= 0 && x < height && y >= 0 && y < width) {
-   if (map[x][y] != 0) {
-     delete map[x][y];
-     map[x][y] = 0;
-   }
+   deleteObjectAt(x, y);
    map[x][y] = ch;
+}
+
+void TerrainMap::removeObjectAt(unsigned int x, unsigned int y)
+{
+  if (map[x][y] != 0) {
+    map[x][y] = 0;
+  }
+}
+
+void TerrainMap::deleteObjectAt(unsigned int x, unsigned int y)
+{
+  if (map[x][y] != 0) {
+    delete map[x][y];
+    map[x][y] = 0;
+  }
 }
 
 void TerrainMap::moveObject(unsigned int newX, unsigned int newY, TerrainObject * ch) {
@@ -79,17 +88,9 @@ void TerrainMap::placeRandomObjects(unsigned int numberOfObjects, unsigned int t
     x = rand()%height;
     y = rand()%width;
     if (terrain_object == TERRAIN_TREE) {
-      if (map[x][y] != 0) {
-        delete map[x][y];
-        map[x][y] = 0;
-      }
-      map[x][y] = new Tree(x,y);
+      setAt(x, y, new Tree(x,y));
     } else if (terrain_object == TERRAIN_GRAVESTONE) {
-      if (map[x][y] != 0) {
-        delete map[x][y];
-        map[x][y] = 0;
-      }
-      map[x][y] = new Gravestone(x,y);
+      setAt(x, y, new Gravestone(x,y));
     }
   }
 }

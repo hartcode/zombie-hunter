@@ -169,19 +169,18 @@ void game_loop(Display * const display, Input * const in) {
          }
          break;
          case ESCAPE_KEY:
-         display->printConversation("Menu", "obj->getConversation()");
-        /*  int menuoption = display->displayMenu();
-          switch(menuoption) {
-            case MENU_EXIT:
-            cancel = true;
-            break;
-            default:
-            case MENU_CANCEL:
-            break;
-            case MENU_ACHIEVEMENTS:
-            break;
-          }*/
-            cancel = true;
+           int menuoption = display->displayMenu();
+            switch(menuoption) {
+              case MENU_EXIT:
+              cancel = true;
+              break;
+              default:
+              case MENU_CANCEL:
+              break;
+              case MENU_ACHIEVEMENTS:
+              break;
+            }
+            change |= true;
          break;
        }
     }
@@ -212,8 +211,10 @@ void game_loop(Display * const display, Input * const in) {
 
   display->clear();
 
+  map.removeObjectAt(player->getX(), player->getY());
   if (player != 0) {
     delete player;
+    player = 0;
   }
 }
 
