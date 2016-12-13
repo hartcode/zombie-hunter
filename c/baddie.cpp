@@ -2,6 +2,7 @@
 #include <baddie.h>
 #include <terrainmap.h>
 #include <stdlib.h>
+#include <string.h>
 
 Baddie::Baddie(unsigned int initialPosX, unsigned int initialPosY) : Avatar(initialPosX, initialPosY, TERRAIN_BADDIE) {
   state = BADDIE_STATE_UNDERGROUND;

@@ -1,10 +1,11 @@
-#include <engine.h>
+ #include <engine.h>
 #include <display.h>
 #include <terrainmap.h>
 #include <input.h>
 #include <avatar.h>
 #include <baddie.h>
 #include <bullet.h>
+#include <achievement.h>
 
 #include <string.h>
 #include <iostream>
@@ -36,6 +37,8 @@ unsigned int avatar_count = 0;
 
 Bullet bullet = Bullet(0, 0);
 
+
+
 void game_loop(Display * const display, Input * const in) {
   int viewX = 0;
   int viewY = 0;
@@ -44,6 +47,19 @@ void game_loop(Display * const display, Input * const in) {
   int key = 0;
   int baddieStep = 0;
   double milliseconds;
+
+  Achievement ** achievements = new Achievement*[ACHIEVEMENT_SIZE];
+
+  achievements[0] = new Achievement(1, ACHIEVEMENT_STATUS_REVEALED, "Prime Directive", "- Cure a human");
+  achievements[1] = new Achievement(2, ACHIEVEMENT_STATUS_REVEALED, "Prime Directive", "- Cure 10 humans");
+  achievements[2] = new Achievement(3, ACHIEVEMENT_STATUS_REVEALED, "Prime Directive", "- Cure 20 humans");
+  achievements[3] = new Achievement(4, ACHIEVEMENT_STATUS_ACHIEVED, "Prime Directive", "- Cure 30 humans");
+  achievements[4] = new Achievement(5, ACHIEVEMENT_STATUS_HIDDEN, "Prime Directive", "- Cure 40 humans");
+  achievements[5] = new Achievement(6, ACHIEVEMENT_STATUS_REVEALED, "Prime Directive", "- Cure 50 humans");
+  achievements[6] = new Achievement(7, ACHIEVEMENT_STATUS_REVEALED, "Prime Directive", "- Cure 60 humans");
+  achievements[7] = new Achievement(8, ACHIEVEMENT_STATUS_REVEALED, "Prime Directive", "- Cure 70 humans");
+  achievements[8] = new Achievement(9, ACHIEVEMENT_STATUS_REVEALED, "Prime Directive", "- Cure 80 humans");
+  achievements[9] = new Achievement(10, ACHIEVEMENT_STATUS_REVEALED, "Prime Directive", "- Cure 90 humans");
 
   // setup random numbers
   srand(time(NULL));
@@ -178,6 +194,7 @@ void game_loop(Display * const display, Input * const in) {
               case MENU_CANCEL:
               break;
               case MENU_ACHIEVEMENTS:
+                display->displayAchievements(achievements);
               break;
             }
             change |= true;
@@ -194,6 +211,7 @@ void game_loop(Display * const display, Input * const in) {
            Baddie * baddie = (Baddie *)to;
            if (baddie->getState() == BADDIE_STATE_ZOMBIE) {
              baddie->turnHuman();
+             achievements[0]->achieve();
            }
          }
          bullet.setFired(false);
@@ -216,6 +234,10 @@ void game_loop(Display * const display, Input * const in) {
     delete player;
     player = 0;
   }
+  for (int i=0; i < ACHIEVEMENT_SIZE; i++) {
+    delete achievements[i];
+  }
+  delete achievements;
 }
 
 void draw(TerrainMap * const map, int * viewX, int * viewY, Display * const display) {

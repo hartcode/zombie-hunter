@@ -24,6 +24,7 @@ void destroy_win(WINDOW *local_win);
 Display::Display(Input * const in)
 {
   initscr();
+  scrollok(stdscr,TRUE);
   curs_set(0);
   cols = 0;
   rows = 0;
@@ -76,7 +77,6 @@ void Display::printConversation(const char * title, const char * string) {
 int Display::displayMenu(){
   int retval = MENU_CANCEL;
   const char *choices[] = {
-                          "Cancel",
                           "Achievements",
                           "Quit",
                           (char *)NULL,
@@ -119,7 +119,7 @@ int Display::displayMenu(){
 
 	post_menu(my_menu);
 	wrefresh(win);
-	while(c != KEY_F(1))
+	while(c != 27)
   {
     c = wgetch(win);
     switch(c)
@@ -142,15 +142,12 @@ int Display::displayMenu(){
         iname = item_name(cur_item);
         if (strncmp(iname,choices[0],sizeof(*choices[0])) == 0)
         {
-          retval = MENU_CANCEL;
-        }else if (strncmp(iname,choices[1],sizeof(*choices[1])) == 0)
-        {
           retval = MENU_ACHIEVEMENTS;
-        } else if (strncmp(iname,choices[2],sizeof(*choices[2])) == 0)
+        } else if (strncmp(iname,choices[1],sizeof(*choices[1])) == 0)
         {
           retval = MENU_EXIT;
         }
-          c = KEY_F(1);
+          c = 27;
 				break;
 		  }
     wrefresh(win);
@@ -230,4 +227,74 @@ void print_in_middle(WINDOW *win, int starty, int startx, int width, char const 
 	mvwprintw(win, y, x, "%s", string);
 	wattroff(win, color);
 	refresh();
+}
+
+void Display::displayAchievements(Achievement ** achievements) {
+  int height = 10;
+  int width = 60;
+  ITEM **my_items;
+  int c = 0;
+  MENU *my_menu;
+  WINDOW* win;
+  WINDOW* subwin;
+  int n_choices, i;
+
+  win = create_newwin(height, width, (rows - height) /2, (cols - width)/2);
+  keypad(win, TRUE); // Set main window and sub window
+
+  // Create items
+  n_choices = ACHIEVEMENT_SIZE + 1;
+  my_items = (ITEM **)calloc(n_choices, sizeof(ITEM *));
+  for(i = 0; i < n_choices-1; ++i) {
+     my_items[i] = new_item((*achievements)->getName(), (*achievements)->getDescription());
+     if ((*achievements)->getStatus() == ACHIEVEMENT_STATUS_ACHIEVED) {
+       set_item_value(my_items[i], 1);
+     }
+     achievements++;
+   }
+   my_items[i] = new_item((char *)NULL, (char *)NULL);
+
+
+  // Crate menu
+  my_menu = new_menu((ITEM **)my_items);
+
+  menu_opts_off(my_menu, O_ONEVALUE);
+
+  set_menu_win(my_menu, win);
+  subwin = derwin(win, 6, width-2, 3, 1);
+  set_menu_sub(my_menu, subwin);
+
+  set_menu_format(my_menu, 6, 1);
+  // Set menu mark to the string " * "
+  set_menu_mark(my_menu, " * ");
+  //set_menu_opts(my_menu, O_ONEVALUE);
+
+  // Print a border around the main window and print a title
+  print_in_middle(win, 1, 0, width, "Achievements", COLOR_PAIR(1));
+  mvwaddch(win, 2, 0, ACS_LTEE);
+  mvwhline(win, 2, 1, ACS_HLINE, width-2);
+  mvwaddch(win, 2, width-1, ACS_RTEE);
+  wrefresh(win);
+  post_menu(my_menu);
+  wrefresh(win);
+  while(c != 27)
+  {
+    c = wgetch(win);
+    switch(c)
+      {
+      case KEY_DOWN:
+        menu_driver(my_menu, REQ_DOWN_ITEM);
+        break;
+      case KEY_UP:
+        menu_driver(my_menu, REQ_UP_ITEM);
+        break;
+      }
+    wrefresh(win);
+  }
+
+    unpost_menu(my_menu);
+    free_menu(my_menu);
+    for(i = 0; i < n_choices; ++i)
+        free_item(my_items[i]);
+    destroy_win(win); // and delete
 }

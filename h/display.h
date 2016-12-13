@@ -1,3 +1,4 @@
+#include <achievement.h>
 #include <input.h>
 
 #ifndef DISPLAY_H
@@ -26,6 +27,7 @@ public:
   void draw();
   void printConversation(const char *, const char *);
   int displayMenu();
+  void displayAchievements(Achievement ** achievements);
 };
 
 #endif
