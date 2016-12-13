@@ -1,17 +1,19 @@
 CC=g++ $(WARN) $(HEADERS) $(PLATFORM)
-link=-lmenuw -lncursesw
+link=-lmenu -lncurses
 DEBUG=-g
 OBJECT_DIR=$(BUILD_DIR)/obj
 BUILD_DIR=build
 MKDIR=mkdir
 RM=rm
 WARN=-Wall
-HEADERS=-Ih -I$(MINGWINCLUDE)\ncursesw
+HEADERS=-Ih -I$(MINGWINCLUDE)\ncurses
 CODE_FOLDER=c/
 MINGWINCLUDE=C:\MinGW\include
 
 ifeq ($(OS),Windows_NT)
   PLATFORM=-DWINDOWS
+	link=-lmenuw -lncursesw
+	HEADERS=-Ih -I$(MINGWINCLUDE)\ncursesw
 endif
 
 _OBJ = wall.o gravestone.o tree.o main.o start.o engine.o terrainobject.o avatar.o baddie.o terrainmap.o input.o display.o bullet.o
