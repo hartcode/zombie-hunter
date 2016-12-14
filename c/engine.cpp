@@ -50,12 +50,12 @@ void game_loop(Display * const display, Input * const in) {
 
   Achievement ** achievements = new Achievement*[ACHIEVEMENT_SIZE];
 
-  achievements[0] = new Achievement(1, ACHIEVEMENT_STATUS_REVEALED, "Prime Directive", "- Cure a human");
-  achievements[1] = new Achievement(2, ACHIEVEMENT_STATUS_REVEALED, "Prime Directive", "- Cure 10 humans");
-  achievements[2] = new Achievement(3, ACHIEVEMENT_STATUS_REVEALED, "Prime Directive", "- Cure 20 humans");
-  achievements[3] = new Achievement(4, ACHIEVEMENT_STATUS_ACHIEVED, "Prime Directive", "- Cure 30 humans");
-  achievements[4] = new Achievement(5, ACHIEVEMENT_STATUS_HIDDEN, "Prime Directive", "- Cure 40 humans");
-  achievements[5] = new Achievement(6, ACHIEVEMENT_STATUS_REVEALED, "Prime Directive", "- Cure 50 humans");
+  achievements[0] = new Achievement(1, ACHIEVEMENT_STATUS_ACHIEVED, "Alpha Directive", "- Cure a human");
+  achievements[1] = new Achievement(2, ACHIEVEMENT_STATUS_REVEALED, "Beta Directive", "- Cure 10 humans");
+  achievements[2] = new Achievement(3, ACHIEVEMENT_STATUS_REVEALED, "Gamma Directive", "- Cure 20 humans");
+  achievements[3] = new Achievement(4, ACHIEVEMENT_STATUS_REVEALED, "Delta Directive", "- Cure 30 humans");
+  achievements[4] = new Achievement(5, ACHIEVEMENT_STATUS_REVEALED, "Epsilon Directive", "- Cure 40 humans");
+  achievements[5] = new Achievement(6, ACHIEVEMENT_STATUS_REVEALED, "Zeta Directive", "- Cure 50 humans");
   achievements[6] = new Achievement(7, ACHIEVEMENT_STATUS_REVEALED, "Prime Directive", "- Cure 60 humans");
   achievements[7] = new Achievement(8, ACHIEVEMENT_STATUS_REVEALED, "Prime Directive", "- Cure 70 humans");
   achievements[8] = new Achievement(9, ACHIEVEMENT_STATUS_REVEALED, "Prime Directive", "- Cure 80 humans");
