@@ -16,7 +16,7 @@ ifeq ($(OS),Windows_NT)
 	HEADERS=-Ih -I$(MINGWINCLUDE)\ncursesw
 endif
 
-_OBJ = achievement.o wall.o gravestone.o tree.o main.o start.o engine.o terrainobject.o avatar.o baddie.o terrainmap.o input.o display.o bullet.o
+_OBJ = notificationsystem.o achievement.o wall.o gravestone.o tree.o main.o start.o engine.o terrainobject.o avatar.o baddie.o terrainmap.o input.o display.o bullet.o
 DEBUG_OBJ = $(patsubst %,$(OBJECT_DIR)/debug/%,$(_OBJ))
 RELEASE_OBJ = $(patsubst %,$(OBJECT_DIR)/release/%,$(_OBJ))
 

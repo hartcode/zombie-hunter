@@ -6,6 +6,7 @@
 #include <baddie.h>
 #include <bullet.h>
 #include <achievement.h>
+#include <notificationsystem.h>
 
 #include <string.h>
 #include <iostream>
@@ -37,8 +38,6 @@ unsigned int avatar_count = 0;
 
 Bullet bullet = Bullet(0, 0);
 
-
-
 void game_loop(Display * const display, Input * const in) {
   int viewX = 0;
   int viewY = 0;
@@ -48,6 +47,7 @@ void game_loop(Display * const display, Input * const in) {
   int baddieStep = 0;
   double milliseconds;
 
+  NotificationSystem notificationsystem = NotificationSystem(display);
   Achievement ** achievements = new Achievement*[ACHIEVEMENT_SIZE];
 
   achievements[0] = new Achievement(1, ACHIEVEMENT_STATUS_ACHIEVED, "Alpha Directive", "- Cure a human");
@@ -87,7 +87,7 @@ void game_loop(Display * const display, Input * const in) {
       map.setAt(baddieX, baddieY, new Baddie(baddieX, baddieY));
     }
   }
-
+  notificationsystem.showNotification("Hello",10);
   // Draw initial screen
   draw(&map, &viewX, &viewY, display);
 
@@ -223,6 +223,7 @@ void game_loop(Display * const display, Input * const in) {
      change = false;
      draw(&map, &viewX, &viewY, display);
     }
+    notificationsystem.update();
     in->sleepy(milliseconds);
    }
   } // Main loop

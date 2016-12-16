@@ -1,6 +1,8 @@
 #include <achievement.h>
 #include <input.h>
 
+#include <ncurses.h>
+
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
@@ -15,6 +17,7 @@ class Display {
   unsigned int rows;
   unsigned int cols;
   Input * input;
+  WINDOW* notificationWindow;
 public:
   Display(Input * const in);
   virtual ~Display();
@@ -28,6 +31,8 @@ public:
   void printConversation(const char *, const char *);
   int displayMenu();
   void displayAchievements(Achievement ** achievements);
+  void createNotification(const char *);
+  void destroyNotification();
 };
 
 #endif

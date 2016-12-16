@@ -29,10 +29,14 @@ Display::Display(Input * const in)
   cols = 0;
   rows = 0;
   input = in;
+  notificationWindow = 0;
   getmaxyx(stdscr, rows, cols);
 }
 
 Display::~Display() {
+  // clean up any notifications
+  destroyNotification();
+  // clean up ncurses
   endwin();
 }
 
@@ -297,4 +301,24 @@ void Display::displayAchievements(Achievement ** achievements) {
     for(i = 0; i < n_choices; ++i)
         free_item(my_items[i]);
     destroy_win(win); // and delete
+}
+
+void Display::createNotification(const char * note)
+{
+  destroyNotification();
+  int height = 5;
+  int width = cols-40;
+  int notesize = strlen(note);
+  notificationWindow = create_newwin(height, width, (rows - height)/4, (cols - width)/2 );
+  mvwprintw(notificationWindow, 1, (width - notesize)/2, note);
+  wrefresh(notificationWindow);
+}
+
+void Display::destroyNotification()
+{
+  if (notificationWindow != 0)
+  {
+      destroy_win(notificationWindow);
+      notificationWindow = 0;
+  }
 }

@@ -1,4 +1,5 @@
 #include <achievement.h>
+#include <stdlib.h>
 #include <string.h>
 using namespace std;
 Achievement::Achievement() {
@@ -8,35 +9,33 @@ Achievement::Achievement(unsigned int inid, unsigned int instatus, char const * 
 {
   id = inid;
   status = instatus;
-
-
-
-
-
   if (status != ACHIEVEMENT_STATUS_ACHIEVED) {
     int namelen = strlen(inname)+1 + UNACHIEVED_SIZE;
-    name = new char[namelen];
+    name = (char *)calloc(  namelen + 2 ,sizeof(char) );
     strncpy(name, UNACHIEVED_CHAR, UNACHIEVED_SIZE);
-    strncpy((name+UNACHIEVED_SIZE), inname, namelen);
+    strncpy(&name[UNACHIEVED_SIZE], inname, strlen(inname));
   } else {
     int namelen = strlen(inname)+1 + ACHIEVED_SIZE;
-    name = new char[namelen];
+    name = (char *)calloc(  namelen + 2 ,sizeof(char));
     strncpy(name, ACHIEVED_CHAR, ACHIEVED_SIZE);
-    strncpy((name+ACHIEVED_SIZE), inname, namelen);
+    strncpy(&name[ACHIEVED_SIZE], inname, strlen(inname));
   }
+
   int desclen = strlen(indescription)+1;
-  description = new char[desclen];
-  strncpy(description, indescription, desclen);
+  description = (char *)calloc(  desclen + 2 ,sizeof(char) );
+  strncpy(description, indescription, strlen(indescription));
 }
 Achievement::~Achievement() {
   if (name != 0)
   {
-    delete name;
+    free(name);
+    name = 0;
   }
 
   if (description != 0)
   {
-    delete description;
+    free(description);
+    description = 0;
   }
 }
 
