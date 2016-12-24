@@ -6,7 +6,8 @@ using namespace std;
 
 void start_screen(Display * const display, Input * const input) {
   display->clear();
-  display->print("Zombie Hunter 100");
+  display->print("Zombie Hunter 100\n\n");
+  display->print("Press Space to Continue");
   display->draw();
   display->getanykey();
 
@@ -24,6 +25,7 @@ void start_screen(Display * const display, Input * const input) {
   display->draw();
   input->sleepy(2000);
   display->print("As a Zombie Hunter it's up to YOU to save humanity.\n\n");
+  display->print("Press Space to Continue");
   display->draw();
 
   display->getanykey();

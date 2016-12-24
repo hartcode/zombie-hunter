@@ -87,7 +87,7 @@ void game_loop(Display * const display, Input * const in) {
       map.setAt(baddieX, baddieY, new Baddie(baddieX, baddieY));
     }
   }
-  notificationsystem.showNotification("Hello",10);
+  //notificationsystem.showNotification("Hello",10);
   // Draw initial screen
   draw(&map, &viewX, &viewY, display);
 
