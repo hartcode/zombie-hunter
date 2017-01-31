@@ -13,7 +13,21 @@ public class AsciiMapScript : MonoBehaviour
 
 	public GameObject prefabParent;
 	public GameObject prefabTree;
-	public GameObject prefabDefaultTerrain;
+	public GameObject prefabGrass;
+	public GameObject prefabDirtRoad;
+
+	int[,] floorarray =  new [,] {
+		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+		{ 1, 1, 0, 0, 0, 0, 0, 0, 0, 1 },
+		{ 2, 2, 2, 2, 2, 2, 2, 2, 0, 1 },
+		{ 2, 2, 2, 2, 2, 2, 2, 2, 0, 1 },
+		{ 1, 0, 0, 0, 1, 0, 2, 2, 0, 1 },
+		{ 1, 0, 0, 0, 0, 1, 2, 2, 0, 1 },
+		{ 1, 0, 0, 0, 0, 0, 2, 2, 0, 1 },
+		{ 1, 0, 0, 0, 0, 0, 2, 2, 0, 1 },
+		{ 1, 0, 0, 0, 0, 0, 2, 2, 1, 1 },
+		{ 1, 1, 1, 1, 1, 1, 2, 2, 1, 1 }
+	};
 
 	int[,] array =  new [,] {
 		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
@@ -36,21 +50,33 @@ public class AsciiMapScript : MonoBehaviour
 		}
 
 
-		for (int y = 0; y < rows; y++) {
-			for (int x = 0; x < cols; x++) {
-				if (array [x,y] == 0) {
-					CreateTerrain (x, y);
-				} else {
+		for (int x = 0; x < cols; x++) {
+			for (int y = 0; y < rows; y++) {
+				if (floorarray [y, x] == 1) {
+					CreateGrassTerrain (x, y);
+				} else if (floorarray[y,x] == 2) {
+					CreateDirtRoadTerrain (x, y);
+				}
+				if (array[y,x] == 1) {
 					CreateTree (x, y);
 				}
 			}
 		}
 	}
 
-	void CreateTerrain (int x, int y)
+	void CreateGrassTerrain (int x, int y)
 	{
-		if (prefabDefaultTerrain != null) {
-			GameObject prefab = (GameObject)Instantiate (prefabDefaultTerrain, new Vector3 (OriginX + (x * CharacterWidth), OriginY + (-y * CharacterHeight), 0), Quaternion.identity, prefabParent.transform);
+		if (prefabGrass != null) {
+			GameObject prefab = (GameObject)Instantiate (prefabGrass, new Vector3 (OriginX + (x * CharacterWidth), OriginY + (-y * CharacterHeight), 0), Quaternion.identity, prefabParent.transform);
+			prefab.isStatic = true;
+		} else {
+			throw new MissingReferenceException ("Default Terrain Reference Missing");
+		}
+	}
+	void CreateDirtRoadTerrain (int x, int y)
+	{
+		if (prefabDirtRoad != null) {
+			GameObject prefab = (GameObject)Instantiate (prefabDirtRoad, new Vector3 (OriginX + (x * CharacterWidth), OriginY + (-y * CharacterHeight), 0), Quaternion.identity, prefabParent.transform);
 			prefab.isStatic = true;
 		} else {
 			throw new MissingReferenceException ("Default Terrain Reference Missing");
