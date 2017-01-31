@@ -9,4 +9,4 @@ sync_github:
   image: docker:1.12.1-git
   script:
    - git fetch --prune
-   - git push --prune git@github.com:hartalex/console-experiment-unity.git +refs/remotes/origin/*:refs/heads/* +refs/tags/*:refs/tags/* 
+   - git push --prune git@github.com:hartcode/zombie-hunter.git +refs/remotes/origin/*:refs/heads/* +refs/tags/*:refs/tags/* 
