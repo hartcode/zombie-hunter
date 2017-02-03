@@ -62,24 +62,39 @@ public class AsciiMapScript : MonoBehaviour
 				}
 			}
 		}
+		GameObject player = GameObject.Find ("Player");
+		if (player == null) {
+			throw new MissingReferenceException ("Player gameobject is missing");
+		}
+
+		// throw the player in the center of the map.
+		Vector3 playerPosition = calculateTransformPosition((int)(cols / 2),(int)(rows / 2));
+		player.transform.position = playerPosition;
 	}
+
+	Vector3 calculateTransformPosition(int x, int y) {
+		Vector3 retval;
+		retval = new Vector3 (OriginX + (x * CharacterWidth), OriginY + (-y * CharacterHeight), 0);
+		return retval;
+	}
+
 
 	void CreateGrassTerrain (int x, int y)
 	{
 		if (prefabGrass != null) {
-			GameObject prefab = (GameObject)Instantiate (prefabGrass, new Vector3 (OriginX + (x * CharacterWidth), OriginY + (-y * CharacterHeight), 0), Quaternion.identity, prefabParent.transform);
+			GameObject prefab = (GameObject)Instantiate (prefabGrass, calculateTransformPosition(x,y), Quaternion.identity, prefabParent.transform);
 			prefab.isStatic = true;
 		} else {
-			throw new MissingReferenceException ("Default Terrain Reference Missing");
+			throw new MissingReferenceException ("Grass Terrain Reference Missing");
 		}
 	}
 	void CreateDirtRoadTerrain (int x, int y)
 	{
 		if (prefabDirtRoad != null) {
-			GameObject prefab = (GameObject)Instantiate (prefabDirtRoad, new Vector3 (OriginX + (x * CharacterWidth), OriginY + (-y * CharacterHeight), 0), Quaternion.identity, prefabParent.transform);
+			GameObject prefab = (GameObject)Instantiate (prefabDirtRoad, calculateTransformPosition(x,y), Quaternion.identity, prefabParent.transform);
 			prefab.isStatic = true;
 		} else {
-			throw new MissingReferenceException ("Default Terrain Reference Missing");
+			throw new MissingReferenceException ("Dirt Road Terrain Reference Missing");
 		}
 	}
 
@@ -88,7 +103,7 @@ public class AsciiMapScript : MonoBehaviour
 		if (prefabTree != null) {
 			//bool createTree = Random.value > .95f;
 			//if (createTree) {
-			GameObject prefab = (GameObject)Instantiate (prefabTree, new Vector3 (OriginX + (x * CharacterWidth), OriginY + (-y * CharacterHeight), 0), Quaternion.identity, prefabParent.transform);
+			GameObject prefab = (GameObject)Instantiate (prefabTree, calculateTransformPosition(x,y), Quaternion.identity, prefabParent.transform);
 			ScaleChange scaleChange = prefab.GetComponent<ScaleChange> ();
 			if (scaleChange != null) {
 				scaleChange.delay = Random.value;
@@ -98,12 +113,5 @@ public class AsciiMapScript : MonoBehaviour
 		} else {
 			throw new MissingReferenceException ("Tree Reference Missing");
 		}
-	}
-
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	
 	}
 }
