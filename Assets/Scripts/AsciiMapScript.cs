@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using AssemblyCSharp;
 
 public class AsciiMapScript : MonoBehaviour
 {
@@ -8,81 +9,35 @@ public class AsciiMapScript : MonoBehaviour
 	public float OriginY;
 	public float CharacterWidth;
 	public float CharacterHeight;
-	public int rows;
-	public int cols;
 
 	public GameObject prefabParent;
-	public GameObject prefabTree;
-	public GameObject prefabGrass;
-	public GameObject prefabDirtRoad;
-	public GameObject prefabWall;
 
-	int[,] floorarray =  new [,] {
-		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{ 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{ 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{ 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{ 1, 0, 0, 0, 1, 0, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{ 1, 0, 0, 0, 0, 1, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{ 1, 0, 0, 0, 0, 0, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{ 1, 0, 0, 0, 0, 0, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{ 1, 0, 0, 0, 0, 0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{ 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{ 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{ 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{ 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{ 1, 0, 0, 0, 1, 0, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{ 1, 0, 0, 0, 0, 1, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{ 1, 0, 0, 0, 0, 0, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{ 1, 0, 0, 0, 0, 0, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{ 1, 0, 0, 0, 0, 0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{ 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
-	};
-
-	int[,] array =  new [,] {
-		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{ 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{ 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{ 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{ 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{ 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{ 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{ 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{ 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{ 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1}
-	};
+	protected MapData mapData;
 
 	// Use this for initialization
 	void Start ()
 	{
+		mapData = new MapData ();
+
 		if (prefabParent == null) {
 			prefabParent = GameObject.Find ("AsciiMapCharacters");
 		}
 
+		GameObject prefabWall = (GameObject)Resources.Load ("Main/Wall", typeof(GameObject));
 
-		for (int x = -1; x <= cols; x++) {
-			for (int y = -1; y <= rows; y++) {
-				if (x < 0 || x == cols || y < 0 || y == rows) {
-					CreateWallTerrain (x, y);
+		for (int x = -1; x <= mapData.getCols(); x++) {
+			for (int y = -1; y <= mapData.getRows(); y++) {
+
+				if (x < 0 || x == mapData.getCols() || y < 0 || y == mapData.getRows()) {
+					CreateMapObject (x, y,prefabWall);
 				} else {
-					if (floorarray [y, x] == 1) {
-						CreateGrassTerrain (x, y);
-					} else if (floorarray [y, x] == 2) {
-						CreateDirtRoadTerrain (x, y);
+					GameObject floorObject = mapData.getFloor (x, y);
+					if (floorObject != null) {
+						CreateMapObject (x, y,floorObject);
 					}
-					if (array [y, x] == 1) {
-						CreateTree (x, y);
+					GameObject mainObject = mapData.getMain (x, y);
+					if (mainObject != null) {
+						CreateMapObject (x, y, mainObject);
 					}
 				}
 			}
@@ -93,7 +48,7 @@ public class AsciiMapScript : MonoBehaviour
 		}
 
 		// throw the player in the center of the map.
-		Vector3 playerPosition = calculateTransformPosition((int)(cols / 2),(int)(rows / 2));
+		Vector3 playerPosition = calculateTransformPosition((int)(mapData.getCols() / 2),(int)(mapData.getRows() / 2));
 		player.transform.position = playerPosition;
 	}
 
@@ -103,50 +58,13 @@ public class AsciiMapScript : MonoBehaviour
 		return retval;
 	}
 
-
-	void CreateGrassTerrain (int x, int y)
+	void CreateMapObject (int x, int y, GameObject mapPrefab)
 	{
-		if (prefabGrass != null) {
-			GameObject prefab = (GameObject)Instantiate (prefabGrass, calculateTransformPosition(x,y), Quaternion.identity, prefabParent.transform);
+		if (mapPrefab != null) {
+			GameObject prefab = (GameObject)Instantiate (mapPrefab, calculateTransformPosition(x,y), Quaternion.identity, prefabParent.transform);
 			prefab.isStatic = true;
 		} else {
-			throw new MissingReferenceException ("Grass Terrain Reference Missing");
-		}
-	}
-	void CreateDirtRoadTerrain (int x, int y)
-	{
-		if (prefabDirtRoad != null) {
-			GameObject prefab = (GameObject)Instantiate (prefabDirtRoad, calculateTransformPosition(x,y), Quaternion.identity, prefabParent.transform);
-			prefab.isStatic = true;
-		} else {
-			throw new MissingReferenceException ("Dirt Road Terrain Reference Missing");
-		}
-	}
-
-	void CreateWallTerrain (int x, int y)
-	{
-		if (prefabWall != null) {
-			GameObject prefab = (GameObject)Instantiate (prefabWall, calculateTransformPosition(x,y), Quaternion.identity, prefabParent.transform);
-			prefab.isStatic = true;
-		} else {
-			throw new MissingReferenceException ("Wall Reference Missing");
-		}
-	}
-
-	void CreateTree (int x, int y)
-	{
-		if (prefabTree != null) {
-			//bool createTree = Random.value > .95f;
-			//if (createTree) {
-			GameObject prefab = (GameObject)Instantiate (prefabTree, calculateTransformPosition(x,y), Quaternion.identity, prefabParent.transform);
-			ScaleChange scaleChange = prefab.GetComponent<ScaleChange> ();
-			if (scaleChange != null) {
-				scaleChange.delay = Random.value;
-			}
-			prefab.isStatic = true;
-			//}
-		} else {
-			throw new MissingReferenceException ("Tree Reference Missing");
+			throw new MissingReferenceException ("Map Prefab Reference Missing");
 		}
 	}
 }
