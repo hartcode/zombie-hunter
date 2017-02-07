@@ -27,22 +27,21 @@ namespace AssemblyCSharp
 					reader = new BinaryReader(stream);
 
 					int fileVersion = reader.ReadInt32();
-					if (fileVersion > maploaders.length || fileVersion < 0) {
-						throw new Exception("File Version {0} is unsupported", fileVersion);
+					if (fileVersion > maploaders.Length || fileVersion < 0) {
+					//TODO: display fileversion in exception
+						throw new Exception("File Version {0} is unsupported");
 					}
 
 					retval = maploaders[fileVersion].LoadFile(reader);
 
 				}finally {
 					if (reader != null) {
-						reader.close();
-						reader.dispose();
+						reader.Close();
 						reader = null;
 					}
 					if (stream != null) {
-						stream.flush();
-						stream.close();
-						stream.dispose();
+						stream.Close();
+						stream.Dispose();
 						stream = null;
 					}
 				}
@@ -62,19 +61,17 @@ namespace AssemblyCSharp
 					stream = File.OpenWrite(path);
 					writer = new BinaryWriter(stream);
 
-					writer.WriteInt32(VersionNumber);
-					maploaders[maploaders.Length].SaveFile(mapData, writer);
+				writer.Write(maploaders.Length-1);
+					maploaders[maploaders.Length-1].SaveFile(mapData, writer);
 
 				}finally {
 					if (writer != null) {
-						writer.close();
-						writer.dispose();
+						writer.Close();
 						writer = null;
 					}
 					if (stream != null) {
-						stream.flush();
-						stream.close();
-						stream.dispose();
+						stream.Close();
+						stream.Dispose();
 						stream = null;
 					}
 				}

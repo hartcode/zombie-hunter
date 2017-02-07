@@ -37,12 +37,12 @@ namespace AssemblyCSharp
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 1},
 			{ 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 			{ 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 			{ 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 1},
-			{ 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+			{ 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 1},
 			{ 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 1},
@@ -76,19 +76,20 @@ namespace AssemblyCSharp
 			floorResources [2] = "Flooring/DirtRoad";
 
 
-			maxMainPrefabs = 1;
+			maxMainPrefabs = 2;
 			mainResources = new String[maxMainPrefabs+1];
 			mainResources [0] = null;
 			mainResources [1] = "Main/Tree";
+			mainResources [2] = "Main/Column";
 
 			floorPrefabs = new GameObject[maxFloorPrefabs+1];
-			for (int i = 0; i < maxFloorPrefabs+1,i++) {
+			for (int i = 0; i < maxFloorPrefabs+1; i++) {
 				floorPrefabs [i] = (GameObject)Resources.Load (floorResources[i], typeof(GameObject));
 			}
 
 
 			mainPrefabs = new GameObject[maxMainPrefabs+1];
-			for (int i = 0; i < maxMainPrefabs+1,i++) {
+			for (int i = 0; i < maxMainPrefabs+1; i++) {
 				mainPrefabs [i] = (GameObject)Resources.Load (mainResources[i], typeof(GameObject));
 			}
 		}
@@ -98,6 +99,8 @@ namespace AssemblyCSharp
 			this.rows = rows;
 			this.cols = cols;
 
+			this.floorarray = new int[rows, cols];
+			this.array = new int[rows, cols];
 			for (int x = 0; x < rows; x++) {
 				for (int y = 0; y < cols; y++) {
 					this.floorarray[x,y] = floorarray[x,y];
@@ -107,14 +110,16 @@ namespace AssemblyCSharp
 
 			maxFloorPrefabs = floorResources.Length;
 			floorPrefabs = new GameObject[maxFloorPrefabs+1];
-			for (int i = 0; i < maxFloorPrefabs) {
+			this.floorResources = new String[maxFloorPrefabs + 1];
+			for (int i = 0; i < maxFloorPrefabs; i++) {
 				this.floorResources[i] = floorResources[i];
 				floorPrefabs[i] = (GameObject)Resources.Load (floorResources[i], typeof(GameObject));
 			}
 
 			maxMainPrefabs = mainResources.Length;
 			mainPrefabs = new GameObject[maxMainPrefabs+1];
-			for (int i = 0; i < maxMainPrefabs) {
+			this.mainResources = new String[maxMainPrefabs + 1];
+			for (int i = 0; i < maxMainPrefabs;i++) {
 				this.mainResources[i] = mainResources[i];
 				mainPrefabs[i] = (GameObject)Resources.Load (mainResources[i], typeof(GameObject));
 			}
@@ -127,7 +132,7 @@ namespace AssemblyCSharp
 		}
 
 		public int getCols() {
-			return rows;
+			return cols;
 		}
 
 		public GameObject getFloor(int x, int y) {

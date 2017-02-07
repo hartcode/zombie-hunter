@@ -11,6 +11,7 @@ public class AsciiMapScript : MonoBehaviour
 	public float CharacterHeight;
 
 	public GameObject prefabParent;
+	public GameObject prefabWall;
 
 	protected MapData mapData;
 
@@ -18,16 +19,18 @@ public class AsciiMapScript : MonoBehaviour
 	void Start ()
 	{
 		mapData = new MapData ();
-		MApFile mapfile = new MapFile();
+		MapFile mapfile = new MapFile();
 
-		mapFile.SaveFile(mapData);
+		mapfile.SaveFile(mapData,"map00.txt");
+		mapData = mapfile.LoadFile ("map00.txt");
 
 		if (prefabParent == null) {
 			prefabParent = GameObject.Find ("AsciiMapCharacters");
 		}
 
-		GameObject prefabWall = (GameObject)Resources.Load ("Main/Wall", typeof(GameObject));
-
+		if (prefabWall == null) {
+			prefabWall = (GameObject)Resources.Load ("Main/Wall", typeof(GameObject));
+		}
 		for (int x = -1; x <= mapData.getCols(); x++) {
 			for (int y = -1; y <= mapData.getRows(); y++) {
 
