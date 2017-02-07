@@ -58,12 +58,12 @@ namespace AssemblyCSharp.Map.v0
 				throw new NullReferenceException ("Parameter writer cannot be null");
 			}
 
-			int rows = mapData.getRows ();
-			int cols = mapData.getCols ();
+			Int32 rows = mapData.getRows ();
+			Int32 cols = mapData.getCols ();
 			ArrayList floorResources = new ArrayList ();
 			ArrayList mainResources = new ArrayList ();
-			int[,] floorarray = new int[rows, cols];
-			int[,] array = new int[rows, cols];
+			Int32[,] floorarray = new Int32[rows, cols];
+			Int32[,] array = new Int32[rows, cols];
 			for (int x = 0; x < rows; x++) {
 				for (int y = 0; y < cols; y++) {
 					String floorResource = mapData.getFloorResource (x, y);
@@ -87,7 +87,7 @@ namespace AssemblyCSharp.Map.v0
 				}
 			}
 
-			writer.Write (floorResources.Count);
+			writer.Write ((Int32)floorResources.Count);
 			for (int i = 0; i < floorResources.Count; i++) {
 				String floorResource = (String)floorResources [i];
 				if (floorResource == null) {
@@ -96,7 +96,7 @@ namespace AssemblyCSharp.Map.v0
 				writer.Write (floorResource);
 			}
 
-			writer.Write (mainResources.Count);
+			writer.Write ((Int32)mainResources.Count);
 			for (int i = 0; i < mainResources.Count; i++) {
 				String mainResource = (String)mainResources [i];
 				if (mainResource == null) {
@@ -105,18 +105,18 @@ namespace AssemblyCSharp.Map.v0
 				writer.Write (mainResource);
 			}
 
-			writer.Write (rows);
-			writer.Write (cols);
+			writer.Write ((Int32)rows);
+			writer.Write ((Int32)cols);
 
 			for (int x = 0; x < rows; x++) {
 				for (int y = 0; y < cols; y++) {
-					writer.Write (floorarray [x, y]);
+					writer.Write ((Int32)floorarray [x, y]);
 				}
 			}
 
 			for (int x = 0; x < rows; x++) {
 				for (int y = 0; y < cols; y++) {
-					writer.Write (array [x, y]);
+					writer.Write ((Int32)array [x, y]);
 				}
 			}
 
