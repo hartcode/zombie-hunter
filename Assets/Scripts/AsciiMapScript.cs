@@ -18,6 +18,9 @@ public class AsciiMapScript : MonoBehaviour
 	void Start ()
 	{
 		mapData = new MapData ();
+		MApFile mapfile = new MapFile();
+
+		mapFile.SaveFile(mapData);
 
 		if (prefabParent == null) {
 			prefabParent = GameObject.Find ("AsciiMapCharacters");
