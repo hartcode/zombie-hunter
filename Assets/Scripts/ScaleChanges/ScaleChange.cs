@@ -9,6 +9,7 @@ public class ScaleChange : MonoBehaviour {
 	protected float startTime;
 	public Transform transformToScaleChange = null;
 	public float delay;
+	public bool RandomDelay = false;
 	protected bool go = false;
 
 	public void Start () {
@@ -20,6 +21,9 @@ public class ScaleChange : MonoBehaviour {
 		}
 		transformToScaleChange.localScale  = startScale;
 		startTime = Time.time;
+		if (RandomDelay) {
+			delay = Random.value;
+		}
 	}
 
 	// Update is called once per frame
