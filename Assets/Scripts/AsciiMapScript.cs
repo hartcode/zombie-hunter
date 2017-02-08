@@ -17,8 +17,8 @@ public class AsciiMapScript : MonoBehaviour
 
 	protected MapData mapData;
 	protected MapFile mapfile;
-	protected int Worldx = 0;
-	protected int Worldy = 0;
+	protected int Worldx = 1;
+	protected int Worldy = 1;
 	protected int MapCols = 20;
 	protected int MapRows = 20;
 
@@ -38,8 +38,16 @@ public class AsciiMapScript : MonoBehaviour
 		mapfile = new MapFile();
 	
 		String startingMapFile = getMapPath (Worldx, Worldy);
-		mapfile.SaveFile(mapData,startingMapFile);
-
+		//mapfile.SaveFile(mapData,startingMapFile);
+		mapfile.SaveFile(mapData,getMapPath(0,0));
+		mapfile.SaveFile(mapData,getMapPath(0,1));
+		mapfile.SaveFile(mapData,getMapPath(1,0));
+		mapfile.SaveFile(mapData,getMapPath(1,1));
+		mapfile.SaveFile(mapData,getMapPath(0,2));
+		mapfile.SaveFile(mapData,getMapPath(2,0));
+		mapfile.SaveFile(mapData,getMapPath(2,1));
+		mapfile.SaveFile(mapData,getMapPath(1,2));
+		mapfile.SaveFile(mapData,getMapPath(2,2));
 
 
 		if (prefabParent == null) {
@@ -50,10 +58,15 @@ public class AsciiMapScript : MonoBehaviour
 			prefabWall = (GameObject)Resources.Load ("Main/Wall", typeof(GameObject));
 		}
 
-		LoadMap (Worldx, Worldy);
+		LoadMap (0, 0);
 		LoadMap (0, 1);
 		LoadMap (1, 0);
 		LoadMap (1, 1);
+		LoadMap (2, 1);
+		LoadMap (1, 2);
+		LoadMap (0, 2);
+		LoadMap (2, 0);
+		LoadMap (2, 2);
 
 		GameObject player = GameObject.Find ("Player");
 		if (player == null) {
