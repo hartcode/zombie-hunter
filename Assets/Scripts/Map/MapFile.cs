@@ -33,8 +33,10 @@ namespace AssemblyCSharp
 					}
 
 					retval = maploaders[fileVersion].LoadFile(reader);
-
-				}finally {
+			}catch(Exception exception)
+			{
+				//TODO: log exceptions					
+			}finally {
 					if (reader != null) {
 						reader.Close();
 						reader = null;

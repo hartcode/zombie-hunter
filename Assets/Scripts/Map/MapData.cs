@@ -113,7 +113,7 @@ namespace AssemblyCSharp
 			this.floorResources = new String[maxFloorPrefabs + 1];
 			for (int i = 0; i < maxFloorPrefabs; i++) {
 				this.floorResources[i] = floorResources[i];
-				floorPrefabs[i] = (GameObject)Resources.Load (floorResources[i], typeof(GameObject));
+				//floorPrefabs[i] = (GameObject)Resources.Load (floorResources[i], typeof(GameObject));
 			}
 
 			maxMainPrefabs = mainResources.Length;
@@ -121,7 +121,7 @@ namespace AssemblyCSharp
 			this.mainResources = new String[maxMainPrefabs + 1];
 			for (int i = 0; i < maxMainPrefabs;i++) {
 				this.mainResources[i] = mainResources[i];
-				mainPrefabs[i] = (GameObject)Resources.Load (mainResources[i], typeof(GameObject));
+				//mainPrefabs[i] = (GameObject)Resources.Load (mainResources[i], typeof(GameObject));
 			}
 
 		}
