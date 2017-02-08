@@ -17,8 +17,8 @@ public class AsciiMapScript : MonoBehaviour
 
 	protected MapData mapData;
 	protected MapFile mapfile;
-	public int Worldx = 1;
-	public int Worldy = 1;
+	public int Worldx = 2;
+	public int Worldy = 2;
 	protected int MapCols = 20;
 	protected int MapRows = 20;
 	protected GameObject player;
@@ -74,16 +74,17 @@ public class AsciiMapScript : MonoBehaviour
 			prefabWall = (GameObject)Resources.Load ("Main/Wall", typeof(GameObject));
 		}
 
-		LoadMap (0, 0);
-		LoadMap (0, 1);
-		LoadMap (1, 0);
-		LoadMap (1, 1);
-		LoadMap (2, 1);
-		LoadMap (1, 2);
-		LoadMap (0, 2);
-		LoadMap (2, 0);
-		LoadMap (2, 2);
+		LoadMap (Worldx-1, Worldy-1);
+		LoadMap (Worldx-1, Worldy);
+		LoadMap (Worldx-1, Worldy+1);
+		LoadMap (Worldx, Worldy-1);
 
+		LoadMap (Worldx, Worldy+1);
+		LoadMap (Worldx+1, Worldy-1);
+		LoadMap (Worldx+1, Worldy);
+		LoadMap (Worldx+1, Worldy+1);
+
+		LoadMap (Worldx, Worldy);
 
 		player = GameObject.Find ("Player");
 		if (player == null) {
@@ -314,9 +315,9 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 			Vector3 worldstart = calculateTransformPosition(0,0, Worldx, Worldy);
 			Vector3 worldend = calculateTransformPosition (MapRows, MapCols, Worldx, Worldy);
 			if (player.transform.position.x < worldstart.x) {
-				 (UnLoadMap (Worldx + 1, Worldy-1));
-				 (UnLoadMap (Worldx + 1, Worldy));
-				 (UnLoadMap (Worldx + 1, Worldy+1));
+				 UnLoadMap (Worldx + 1, Worldy-1);
+				 UnLoadMap (Worldx + 1, Worldy);
+				 UnLoadMap (Worldx + 1, Worldy+1);
 				Worldx--;
 				LoadMapThreaded (Worldx - 1, Worldy-1, YieldDirection.YieldLeft);
 				LoadMapThreaded (Worldx - 1, Worldy, YieldDirection.YieldLeft);
@@ -324,27 +325,27 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 			}
 			if (player.transform.position.x > worldend.x) {
 
-				 (UnLoadMap (Worldx - 1, Worldy-1));
-				 (UnLoadMap (Worldx - 1, Worldy));
-				 (UnLoadMap (Worldx - 1, Worldy+1));
+				 UnLoadMap (Worldx - 1, Worldy-1);
+				 UnLoadMap (Worldx - 1, Worldy);
+				 UnLoadMap (Worldx - 1, Worldy+1);
 				Worldx++;
 				LoadMapThreaded (Worldx + 1, Worldy-1, YieldDirection.YieldRight);
 				LoadMapThreaded (Worldx + 1, Worldy, YieldDirection.YieldRight);
 				LoadMapThreaded (Worldx + 1, Worldy+1, YieldDirection.YieldRight);
 			}
 			if (player.transform.position.y > worldstart.y) {
-				 (UnLoadMap (Worldx - 1, Worldy+1));
-				 (UnLoadMap (Worldx, Worldy+1));
-				 (UnLoadMap (Worldx + 1, Worldy+1));
+				 UnLoadMap (Worldx - 1, Worldy+1);
+				 UnLoadMap (Worldx, Worldy+1);
+				 UnLoadMap (Worldx + 1, Worldy+1);
 				Worldy--;
 				LoadMapThreaded (Worldx - 1, Worldy - 1, YieldDirection.YieldUp);
 				LoadMapThreaded (Worldx, Worldy - 1, YieldDirection.YieldUp);
 				LoadMapThreaded (Worldx + 1, Worldy - 1, YieldDirection.YieldUp);
 			}
 			if (player.transform.position.y < worldend.y) {
-				 (UnLoadMap (Worldx - 1, Worldy-1));
-				 (UnLoadMap (Worldx, Worldy-1));
-				 (UnLoadMap (Worldx + 1, Worldy-1));
+				 UnLoadMap (Worldx - 1, Worldy-1);
+				 UnLoadMap (Worldx, Worldy-1);
+				 UnLoadMap (Worldx + 1, Worldy-1);
 				Worldy++;
 				LoadMapThreaded (Worldx - 1, Worldy + 1, YieldDirection.YieldDown);
 				LoadMapThreaded (Worldx, Worldy + 1, YieldDirection.YieldDown);
