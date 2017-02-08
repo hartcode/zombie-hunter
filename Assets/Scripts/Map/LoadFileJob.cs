@@ -7,7 +7,9 @@ namespace AssemblyCSharp
 		public String input;
 		public int Worldx;
 		public int Worldy;
+    public YieldDirection yieldDirection;
 		public MapData output;
+
 
 		protected override void ThreadFunction()
 		{
@@ -16,4 +18,3 @@ namespace AssemblyCSharp
 		}
 	}
 }
-

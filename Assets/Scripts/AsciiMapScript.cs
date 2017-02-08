@@ -46,7 +46,7 @@ public class AsciiMapScript : MonoBehaviour
 	{
 		mapData = new MapData ();
 		mapfile = new MapFile();
-	
+
 		String startingMapFile = getMapPath (Worldx, Worldy);
 		//mapfile.SaveFile(mapData,startingMapFile);
 		mapfile.SaveFile(mapData,getMapPath(0,0));
@@ -83,7 +83,7 @@ public class AsciiMapScript : MonoBehaviour
 		LoadMap (0, 2);
 		LoadMap (2, 0);
 		LoadMap (2, 2);
-	
+
 
 		player = GameObject.Find ("Player");
 		if (player == null) {
@@ -118,101 +118,159 @@ public class AsciiMapScript : MonoBehaviour
 			InstantiateMap (mapData, Worldx, Worldy);
 	}
 
-	void LoadMapThreaded(int Worldx, int Worldy) {
+	void LoadMapThreaded(int Worldx, int Worldy, YieldDirection yieldDirection) {
 		String mapPath = getMapPath (Worldx, Worldy);
 		LoadFileJob loadFileJob = new LoadFileJob ();
 		loadFileJob.Worldx = Worldx;
 		loadFileJob.Worldy = Worldy;
 		loadFileJob.input = mapPath;
+		loadFileJob.yieldDirection = yieldDirection;
 		lfj.Add (loadFileJob);
 		loadFileJob.Start ();
 	}
 
-	void InstantiateMap(MapData mapData, int Worldx, int Worldy)
+IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
+	return InstantiateMap(mapData,Worldx,Worldy, YieldDirection.NoYield);
+}
+
+	IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy, YieldDirection yieldDirection)
 	{
 		GameObject world = GameObject.Find (getWorldName (Worldx, Worldy));
 		if (world == null) {
 			world = new GameObject (getWorldName (Worldx, Worldy));
 			world.transform.parent = prefabParent.transform;
 			if (mapData == null) {
-			
-				for (int x = 0; x < MapRows; x++) {
-					for (int y = 0; y < MapCols; y++) {
-						CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+				if (yieldDirection == yieldDirection.YieldRight) {
+					for (int x = 0; x < MapRows; x++) {
+						for (int y = 0; y < MapCols; y++) {
+							CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+						}
+						yield return null;
 					}
-
+				} else if (yieldDirection == yieldDirection.YieldLeft) {
+					for (int x = MapRows-1; x >= 0; x--) {
+						for (int y = 0; y < MapCols; y++) {
+							CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+						}
+						yield return null;
+					}
+				} else if (yieldDirection == yieldDirection.YieldUp) {
+					for (int y = 0; y < MapCols; y++) {
+						for (int x = 0; x < MapRows; x++) {
+							CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+						}
+						yield return null;
+					}
+				} else if (yieldDirection == yieldDirection.YieldDown) {
+					for (int y = MapCols-1; y >= 0; y--) {
+						for (int x = 0; x < MapRows ; x++) {
+							CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+						}
+						yield return null;
+					}
 				}
 			} else {
-			
-				for (int x = 0; x < mapData.getRows (); x++) {
-					for (int y = 0; y < mapData.getCols (); y++) {
 
-						if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
-							CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
-						} else {
-							//GameObject floorObject = mapData.getFloor (x, y);
-							GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
-							if (floorObject != null) {
-								CreateMapObject (x, y, floorObject, Worldx, Worldy, world);
-							}
-							//GameObject mainObject = mapData.getMain (x, y);
-							GameObject mainObject = (GameObject)Resources.Load (mapData.getMainResource (x, y), typeof(GameObject));
-							if (mainObject != null) {
-								CreateMapObject (x, y, mainObject, Worldx, Worldy, world);
+				if (yieldDirection == yieldDirection.YieldRight) {
+					for (int x = 0; x < mapData.getRows (); x++) {
+						for (int y = 0; y < mapData.getCols (); y++) {
+							if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
+								CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+							} else {
+								//GameObject floorObject = mapData.getFloor (x, y);
+								GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
+								if (floorObject != null) {
+									CreateMapObject (x, y, floorObject, Worldx, Worldy, world);
+								}
+								//GameObject mainObject = mapData.getMain (x, y);
+								GameObject mainObject = (GameObject)Resources.Load (mapData.getMainResource (x, y), typeof(GameObject));
+								if (mainObject != null) {
+									CreateMapObject (x, y, mainObject, Worldx, Worldy, world);
+								}
 							}
 						}
-
+						yield return null;
+					}
+				} else if (yieldDirection == yieldDirection.YieldLeft) {
+					for (int x = mapData.getRows ()-1; x >= 0; x--) {
+						for (int y = 0; y < mapData.getCols (); y++) {
+							if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
+								CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+							} else {
+								//GameObject floorObject = mapData.getFloor (x, y);
+								GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
+								if (floorObject != null) {
+									CreateMapObject (x, y, floorObject, Worldx, Worldy, world);
+								}
+								//GameObject mainObject = mapData.getMain (x, y);
+								GameObject mainObject = (GameObject)Resources.Load (mapData.getMainResource (x, y), typeof(GameObject));
+								if (mainObject != null) {
+									CreateMapObject (x, y, mainObject, Worldx, Worldy, world);
+								}
+							}
+						}
+						yield return null;
+					}
+				} else if (yieldDirection == yieldDirection.YieldUp) {
+					for (int y = 0; y < mapData.getCols (); y++) {
+						for (int x = 0; x < mapData.getRows (); x++) {
+							if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
+								CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+							} else {
+								//GameObject floorObject = mapData.getFloor (x, y);
+								GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
+								if (floorObject != null) {
+									CreateMapObject (x, y, floorObject, Worldx, Worldy, world);
+								}
+								//GameObject mainObject = mapData.getMain (x, y);
+								GameObject mainObject = (GameObject)Resources.Load (mapData.getMainResource (x, y), typeof(GameObject));
+								if (mainObject != null) {
+									CreateMapObject (x, y, mainObject, Worldx, Worldy, world);
+								}
+							}
+						}
+						yield return null;
+					}
+				} else if (yieldDirection == yieldDirection.YieldDown) {
+					for (int y = mapData.getCols ()-1; y >= 0; y--) {
+						for (int x = 0; x < mapData.getRows (); x++) {
+							if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
+								CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+							} else {
+								//GameObject floorObject = mapData.getFloor (x, y);
+								GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
+								if (floorObject != null) {
+									CreateMapObject (x, y, floorObject, Worldx, Worldy, world);
+								}
+								//GameObject mainObject = mapData.getMain (x, y);
+								GameObject mainObject = (GameObject)Resources.Load (mapData.getMainResource (x, y), typeof(GameObject));
+								if (mainObject != null) {
+									CreateMapObject (x, y, mainObject, Worldx, Worldy, world);
+								}
+							}
+						}
+						yield return null;
 					}
 				}
+
 			}
 		}
 	}
-	IEnumerator InstantiateCoroutineMap(MapData mapData, int Worldx, int Worldy)
-	{
-		GameObject world = GameObject.Find (getWorldName (Worldx, Worldy));
-		if (world == null) {
-			world = new GameObject (getWorldName (Worldx, Worldy));
-			world.transform.parent = prefabParent.transform;
-			if (mapData == null) {
-			
-				for (int x = 0; x < MapRows; x++) {
-					for (int y = 0; y < MapCols; y++) {
-						CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
 
-					}
-					yield return null;
-				}
-			
-			} else {		
-				for (int x = 0; x < mapData.getRows (); x++) {
-					for (int y = 0; y < mapData.getCols (); y++) {
-
-						if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
-							CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
-						} else {
-							//GameObject floorObject = mapData.getFloor (x, y);
-							GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
-							if (floorObject != null) {
-								CreateMapObject (x, y, floorObject, Worldx, Worldy, world);
-							}
-							//GameObject mainObject = mapData.getMain (x, y);
-							GameObject mainObject = (GameObject)Resources.Load (mapData.getMainResource (x, y), typeof(GameObject));
-							if (mainObject != null) {
-								CreateMapObject (x, y, mainObject, Worldx, Worldy, world);
-							}
-						}
-					}
-					yield return null;
-				}
-			}	
-		}
-	}
 
 	void UnLoadMap(int Worldx, int Worldy) {
 		GameObject  world = GameObject.Find (getWorldName (Worldx, Worldy));
 		if (world != null) {
 			DestroyObject (world);
+			world = null;
 		}
+	}
+  // There is a race condition where we could be removing a map before it
+	// is completely instantiated
+	IEnumerator UnLoadMapWithDelay( int Worldx, int Worldy)
+	{
+			yield return new WaitForSeconds(1f);
+			UnLoadMap(int Worldx, int Worldy);
 	}
 
 	void FixedUpdate()
@@ -221,9 +279,7 @@ public class AsciiMapScript : MonoBehaviour
 			foreach (LoadFileJob loadFileJob in lfj.ToArray()) {
 				if (loadFileJob.Update ()) {
 					lfj.Remove (loadFileJob);
-					IEnumerator coroutine = 
-						InstantiateCoroutineMap (loadFileJob.output, loadFileJob.Worldx, loadFileJob.Worldy);
-					StartCoroutine (coroutine);
+					StartCoroutine (InstantiateMap (loadFileJob.output, loadFileJob.Worldx, loadFileJob.Worldy, loadFileJob.yieldDirection));
 				}
 			}
 		}
@@ -231,41 +287,41 @@ public class AsciiMapScript : MonoBehaviour
 			Vector3 worldstart = calculateTransformPosition(0,0, Worldx, Worldy);
 			Vector3 worldend = calculateTransformPosition (MapRows, MapCols, Worldx, Worldy);
 			if (player.transform.position.x < worldstart.x) {
-				UnLoadMap (Worldx + 1, Worldy-1);
-				UnLoadMap (Worldx + 1, Worldy);
-				UnLoadMap (Worldx + 1, Worldy+1);
+				StartCoroutine (UnLoadMapWithDelay (Worldx + 1, Worldy-1));
+				StartCoroutine (UnLoadMapWithDelay (Worldx + 1, Worldy));
+				StartCoroutine (UnLoadMapWithDelay (Worldx + 1, Worldy+1));
 				Worldx--;
-				LoadMapThreaded (Worldx - 1, Worldy-1);
-				LoadMapThreaded (Worldx - 1, Worldy);
-				LoadMapThreaded (Worldx - 1, Worldy+1);
+				LoadMapThreaded (Worldx - 1, Worldy-1, yieldDirection.YieldLeft);
+				LoadMapThreaded (Worldx - 1, Worldy, yieldDirection.YieldLeft);
+				LoadMapThreaded (Worldx - 1, Worldy+1, yieldDirection.YieldLeft);
 			}
 			if (player.transform.position.x > worldend.x) {
 
-				UnLoadMap (Worldx - 1, Worldy-1);
-				UnLoadMap (Worldx - 1, Worldy);
-				UnLoadMap (Worldx - 1, Worldy+1);
+				StartCoroutine (UnLoadMapWithDelay (Worldx - 1, Worldy-1));
+				StartCoroutine (UnLoadMapWithDelay (Worldx - 1, Worldy));
+				StartCoroutine (UnLoadMapWithDelay (Worldx - 1, Worldy+1));
 				Worldx++;
-				LoadMapThreaded (Worldx + 1, Worldy-1);
-				LoadMapThreaded (Worldx + 1, Worldy);
-				LoadMapThreaded (Worldx + 1, Worldy+1);
+				LoadMapThreaded (Worldx + 1, Worldy-1, yieldDirection.YieldRight);
+				LoadMapThreaded (Worldx + 1, Worldy, yieldDirection.YieldRight);
+				LoadMapThreaded (Worldx + 1, Worldy+1, yieldDirection.YieldRight);
 			}
 			if (player.transform.position.y > worldstart.y) {
-				UnLoadMap (Worldx - 1, Worldy+1);
-				UnLoadMap (Worldx, Worldy+1);
-				UnLoadMap (Worldx + 1, Worldy+1);
+				StartCoroutine (UnLoadMapWithDelay (Worldx - 1, Worldy+1));
+				StartCoroutine (UnLoadMapWithDelay (Worldx, Worldy+1));
+				StartCoroutine (UnLoadMapWithDelay (Worldx + 1, Worldy+1));
 				Worldy--;
-				LoadMapThreaded (Worldx - 1, Worldy - 1);
-				LoadMapThreaded (Worldx, Worldy - 1);
-				LoadMapThreaded (Worldx + 1, Worldy - 1);
+				LoadMapThreaded (Worldx - 1, Worldy - 1, yieldDirection.YieldUp);
+				LoadMapThreaded (Worldx, Worldy - 1, yieldDirection.YieldUp);
+				LoadMapThreaded (Worldx + 1, Worldy - 1, yieldDirection.YieldUp);
 			}
 			if (player.transform.position.y < worldend.y) {
-				UnLoadMap (Worldx - 1, Worldy-1);
-				UnLoadMap (Worldx, Worldy-1);
-				UnLoadMap (Worldx + 1, Worldy-1);
+				StartCoroutine (UnLoadMapWithDelay (Worldx - 1, Worldy-1));
+				StartCoroutine (UnLoadMapWithDelay (Worldx, Worldy-1));
+				StartCoroutine (UnLoadMapWithDelay (Worldx + 1, Worldy-1));
 				Worldy++;
-				LoadMapThreaded (Worldx - 1, Worldy + 1);
-				LoadMapThreaded (Worldx, Worldy + 1);
-				LoadMapThreaded (Worldx + 1, Worldy + 1);
+				LoadMapThreaded (Worldx - 1, Worldy + 1, yieldDirection.YieldDown);
+				LoadMapThreaded (Worldx, Worldy + 1, yieldDirection.YieldDown);
+				LoadMapThreaded (Worldx + 1, Worldy + 1, yieldDirection.YieldDown);
 			}
 		}
 	}
