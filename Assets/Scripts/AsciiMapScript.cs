@@ -47,7 +47,7 @@ public class AsciiMapScript : MonoBehaviour
 		mapData = new MapData ();
 		mapfile = new MapFile();
 
-		String startingMapFile = getMapPath (Worldx, Worldy);
+		//String startingMapFile = getMapPath (Worldx, Worldy);
 		//mapfile.SaveFile(mapData,startingMapFile);
 		mapfile.SaveFile(mapData,getMapPath(0,0));
 		mapfile.SaveFile(mapData,getMapPath(0,1));
@@ -104,8 +104,10 @@ public class AsciiMapScript : MonoBehaviour
 	void CreateMapObject (int x, int y, GameObject mapPrefab, int Worldx, int Worldy, GameObject parent)
 	{
 		if (mapPrefab != null) {
-			GameObject prefab = (GameObject)Instantiate (mapPrefab, calculateTransformPosition(x,y, Worldx, Worldy), Quaternion.identity, parent.transform);
-			prefab.isStatic = true;
+			if (parent != null) {
+				GameObject prefab = (GameObject)Instantiate (mapPrefab, calculateTransformPosition (x, y, Worldx, Worldy), Quaternion.identity, parent.transform);
+				prefab.isStatic = true;
+			}
 		} else {
 			throw new MissingReferenceException ("Map Prefab Reference Missing");
 		}
@@ -115,7 +117,7 @@ public class AsciiMapScript : MonoBehaviour
 	void LoadMap(int Worldx, int Worldy) {
 			String mapPath = getMapPath (Worldx, Worldy);
 			mapData = mapfile.LoadFile (mapPath);
-			InstantiateMap (mapData, Worldx, Worldy);
+		StartCoroutine(InstantiateMap (mapData, Worldx, Worldy));
 	}
 
 	void LoadMapThreaded(int Worldx, int Worldy, YieldDirection yieldDirection) {
@@ -130,7 +132,7 @@ public class AsciiMapScript : MonoBehaviour
 	}
 
 IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
-	return InstantiateMap(mapData,Worldx,Worldy, YieldDirection.NoYield);
+		return InstantiateMap(mapData,Worldx,Worldy, YieldDirection.NoYield);
 }
 
 	IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy, YieldDirection yieldDirection)
@@ -140,38 +142,44 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 			world = new GameObject (getWorldName (Worldx, Worldy));
 			world.transform.parent = prefabParent.transform;
 			if (mapData == null) {
-				if (yieldDirection == yieldDirection.YieldRight) {
+				if (yieldDirection == YieldDirection.YieldRight) {
 					for (int x = 0; x < MapRows; x++) {
 						for (int y = 0; y < MapCols; y++) {
 							CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
 						}
 						yield return null;
 					}
-				} else if (yieldDirection == yieldDirection.YieldLeft) {
+				} else if (yieldDirection == YieldDirection.YieldLeft) {
 					for (int x = MapRows-1; x >= 0; x--) {
 						for (int y = 0; y < MapCols; y++) {
 							CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
 						}
 						yield return null;
 					}
-				} else if (yieldDirection == yieldDirection.YieldUp) {
+				} else if (yieldDirection == YieldDirection.YieldDown) {
 					for (int y = 0; y < MapCols; y++) {
 						for (int x = 0; x < MapRows; x++) {
 							CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
 						}
 						yield return null;
 					}
-				} else if (yieldDirection == yieldDirection.YieldDown) {
+				} else if (yieldDirection == YieldDirection.YieldUp) {
 					for (int y = MapCols-1; y >= 0; y--) {
 						for (int x = 0; x < MapRows ; x++) {
 							CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
 						}
 						yield return null;
 					}
+				}else  {
+					for (int x = 0; x < MapRows ; x++) {
+						for (int y = 0; y < MapCols; y++) {
+							CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+						}
+					}
 				}
 			} else {
 
-				if (yieldDirection == yieldDirection.YieldRight) {
+				if (yieldDirection == YieldDirection.YieldRight) {
 					for (int x = 0; x < mapData.getRows (); x++) {
 						for (int y = 0; y < mapData.getCols (); y++) {
 							if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
@@ -191,8 +199,8 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 						}
 						yield return null;
 					}
-				} else if (yieldDirection == yieldDirection.YieldLeft) {
-					for (int x = mapData.getRows ()-1; x >= 0; x--) {
+				} else if (yieldDirection == YieldDirection.YieldLeft) {
+					for (int x = mapData.getRows () - 1; x >= 0; x--) {
 						for (int y = 0; y < mapData.getCols (); y++) {
 							if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
 								CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
@@ -211,7 +219,7 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 						}
 						yield return null;
 					}
-				} else if (yieldDirection == yieldDirection.YieldUp) {
+				} else if (yieldDirection == YieldDirection.YieldDown) {
 					for (int y = 0; y < mapData.getCols (); y++) {
 						for (int x = 0; x < mapData.getRows (); x++) {
 							if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
@@ -231,8 +239,8 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 						}
 						yield return null;
 					}
-				} else if (yieldDirection == yieldDirection.YieldDown) {
-					for (int y = mapData.getCols ()-1; y >= 0; y--) {
+				} else if (yieldDirection == YieldDirection.YieldUp) {
+					for (int y = mapData.getCols () - 1; y >= 0; y--) {
 						for (int x = 0; x < mapData.getRows (); x++) {
 							if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
 								CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
@@ -250,6 +258,25 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 							}
 						}
 						yield return null;
+					}
+				} else {
+					for (int x = 0; x < mapData.getRows (); x++) {
+						for (int y = 0; y < mapData.getCols (); y++) {
+							if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
+								CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+							} else {
+								//GameObject floorObject = mapData.getFloor (x, y);
+								GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
+								if (floorObject != null) {
+									CreateMapObject (x, y, floorObject, Worldx, Worldy, world);
+								}
+								//GameObject mainObject = mapData.getMain (x, y);
+								GameObject mainObject = (GameObject)Resources.Load (mapData.getMainResource (x, y), typeof(GameObject));
+								if (mainObject != null) {
+									CreateMapObject (x, y, mainObject, Worldx, Worldy, world);
+								}
+							}
+						}
 					}
 				}
 
@@ -270,7 +297,7 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 	IEnumerator UnLoadMapWithDelay( int Worldx, int Worldy)
 	{
 			yield return new WaitForSeconds(1f);
-			UnLoadMap(int Worldx, int Worldy);
+			UnLoadMap(Worldx, Worldy);
 	}
 
 	void FixedUpdate()
@@ -287,41 +314,41 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 			Vector3 worldstart = calculateTransformPosition(0,0, Worldx, Worldy);
 			Vector3 worldend = calculateTransformPosition (MapRows, MapCols, Worldx, Worldy);
 			if (player.transform.position.x < worldstart.x) {
-				StartCoroutine (UnLoadMapWithDelay (Worldx + 1, Worldy-1));
-				StartCoroutine (UnLoadMapWithDelay (Worldx + 1, Worldy));
-				StartCoroutine (UnLoadMapWithDelay (Worldx + 1, Worldy+1));
+				 (UnLoadMap (Worldx + 1, Worldy-1));
+				 (UnLoadMap (Worldx + 1, Worldy));
+				 (UnLoadMap (Worldx + 1, Worldy+1));
 				Worldx--;
-				LoadMapThreaded (Worldx - 1, Worldy-1, yieldDirection.YieldLeft);
-				LoadMapThreaded (Worldx - 1, Worldy, yieldDirection.YieldLeft);
-				LoadMapThreaded (Worldx - 1, Worldy+1, yieldDirection.YieldLeft);
+				LoadMapThreaded (Worldx - 1, Worldy-1, YieldDirection.YieldLeft);
+				LoadMapThreaded (Worldx - 1, Worldy, YieldDirection.YieldLeft);
+				LoadMapThreaded (Worldx - 1, Worldy+1, YieldDirection.YieldLeft);
 			}
 			if (player.transform.position.x > worldend.x) {
 
-				StartCoroutine (UnLoadMapWithDelay (Worldx - 1, Worldy-1));
-				StartCoroutine (UnLoadMapWithDelay (Worldx - 1, Worldy));
-				StartCoroutine (UnLoadMapWithDelay (Worldx - 1, Worldy+1));
+				 (UnLoadMap (Worldx - 1, Worldy-1));
+				 (UnLoadMap (Worldx - 1, Worldy));
+				 (UnLoadMap (Worldx - 1, Worldy+1));
 				Worldx++;
-				LoadMapThreaded (Worldx + 1, Worldy-1, yieldDirection.YieldRight);
-				LoadMapThreaded (Worldx + 1, Worldy, yieldDirection.YieldRight);
-				LoadMapThreaded (Worldx + 1, Worldy+1, yieldDirection.YieldRight);
+				LoadMapThreaded (Worldx + 1, Worldy-1, YieldDirection.YieldRight);
+				LoadMapThreaded (Worldx + 1, Worldy, YieldDirection.YieldRight);
+				LoadMapThreaded (Worldx + 1, Worldy+1, YieldDirection.YieldRight);
 			}
 			if (player.transform.position.y > worldstart.y) {
-				StartCoroutine (UnLoadMapWithDelay (Worldx - 1, Worldy+1));
-				StartCoroutine (UnLoadMapWithDelay (Worldx, Worldy+1));
-				StartCoroutine (UnLoadMapWithDelay (Worldx + 1, Worldy+1));
+				 (UnLoadMap (Worldx - 1, Worldy+1));
+				 (UnLoadMap (Worldx, Worldy+1));
+				 (UnLoadMap (Worldx + 1, Worldy+1));
 				Worldy--;
-				LoadMapThreaded (Worldx - 1, Worldy - 1, yieldDirection.YieldUp);
-				LoadMapThreaded (Worldx, Worldy - 1, yieldDirection.YieldUp);
-				LoadMapThreaded (Worldx + 1, Worldy - 1, yieldDirection.YieldUp);
+				LoadMapThreaded (Worldx - 1, Worldy - 1, YieldDirection.YieldUp);
+				LoadMapThreaded (Worldx, Worldy - 1, YieldDirection.YieldUp);
+				LoadMapThreaded (Worldx + 1, Worldy - 1, YieldDirection.YieldUp);
 			}
 			if (player.transform.position.y < worldend.y) {
-				StartCoroutine (UnLoadMapWithDelay (Worldx - 1, Worldy-1));
-				StartCoroutine (UnLoadMapWithDelay (Worldx, Worldy-1));
-				StartCoroutine (UnLoadMapWithDelay (Worldx + 1, Worldy-1));
+				 (UnLoadMap (Worldx - 1, Worldy-1));
+				 (UnLoadMap (Worldx, Worldy-1));
+				 (UnLoadMap (Worldx + 1, Worldy-1));
 				Worldy++;
-				LoadMapThreaded (Worldx - 1, Worldy + 1, yieldDirection.YieldDown);
-				LoadMapThreaded (Worldx, Worldy + 1, yieldDirection.YieldDown);
-				LoadMapThreaded (Worldx + 1, Worldy + 1, yieldDirection.YieldDown);
+				LoadMapThreaded (Worldx - 1, Worldy + 1, YieldDirection.YieldDown);
+				LoadMapThreaded (Worldx, Worldy + 1, YieldDirection.YieldDown);
+				LoadMapThreaded (Worldx + 1, Worldy + 1, YieldDirection.YieldDown);
 			}
 		}
 	}
