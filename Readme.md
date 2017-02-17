@@ -1,4 +1,4 @@
-# Zombie Hunter 100
+# Zombie Hunter 1000
 
 The human race has fallen to a zombie apocalypse.
 
