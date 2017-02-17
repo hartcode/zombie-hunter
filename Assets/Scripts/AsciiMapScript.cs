@@ -14,6 +14,7 @@ public class AsciiMapScript : MonoBehaviour
 
 	public GameObject prefabParent;
 	public GameObject prefabWall;
+	public String mapDataPath = "Assets/Maps/Test/";
 
 	protected MapData mapData;
 	protected MapFile mapfile;
@@ -25,7 +26,8 @@ public class AsciiMapScript : MonoBehaviour
 	protected ArrayList lfj = new ArrayList ();
 
 	String getMapPath(int x, int y) {
-		StringBuilder sb = new StringBuilder ("map");
+		StringBuilder sb = new StringBuilder (mapDataPath);
+		sb.Append ("map");
 		sb.Append (x);
 		sb.Append ("x");
 		sb.Append (y);
