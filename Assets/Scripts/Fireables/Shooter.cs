@@ -7,7 +7,7 @@ public class Shooter : MonoBehaviour {
 	public GameObject prefabParent;
 	public GameObject prefabBullet;
 	private FireableObject bullet;
-	private SpriteRenderer myrenderer;
+	public SpriteRenderer myrenderer;
 	public AsciiMapScript asciiMap;
 
 	// Use this for initialization
