@@ -22,8 +22,10 @@ public class ChangeColor : MonoBehaviour {
 		}
 		switchingStartColor = startColor;
 		switchingEndColor = endColor;
-		foreach (SpriteRenderer rendererToColorChange in renderersToColorChange) {
-			rendererToColorChange.color = switchingStartColor;
+		if (change) {
+			foreach (SpriteRenderer rendererToColorChange in renderersToColorChange) {
+				rendererToColorChange.color = switchingStartColor;
+			}
 		}
 
 		startTime = Time.time;
@@ -54,6 +56,9 @@ public class ChangeColor : MonoBehaviour {
 		switchingStartColor = startColor;
 		switchingEndColor = endColor;
 		this.startTime = Time.time;
+		foreach (SpriteRenderer rendererToColorChange in renderersToColorChange) {
+			rendererToColorChange.color = switchingStartColor;
+		}
 		Change ();
 	}
 }

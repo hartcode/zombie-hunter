@@ -38,14 +38,14 @@ public class MenuCursorMover : MonoBehaviour {
 			position1.change = true;
 		}
 		if (go) {
-			if (Input.GetKey ("down")) {
+			if (Input.GetAxis("Vertical") < 0) {
 				transform.localPosition = bottom;
 				position = 2;
 				flashColor.Restart ();
 				position2.Restart();
 				position1.change = false;
 			}
-			if (Input.GetKey ("up")) {
+			if (Input.GetAxis("Vertical") > 0) {
 				transform.localPosition = start;
 				position = 1;
 				flashColor.Restart ();
