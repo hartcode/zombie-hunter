@@ -18,8 +18,8 @@ public class AsciiMapScript : MonoBehaviour
 
 	protected MapData mapData;
 	protected MapFile mapfile;
-	public int Worldx = 2;
-	public int Worldy = 2;
+	public int Worldx = 3;
+	public int Worldy = 3;
 	protected int MapCols = 20;
 	protected int MapRows = 20;
 	protected GameObject player;
@@ -51,21 +51,24 @@ public class AsciiMapScript : MonoBehaviour
 
 		//String startingMapFile = getMapPath (Worldx, Worldy);
 		//mapfile.SaveFile(mapData,startingMapFile);
-		mapfile.SaveFile(mapData,getMapPath(0,0));
-		mapfile.SaveFile(mapData,getMapPath(0,1));
-		mapfile.SaveFile(mapData,getMapPath(1,0));
-		mapfile.SaveFile(mapData,getMapPath(1,1));
-		mapfile.SaveFile(mapData,getMapPath(0,2));
-		mapfile.SaveFile(mapData,getMapPath(2,0));
-		mapfile.SaveFile(mapData,getMapPath(2,1));
-		mapfile.SaveFile(mapData,getMapPath(1,2));
-		mapfile.SaveFile(mapData,getMapPath(2,2));
-		mapfile.SaveFile(mapData,getMapPath(0,3));
-		mapfile.SaveFile(mapData,getMapPath(1,3));
-		mapfile.SaveFile(mapData,getMapPath(2,3));
-		mapfile.SaveFile(mapData,getMapPath(3,0));
-		mapfile.SaveFile(mapData,getMapPath(3,1));
-		mapfile.SaveFile(mapData,getMapPath(3,2));
+		//mapfile.SaveFile(mapData,getMapPath(0,0));
+		//mapfile.SaveFile(mapData,getMapPath(0,1));
+    //mapfile.SaveFile(mapData,getMapPath(0,2));
+		//mapfile.SaveFile(mapData,getMapPath(0,3));
+
+		//mapfile.SaveFile(mapData,getMapPath(1,0));
+		//mapfile.SaveFile(mapData,getMapPath(1,1));
+		//mapfile.SaveFile(mapData,getMapPath(1,2));
+		//mapfile.SaveFile(mapData,getMapPath(1,3));
+
+		//mapfile.SaveFile(mapData,getMapPath(2,0));
+		//mapfile.SaveFile(mapData,getMapPath(2,1));
+  	//mapfile.SaveFile(mapData,getMapPath(2,2));
+  	//mapfile.SaveFile(mapData,getMapPath(2,3));
+
+		//mapfile.SaveFile(mapData,getMapPath(3,0));
+		//mapfile.SaveFile(mapData,getMapPath(3,1));
+		//mapfile.SaveFile(mapData,getMapPath(3,2));
 		mapfile.SaveFile(mapData,getMapPath(3,3));
 
 		if (prefabParent == null) {
