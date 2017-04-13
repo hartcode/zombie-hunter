@@ -35,8 +35,8 @@ public class Shooter : MonoBehaviour {
 		float currentTime = Time.time;
 		if (currentTime - lastFireTime > (FireSpeed) && bullet == null && Input.GetButton("Fire1") && myrenderer.isVisible) {
 			Vector3 position = new Vector3(
-				gameObject.transform.position.x + controller.direction.x * asciiMap.CharacterWidth,
-				gameObject.transform.position.y + controller.direction.y * asciiMap.CharacterHeight,
+				gameObject.transform.position.x, // + controller.direction.x * asciiMap.CharacterWidth,
+				gameObject.transform.position.y, // + controller.direction.y * asciiMap.CharacterHeight,
 				gameObject.transform.position.z);
 			GameObject prefab = (GameObject)Instantiate (prefabBullet, position, Quaternion.identity,prefabParent.transform);
 			bullet = prefab.GetComponent<FireableObject> ();
