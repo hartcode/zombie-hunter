@@ -10,5 +10,9 @@ public class Reset : MonoBehaviour {
 		if (Input.GetButton ("Reset")) {
 			SceneManager.LoadScene (1);
 		}
+		if (Input.GetButton ("Quit")) {
+			Application.Quit();
+		}
+
 	}
 }
