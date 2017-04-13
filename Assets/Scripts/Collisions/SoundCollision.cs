@@ -17,12 +17,16 @@ public class SoundCollision : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D coll) {
 		if (coll.gameObject.CompareTag (Tag)) {
-			audio.PlayOneShot(impact, 0.2F);	
+			if (audio != null) {
+				audio.PlayOneShot (impact, 0.2F);	
+			}
 		}
 	}
 	void OnCollisionEnter2D(Collision2D coll) {
 		if (coll.gameObject.CompareTag (Tag)) {
-			audio.PlayOneShot (impact, 0.2F);
+			if (audio != null) {
+				audio.PlayOneShot (impact, 0.2F);
+			}
 		}
 	}
 
