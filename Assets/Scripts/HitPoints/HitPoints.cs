@@ -5,7 +5,10 @@ public class HitPoints : MonoBehaviour {
 
 	public int hitPoints;
 	public int maxHitPoints;
-
+	public SpriteRenderer renderer;
+	protected float killTime;
+	public float duration = 1.0f;
+	private bool kill = false;
 	public void heal (int points)
 	{
 		if (points < 0) {
@@ -24,8 +27,9 @@ public class HitPoints : MonoBehaviour {
 		this.hitPoints -= points;
 
 		if (this.hitPoints <= 0) {
-			/// TODO: destorying the object doesn't give the particle system enough time to fire.
-			DestroyObject (this.gameObject);
+			killTime = Time.time;
+			kill = true;
+			renderer.enabled = false;
 		}
 
 	}
@@ -35,6 +39,16 @@ public class HitPoints : MonoBehaviour {
 			damage (-1 * points);
 		} else {
 			heal (points);
+		}
+	}
+
+	void FixedUpdate() {
+		if (kill) {
+			float t = (Time.time - killTime);
+			
+			if (t > duration) {
+				DestroyObject (this.gameObject);
+			}
 		}
 	}
 }
