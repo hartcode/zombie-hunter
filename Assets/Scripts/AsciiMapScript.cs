@@ -69,7 +69,7 @@ public class AsciiMapScript : MonoBehaviour
 		//mapfile.SaveFile(mapData,getMapPath(3,0));
 		//mapfile.SaveFile(mapData,getMapPath(3,1));
 
-		mapfile.SaveFile(mapData,getMapPath(3, 2));
+		//mapfile.SaveFile(mapData,getMapPath(0, 0));
 		//mapfile.SaveFile(mapData,getMapPath(3,3));
 
 		if (prefabParent == null) {
