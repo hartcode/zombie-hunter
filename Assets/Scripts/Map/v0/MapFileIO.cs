@@ -74,7 +74,6 @@ namespace AssemblyCSharp.Map.v0
 							floorarray [x, y] = floorResources.IndexOf (floorResource);
 						}
 
-
 					String mainResource = mapData.getMainResource (x, y);
 						if (!mainResources.Contains (mainResource)) {
 							mainResources.Add (mainResource);

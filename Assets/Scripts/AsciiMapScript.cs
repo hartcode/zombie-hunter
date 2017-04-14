@@ -36,7 +36,11 @@ public class AsciiMapScript : MonoBehaviour
 	}
 
 	String getWorldName(int x, int y) {
-		StringBuilder sb = new StringBuilder ("World");;
+		return getObjectName ("World", x, y);
+	}
+
+	String getObjectName(String name, int x, int y) {
+		StringBuilder sb = new StringBuilder (name);;
 		sb.Append (x);
 		sb.Append ("x");
 		sb.Append (y);
@@ -47,29 +51,6 @@ public class AsciiMapScript : MonoBehaviour
 	void Start ()
 	{
 		mapfile = new MapFile();
-
-		//String startingMapFile = getMapPath (Worldx, Worldy);
-		//mapfile.SaveFile(mapData,startingMapFile);
-		//mapfile.SaveFile(mapData,getMapPath(0,0));
-		//mapfile.SaveFile(mapData,getMapPath(0,1));
-    //mapfile.SaveFile(mapData,getMapPath(0,2));
-		//mapfile.SaveFile(mapData,getMapPath(0,3));
-
-		//mapfile.SaveFile(mapData,getMapPath(1,0));
-		//mapfile.SaveFile(mapData,getMapPath(1,1));
-		//mapfile.SaveFile(mapData,getMapPath(1,2));
-		//mapfile.SaveFile(mapData,getMapPath(1,3));
-
-		//mapfile.SaveFile(mapData,getMapPath(2,0));
-		//mapfile.SaveFile(mapData,getMapPath(2,1));
-  	//mapfile.SaveFile(mapData,getMapPath(2,2));
-  	//mapfile.SaveFile(mapData,getMapPath(2,3));
-
-		//mapfile.SaveFile(mapData,getMapPath(3,0));
-		//mapfile.SaveFile(mapData,getMapPath(3,1));
-
-		//mapfile.SaveFile(mapData,getMapPath(0, 0));
-		//mapfile.SaveFile(mapData,getMapPath(3,3));
 
 		if (prefabParent == null) {
 			prefabParent = GameObject.Find ("AsciiMapCharacters");
@@ -112,7 +93,7 @@ public class AsciiMapScript : MonoBehaviour
 		if (mapPrefab != null) {
 			if (parent != null) {
 				GameObject prefab = (GameObject)Instantiate (mapPrefab, calculateTransformPosition (x, y, Worldx, Worldy), Quaternion.identity, parent.transform);
-				prefab.isStatic = true;
+				prefab.name = getObjectName("obj", x, y);
 			}
 		} else {
 			throw new MissingReferenceException ("Map Prefab Reference Missing");
@@ -142,7 +123,6 @@ public class AsciiMapScript : MonoBehaviour
 	void SaveMap(int Worldx, int Worldy, int x, int y) {
 		String mapPath = getMapPath (Worldx, Worldy);
 		mapfile.SaveFile (mapDataGroup[x,y], mapPath);
-		//StartCoroutine(InstantiateMap (mapData, Worldx, Worldy));
 	}
 
 	void SaveMapThreaded(int Worldx, int Worldy, int x, int y) {
@@ -151,6 +131,7 @@ public class AsciiMapScript : MonoBehaviour
 		saveFileJob.input = mapDataGroup[x,y];
 		saveFileJob.path = mapPath;
 		saveFileJob.Start ();
+		UnLoadMap (Worldx, Worldy, x, y);
 	}
 
 
@@ -162,10 +143,20 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 	IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy, YieldDirection yieldDirection)
 	{
 		GameObject world = GameObject.Find (getWorldName (Worldx, Worldy));
+		GameObject worldFloor;
+		GameObject worldMain;
 		if (world == null) {
 			world = new GameObject (getWorldName (Worldx, Worldy));
 			world.transform.parent = prefabParent.transform;
+
+			worldFloor = new GameObject ("worldFloor");
+			worldFloor.transform.parent = world.transform;
+
+			worldMain = new GameObject ("worldMain");
+			worldMain.transform.parent = world.transform;
+
 			if (mapData == null) {
+				// Empty map blocks will display as walls
 				if (yieldDirection == YieldDirection.YieldRight) {
 					for (int x = 0; x < MapRows; x++) {
 						for (int y = 0; y < MapCols; y++) {
@@ -212,12 +203,12 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 								//GameObject floorObject = mapData.getFloor (x, y);
 								GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
 								if (floorObject != null) {
-									CreateMapObject (x, y, floorObject, Worldx, Worldy, world);
+									CreateMapObject (x, y, floorObject, Worldx, Worldy, worldFloor);
 								}
 								//GameObject mainObject = mapData.getMain (x, y);
 								GameObject mainObject = (GameObject)Resources.Load (mapData.getMainResource (x, y), typeof(GameObject));
 								if (mainObject != null) {
-									CreateMapObject (x, y, mainObject, Worldx, Worldy, world);
+									CreateMapObject (x, y, mainObject, Worldx, Worldy, worldMain);
 								}
 							}
 						}
@@ -232,12 +223,12 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 								//GameObject floorObject = mapData.getFloor (x, y);
 								GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
 								if (floorObject != null) {
-									CreateMapObject (x, y, floorObject, Worldx, Worldy, world);
+									CreateMapObject (x, y, floorObject, Worldx, Worldy, worldFloor);
 								}
 								//GameObject mainObject = mapData.getMain (x, y);
 								GameObject mainObject = (GameObject)Resources.Load (mapData.getMainResource (x, y), typeof(GameObject));
 								if (mainObject != null) {
-									CreateMapObject (x, y, mainObject, Worldx, Worldy, world);
+									CreateMapObject (x, y, mainObject, Worldx, Worldy, worldMain);
 								}
 							}
 						}
@@ -252,12 +243,12 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 								//GameObject floorObject = mapData.getFloor (x, y);
 								GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
 								if (floorObject != null) {
-									CreateMapObject (x, y, floorObject, Worldx, Worldy, world);
+									CreateMapObject (x, y, floorObject, Worldx, Worldy, worldFloor);
 								}
 								//GameObject mainObject = mapData.getMain (x, y);
 								GameObject mainObject = (GameObject)Resources.Load (mapData.getMainResource (x, y), typeof(GameObject));
 								if (mainObject != null) {
-									CreateMapObject (x, y, mainObject, Worldx, Worldy, world);
+									CreateMapObject (x, y, mainObject, Worldx, Worldy, worldMain);
 								}
 							}
 						}
@@ -272,12 +263,12 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 								//GameObject floorObject = mapData.getFloor (x, y);
 								GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
 								if (floorObject != null) {
-									CreateMapObject (x, y, floorObject, Worldx, Worldy, world);
+									CreateMapObject (x, y, floorObject, Worldx, Worldy, worldFloor);
 								}
 								//GameObject mainObject = mapData.getMain (x, y);
 								GameObject mainObject = (GameObject)Resources.Load (mapData.getMainResource (x, y), typeof(GameObject));
 								if (mainObject != null) {
-									CreateMapObject (x, y, mainObject, Worldx, Worldy, world);
+									CreateMapObject (x, y, mainObject, Worldx, Worldy, worldMain);
 								}
 							}
 						}
@@ -292,12 +283,12 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 								//GameObject floorObject = mapData.getFloor (x, y);
 								GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
 								if (floorObject != null) {
-									CreateMapObject (x, y, floorObject, Worldx, Worldy, world);
+									CreateMapObject (x, y, floorObject, Worldx, Worldy, worldFloor);
 								}
 								//GameObject mainObject = mapData.getMain (x, y);
 								GameObject mainObject = (GameObject)Resources.Load (mapData.getMainResource (x, y), typeof(GameObject));
 								if (mainObject != null) {
-									CreateMapObject (x, y, mainObject, Worldx, Worldy, world);
+									CreateMapObject (x, y, mainObject, Worldx, Worldy, worldMain);
 								}
 							}
 						}
@@ -309,20 +300,36 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 	}
 
 
-	void UnLoadMap(int Worldx, int Worldy) {
+	void UnLoadMap(int Worldx, int Worldy, int x, int y) {
 		GameObject  world = GameObject.Find (getWorldName (Worldx, Worldy));
+		Transform worldMainT = world.transform.FindChild ("worldMain");
+		if (worldMainT != null) {
+			for (int i = 0; i < worldMainT.childCount; i++) {
+				Transform child = worldMainT.GetChild (i);
+					int xobj = 0;
+					int yobj = 0;
+					String childName = child.name;
+				int xindex = childName.IndexOf('x');
+				if (xindex >= 0) {
+					xobj = Int32.Parse (childName.Substring (3, xindex-3));
+					yobj = Int32.Parse (childName.Substring (xindex+1));
+					Vector3 pos = calculateTransformPosition (xobj, yobj, Worldx, Worldy);
+					if (child.transform.position != pos) {
+						// child has moved
+
+						Debug.Log ("Child has moved");
+						Debug.Log(mapDataGroup [x, y].getMain(xobj, yobj));
+					}
+				}
+			}
+		}
+
 		if (world != null) {
 			DestroyObject (world);
 			world = null;
 		}
 	}
-  // There is a race condition where we could be removing a map before it
-	// is completely instantiated
-	IEnumerator UnLoadMapWithDelay( int Worldx, int Worldy)
-	{
-			yield return new WaitForSeconds(1f);
-			UnLoadMap(Worldx, Worldy);
-	}
+
 
 	void FixedUpdate()
 	{
@@ -342,9 +349,6 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 				SaveMapThreaded(Worldx + 1, Worldy - 1, 1 + 1, -1 + 1);
 				SaveMapThreaded(Worldx + 1, Worldy, 1 + 1, 0 + 1);
 				SaveMapThreaded(Worldx + 1, Worldy + 1, 1 + 1, 1 + 1);
-				 UnLoadMap (Worldx + 1, Worldy-1);
-				 UnLoadMap (Worldx + 1, Worldy);
-				 UnLoadMap (Worldx + 1, Worldy+1);
 				Worldx--;
 				LoadMapThreaded (Worldx - 1, Worldy-1, -1+1,-1+1, YieldDirection.YieldLeft);
 				LoadMapThreaded (Worldx - 1, Worldy, -1+1,0+1, YieldDirection.YieldLeft);
@@ -354,9 +358,6 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 				SaveMapThreaded(Worldx - 1, Worldy - 1, -1 + 1, -1 + 1);
 				SaveMapThreaded(Worldx - 1, Worldy, -1 + 1, 0 + 1);
 				SaveMapThreaded(Worldx - 1, Worldy + 1, -1 + 1, 1 + 1);
-				 UnLoadMap (Worldx - 1, Worldy-1);
-				 UnLoadMap (Worldx - 1, Worldy);
-				 UnLoadMap (Worldx - 1, Worldy+1);
 				Worldx++;
 				LoadMapThreaded (Worldx + 1, Worldy-1, 1+1,-1+1, YieldDirection.YieldRight);
 				LoadMapThreaded (Worldx + 1, Worldy, 1+1, 0+1, YieldDirection.YieldRight);
@@ -366,9 +367,6 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 				SaveMapThreaded(Worldx - 1, Worldy + 1, -1 + 1, 1 + 1);
 				SaveMapThreaded(Worldx, Worldy +1    , 0 + 1, 1 + 1);
 				SaveMapThreaded(Worldx + 1, Worldy + 1, 1 + 1, 1 + 1);
-				 UnLoadMap (Worldx - 1, Worldy+1);
-				 UnLoadMap (Worldx, Worldy+1);
-				 UnLoadMap (Worldx + 1, Worldy+1);
 				Worldy--;
 				LoadMapThreaded (Worldx - 1, Worldy - 1, -1+1,-1+1,YieldDirection.YieldUp);
 				LoadMapThreaded (Worldx, Worldy - 1, 0+1,-1+1,YieldDirection.YieldUp);
@@ -378,9 +376,6 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 				SaveMapThreaded(Worldx - 1, Worldy - 1, -1 + 1, 1 - 1);
 				SaveMapThreaded(Worldx, Worldy -1    , 0 + 1, 1 - 1);
 				SaveMapThreaded(Worldx + 1, Worldy - 1, 1 + 1, 1 - 1);
-				 UnLoadMap (Worldx - 1, Worldy-1);
-				 UnLoadMap (Worldx, Worldy-1);
-				 UnLoadMap (Worldx + 1, Worldy-1);
 				Worldy++;
 				LoadMapThreaded (Worldx - 1, Worldy + 1,-1+1,1+1, YieldDirection.YieldDown);
 				LoadMapThreaded (Worldx, Worldy + 1,0+1,1+1, YieldDirection.YieldDown);
