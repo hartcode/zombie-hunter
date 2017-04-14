@@ -12,7 +12,7 @@ public class Shooter : MonoBehaviour {
 	public SpriteRenderer myrenderer;
 	public AsciiMapScript asciiMap;
 	public AudioClip fireSound;
-	AudioSource audio;
+	AudioSource aaudio;
 	public float FireSpeed = 2;
 	float lastFireTime;
 	ChangeColor colorChange;
@@ -27,7 +27,7 @@ public class Shooter : MonoBehaviour {
 			}
 		}
 		colorChange = GetComponent<ChangeColor> ();
-		audio = GetComponent<AudioSource>();
+		aaudio = GetComponent<AudioSource>();
 	}
 
 	// Update is called once per frame
@@ -42,14 +42,14 @@ public class Shooter : MonoBehaviour {
 			bullet = prefab.GetComponent<FireableObject> ();
 			bullet.Fire (controller.direction);
 			//if (!audio.isPlaying) {
-				audio.PlayOneShot (fireSound, 0.1F);
+				aaudio.PlayOneShot (fireSound, 0.1F);
 			//}
 			lastFireTime = Time.time;
 			colorChange.Restart ();
 		}
 		// make sure the audio stops if the bullet stops
-		if (bullet == null && audio.isPlaying) {
-			audio.Stop ();
+		if (bullet == null && aaudio.isPlaying) {
+			aaudio.Stop ();
 		}
 	}
 }

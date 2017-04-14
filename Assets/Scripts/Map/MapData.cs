@@ -120,7 +120,6 @@ namespace AssemblyCSharp
 			this.array = new int[rows, cols];
 			for (int x = 0; x < rows; x++) {
 				for (int y = 0; y < cols; y++) {
-					int yy = cols - 1 - y;
 					this.floorarray[x,y] = floorarray[x,y];
 					this.array[x,y] = array[x,y];
 				}

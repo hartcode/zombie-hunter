@@ -5,7 +5,7 @@ public class HitPoints : MonoBehaviour {
 
 	public int hitPoints;
 	public int maxHitPoints;
-	public SpriteRenderer renderer;
+	public SpriteRenderer rrenderer;
 	protected float killTime;
 	public float duration = 1.0f;
 	private bool kill = false;
@@ -29,7 +29,7 @@ public class HitPoints : MonoBehaviour {
 		if (this.hitPoints <= 0) {
 			killTime = Time.time;
 			kill = true;
-			renderer.enabled = false;
+			rrenderer.enabled = false;
 		}
 
 	}
