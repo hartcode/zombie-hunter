@@ -7,7 +7,9 @@ namespace AssemblyCSharp
 		public String input;
 		public int Worldx;
 		public int Worldy;
-    public YieldDirection yieldDirection;
+		public int x;
+		public int y;
+        public YieldDirection yieldDirection;
 		public MapData output;
 
 

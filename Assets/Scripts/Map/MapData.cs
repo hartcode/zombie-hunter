@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 namespace AssemblyCSharp
 {
@@ -78,36 +80,35 @@ namespace AssemblyCSharp
 			rows = 20;
 			cols = 20;
 
-			maxFloorPrefabs = 5;
-			floorResources = new String[maxFloorPrefabs+1];
-			floorResources [0] = null;
-			floorResources [1] = "Flooring/Grass";
-			floorResources [2] = "Flooring/DirtRoad";
-			floorResources [3] = "Flooring/Water";
-			floorResources [4] = "Flooring/Floor";
+			List<String> floorResourcesArray = new List<String> ();
+		    List<String> mainResourcesArray = new List<String> ();
+
+			floorResourcesArray.Add (null);
+			floorResourcesArray.Add ("Flooring/Grass");
+			floorResourcesArray.Add ("Flooring/DirtRoad");
+			floorResourcesArray.Add ("Flooring/Water");
+			floorResourcesArray.Add ("Flooring/Floor");
+
+	
+			mainResourcesArray.Add (null);
+			mainResourcesArray.Add ("Main/Tree");
+			mainResourcesArray.Add ("Main/Column");
+			mainResourcesArray.Add ("Main/Pot");
+			mainResourcesArray.Add ("Main/Box");
+			mainResourcesArray.Add ("Main/Barrel");
+			mainResourcesArray.Add ("Main/wall");
 
 
 
-			maxMainPrefabs = 7;
-			mainResources = new String[maxMainPrefabs+1];
-			mainResources [0] = null;
-			mainResources [1] = "Main/Tree";
-			mainResources [2] = "Main/Column";
-			mainResources [3] = "Main/Pot";
-			mainResources [4] = "Main/Box";
-			mainResources [5] = "Main/Barrel";
-			mainResources [6] = "Main/wall";
-
-
-			floorPrefabs = new GameObject[maxFloorPrefabs+1];
-			for (int i = 0; i < maxFloorPrefabs+1; i++) {
-				floorPrefabs [i] = (GameObject)Resources.Load (floorResources[i], typeof(GameObject));
+			floorPrefabs = new GameObject[floorResourcesArray.Count];
+			for (int i = 0; i < floorResourcesArray.Count; i++) {
+				floorPrefabs [i] = (GameObject)Resources.Load (floorResourcesArray[i], typeof(GameObject));
 			}
 
 
-			mainPrefabs = new GameObject[maxMainPrefabs+1];
-			for (int i = 0; i < maxMainPrefabs+1; i++) {
-				mainPrefabs [i] = (GameObject)Resources.Load (mainResources[i], typeof(GameObject));
+			mainPrefabs = new GameObject[mainResourcesArray.Count];
+			for (int i = 0; i < mainResourcesArray.Count; i++) {
+				mainPrefabs [i] = (GameObject)Resources.Load (mainResourcesArray[i], typeof(GameObject));
 			}
 		}
 
@@ -132,7 +133,7 @@ namespace AssemblyCSharp
 				this.floorResources[i] = floorResources[i];
 				//floorPrefabs[i] = (GameObject)Resources.Load (floorResources[i], typeof(GameObject));
 			}
-
+		
 			maxMainPrefabs = mainResources.Length;
 			mainPrefabs = new GameObject[maxMainPrefabs+1];
 			this.mainResources = new String[maxMainPrefabs + 1];
