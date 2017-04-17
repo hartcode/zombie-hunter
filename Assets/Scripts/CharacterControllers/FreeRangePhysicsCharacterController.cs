@@ -41,7 +41,7 @@ public class FreeRangePhysicsCharacterController : MyCharacterController
 
 		float x = Input.GetAxis("Horizontal");
 		float y = Input.GetAxis("Vertical");
-		if (x != 0 && y != 0) {
+		if (x != 0 || y != 0) {
 			direction = new Vector3 (x, y, 0);
 		}
 		Vector2 mydirection = new Vector2 (x,y);

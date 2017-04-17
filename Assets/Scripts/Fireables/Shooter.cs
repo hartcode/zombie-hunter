@@ -34,13 +34,20 @@ public class Shooter : MonoBehaviour {
 	void FixedUpdate () {
 		float currentTime = Time.time;
 		if (currentTime - lastFireTime > (FireSpeed) && bullet == null && Input.GetButton("Fire1") && myrenderer.isVisible) {
-			Vector3 position = new Vector3(
-				gameObject.transform.position.x, // + controller.direction.x * asciiMap.CharacterWidth,
-				gameObject.transform.position.y, // + controller.direction.y * asciiMap.CharacterHeight,
-				gameObject.transform.position.z);
-			GameObject prefab = (GameObject)Instantiate (prefabBullet, position, Quaternion.identity,prefabParent.transform);
+			Vector3 direction = new Vector3(controller.direction.x, controller.direction.y, 0);
+			if (direction.x > 0) {
+				direction.x = 1;
+			} else if (direction.x < 0) {
+				direction.x = -1;
+			}
+			if (direction.y > 0) {
+				direction.y = 1;
+			} else if (direction.y < 0) {
+				direction.y = -1;
+			}
+			GameObject prefab = (GameObject)Instantiate (prefabBullet, gameObject.transform.position, Quaternion.identity,prefabParent.transform);
 			bullet = prefab.GetComponent<FireableObject> ();
-			bullet.Fire (controller.direction);
+			bullet.Fire (direction);
 			//if (!audio.isPlaying) {
 				aaudio.PlayOneShot (fireSound, 0.1F);
 			//}
