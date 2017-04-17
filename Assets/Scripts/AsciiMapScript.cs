@@ -126,12 +126,13 @@ public class AsciiMapScript : MonoBehaviour
 	}
 
 	void SaveMapThreaded(int Worldx, int Worldy, int x, int y) {
+		UnLoadMap (Worldx, Worldy, x, y);
 		String mapPath = getMapPath (Worldx, Worldy);
 		SaveFileJob saveFileJob = new SaveFileJob ();
 		saveFileJob.input = mapDataGroup[x,y];
 		saveFileJob.path = mapPath;
 		saveFileJob.Start ();
-		UnLoadMap (Worldx, Worldy, x, y);
+
 	}
 
 
