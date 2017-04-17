@@ -132,7 +132,6 @@ public class AsciiMapScript : MonoBehaviour
 		saveFileJob.input = mapDataGroup[x,y];
 		saveFileJob.path = mapPath;
 		saveFileJob.Start ();
-
 	}
 
 
@@ -319,7 +318,8 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 						// child has moved
 						Debug.Log ("Child has moved");
 						if (mapDataGroup [x, y] != null) {
-							Debug.Log (mapDataGroup [x, y].getMain (xobj, yobj));
+							mapDataGroup [x, y].getMain (xobj, yobj);
+
 						}
 					}
 				}
@@ -350,7 +350,7 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 			Vector3 worldstart = calculateTransformPosition(0,0, Worldx, Worldy);
 			Vector3 worldend = calculateTransformPosition (MapRows, MapCols, Worldx, Worldy);
 			if (player.transform.position.x < worldstart.x) {
-				SaveMapThreaded(Worldx + 1, Worldy - 1, 1 + 1, -1 + 1);
+				SaveMapThreaded(Worldx + 1, Worldy -1, 1 + 1, -1 + 1);
 				SaveMapThreaded(Worldx + 1, Worldy, 1 + 1, 0 + 1);
 				SaveMapThreaded(Worldx + 1, Worldy + 1, 1 + 1, 1 + 1);
 				Worldx--;
@@ -359,7 +359,7 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 				LoadMapThreaded (Worldx - 1, Worldy+1, -1+1,1+1, YieldDirection.YieldLeft);
 			}
 			if (player.transform.position.x > worldend.x) {
-				SaveMapThreaded(Worldx - 1, Worldy - 1, -1 + 1, -1 + 1);
+				SaveMapThreaded(Worldx - 1, Worldy -1, -1 + 1, -1 + 1);
 				SaveMapThreaded(Worldx - 1, Worldy, -1 + 1, 0 + 1);
 				SaveMapThreaded(Worldx - 1, Worldy + 1, -1 + 1, 1 + 1);
 				Worldx++;
