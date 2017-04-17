@@ -161,35 +161,35 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 				if (yieldDirection == YieldDirection.YieldRight) {
 					for (int x = 0; x < MapRows; x++) {
 						for (int y = 0; y < MapCols; y++) {
-							CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+							CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor);
 						}
 						yield return null;
 					}
 				} else if (yieldDirection == YieldDirection.YieldLeft) {
 					for (int x = MapRows-1; x >= 0; x--) {
 						for (int y = 0; y < MapCols; y++) {
-							CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+							CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor);
 						}
 						yield return null;
 					}
 				} else if (yieldDirection == YieldDirection.YieldDown) {
 					for (int y = 0; y < MapCols; y++) {
 						for (int x = 0; x < MapRows; x++) {
-							CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+							CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor);
 						}
 						yield return null;
 					}
 				} else if (yieldDirection == YieldDirection.YieldUp) {
 					for (int y = MapCols-1; y >= 0; y--) {
 						for (int x = 0; x < MapRows ; x++) {
-							CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+							CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor);
 						}
 						yield return null;
 					}
 				}else  {
 					for (int x = 0; x < MapRows ; x++) {
 						for (int y = 0; y < MapCols; y++) {
-							CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+							CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor);
 						}
 					}
 				}
@@ -199,7 +199,7 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 					for (int x = 0; x < mapData.getRows (); x++) {
 						for (int y = 0; y < mapData.getCols (); y++) {
 							if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
-								CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+								CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor);
 							} else {
 								//GameObject floorObject = mapData.getFloor (x, y);
 								GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
@@ -219,7 +219,7 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 					for (int x = mapData.getRows () - 1; x >= 0; x--) {
 						for (int y = 0; y < mapData.getCols (); y++) {
 							if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
-								CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+								CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor);
 							} else {
 								//GameObject floorObject = mapData.getFloor (x, y);
 								GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
@@ -239,7 +239,7 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 					for (int y = 0; y < mapData.getCols (); y++) {
 						for (int x = 0; x < mapData.getRows (); x++) {
 							if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
-								CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+								CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor);
 							} else {
 								//GameObject floorObject = mapData.getFloor (x, y);
 								GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
@@ -259,7 +259,7 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 					for (int y = mapData.getCols () - 1; y >= 0; y--) {
 						for (int x = 0; x < mapData.getRows (); x++) {
 							if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
-								CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+								CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor);
 							} else {
 								//GameObject floorObject = mapData.getFloor (x, y);
 								GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
@@ -279,7 +279,7 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 					for (int x = 0; x < mapData.getRows (); x++) {
 						for (int y = 0; y < mapData.getCols (); y++) {
 							if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
-								CreateMapObject (x, y, prefabWall, Worldx, Worldy, world);
+								CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor);
 							} else {
 								//GameObject floorObject = mapData.getFloor (x, y);
 								GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
@@ -317,9 +317,10 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 					Vector3 pos = calculateTransformPosition (xobj, yobj, Worldx, Worldy);
 					if (child.transform.position != pos) {
 						// child has moved
-
 						Debug.Log ("Child has moved");
-						Debug.Log(mapDataGroup [x, y].getMain(xobj, yobj));
+						if (mapDataGroup [x, y] != null) {
+							Debug.Log (mapDataGroup [x, y].getMain (xobj, yobj));
+						}
 					}
 				}
 			}
@@ -338,6 +339,8 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 			foreach (LoadFileJob loadFileJob in lfj.ToArray()) {
 				if (loadFileJob.Update ()) {
 					lfj.Remove (loadFileJob);
+					Debug.Log (loadFileJob.x);
+					Debug.Log (loadFileJob.y);
 					mapDataGroup[loadFileJob.x,loadFileJob.y] = loadFileJob.output;
 					StartCoroutine (InstantiateMap (loadFileJob.output, loadFileJob.Worldx, loadFileJob.Worldy, loadFileJob.yieldDirection));
 				}
