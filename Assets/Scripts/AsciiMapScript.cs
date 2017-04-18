@@ -323,12 +323,16 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 					yobj = Int32.Parse (childName.Substring (xindex+1));
 					Vector3 pos = calculateTransformPosition (xobj, yobj, Worldx, Worldy);
 					if (child.transform.position != pos) {
-						int newX = 0;
-						int newY = 0;
-						calculateXYPosition (child.transform.position, ref newX, ref newY, Worldx, Worldy);
+						int newXobj = 0;
+						int newYobj = 0;
+						calculateXYPosition (child.transform.position, ref newXobj, ref newYobj, Worldx, Worldy);
 						// child has moved
+						int newX = x;
+						int newY = y;
+						newX += newX % mapDataGroup [x, y].getRows ();
+						newY += newY % mapDataGroup [x, y].getCols ();
 						Debug.Log ("Child has moved");
-						mapDataGroup[x, y].setMainInt(newX, newY, mapDataGroup [x, y].getMainInt (xobj, yobj));
+						mapDataGroup[newX, newY].setMainInt(newXobj, newYobj, mapDataGroup [x, y].getMainInt (xobj, yobj));
 						mapDataGroup [x, y].setMainInt (xobj, yobj, 0);
 					
 					}
