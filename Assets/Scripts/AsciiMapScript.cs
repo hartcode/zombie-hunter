@@ -327,10 +327,22 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 						int newYobj = 0;
 						calculateXYPosition (child.transform.position, ref newXobj, ref newYobj, Worldx, Worldy);
 						// child has moved
-						int newX = x;
-						int newY = y;
-						newX += newX % mapDataGroup [x, y].getRows ();
-						newY += newY % mapDataGroup [x, y].getCols ();
+						int newX = 1;
+						int newY = 1;
+						newX += (int)(newXobj / mapDataGroup [x, y].getRows ());
+						newY += (int)(newYobj / mapDataGroup [x, y].getCols ());
+
+						newXobj = (int)(newXobj % mapDataGroup [x, y].getRows ());
+						newYobj = (int)(newYobj % mapDataGroup [x, y].getCols ());
+						if (newXobj < 0) {
+							newXobj += mapDataGroup [x, y].getRows ();
+						}
+						if (newYobj < 0) {
+							newYobj += mapDataGroup [x, y].getCols ();
+						}
+
+						Debug.Log("new XYobj ("+ newXobj + ", " + newYobj + ")");
+						Debug.Log("new XY ("+ newX + ", " + newY + ")");
 						Debug.Log ("Child has moved");
 						mapDataGroup[newX, newY].setMainInt(newXobj, newYobj, mapDataGroup [x, y].getMainInt (xobj, yobj));
 						mapDataGroup [x, y].setMainInt (xobj, yobj, 0);
