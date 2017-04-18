@@ -82,18 +82,18 @@ public class AsciiMapScript : MonoBehaviour
 		player.transform.position = playerPosition;
 	}
 
-	void OnDestroy() {
-		UnLoadMap (Worldx - 1, Worldy - 1, -1 + 1, -1 + 1);
-		UnLoadMap (Worldx-1, Worldy, -1+1, 0+1);
-		UnLoadMap (Worldx-1, Worldy+1, -1+1, 1+1);
-		UnLoadMap (Worldx, Worldy-1, 0+1, -1+1);
+	void OnDisable() {
+		SaveMap (Worldx - 1, Worldy - 1, -1 + 1, -1 + 1);
+		SaveMap (Worldx-1, Worldy, -1+1, 0+1);
+		SaveMap (Worldx-1, Worldy+1, -1+1, 1+1);
+		SaveMap (Worldx, Worldy-1, 0+1, -1+1);
 
-		UnLoadMap (Worldx, Worldy+1, 0+1, 1+1);
-		UnLoadMap (Worldx+1, Worldy-1, 1+1, -1+1);
-		UnLoadMap (Worldx+1, Worldy, 1+1, 0+1);
-		UnLoadMap (Worldx+1, Worldy+1, 1+1, 1+1);
+		SaveMap (Worldx, Worldy+1, 0+1, 1+1);
+		SaveMap (Worldx+1, Worldy-1, 1+1, -1+1);
+		SaveMap (Worldx+1, Worldy, 1+1, 0+1);
+		SaveMap (Worldx+1, Worldy+1, 1+1, 1+1);
 
-		UnLoadMap (Worldx, Worldy, 0+1, 0+1);
+		SaveMap (Worldx, Worldy, 0+1, 0+1);
 	}
 
 	Vector3 calculateTransformPosition(int x, int y, int Worldx, int Worldy) {
@@ -111,8 +111,9 @@ public class AsciiMapScript : MonoBehaviour
 	{
 		if (mapPrefab != null) {
 			if (parent != null) {
-				GameObject prefab = (GameObject)Instantiate (mapPrefab, calculateTransformPosition (x, y, Worldx, Worldy), Quaternion.identity, parent.transform);
-				prefab.name = getObjectName("obj", x, y);
+				GameObject prefab = (GameObject)Instantiate (mapPrefab,calculateTransformPosition(x,y,Worldx,Worldy) , Quaternion.identity, parent.transform);
+				prefab.name = getObjectName ("obj", x, y);
+			//	prefab.transform.localScale = new Vector3 (.05f, .05f, 1);
 			}
 		} else {
 			throw new MissingReferenceException ("Map Prefab Reference Missing");
@@ -170,12 +171,20 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 		if (world == null) {
 			world = new GameObject (getWorldName (Worldx, Worldy));
 			world.transform.parent = prefabParent.transform;
+		/*	Vector3 worldPosition = calculateTransformPosition (0, 0, Worldx, Worldy);
+			world.transform.position = worldPosition;
+			Vector3 worldScale = new Vector3 ((float)1.25*MapRows, (float)1.25*MapCols, 1);
+			world.transform.localScale = worldScale;
 
+			worldScale = new Vector3 (1, 1, 1);
+*/
 			worldFloor = new GameObject ("worldFloor");
 			worldFloor.transform.parent = world.transform;
+//			worldFloor.transform.localScale = worldScale;
 
 			worldMain = new GameObject ("worldMain");
 			worldMain.transform.parent = world.transform;
+//			worldMain.transform.localScale = worldScale;
 
 			if (mapData == null) {
 				// Empty map blocks will display as walls
@@ -366,7 +375,7 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 						Debug.Log("new XYobj ("+ newXobj + ", " + newYobj + ")");
 						Debug.Log("XY ("+ x + ", " + y + ")");
 						Debug.Log("XYobj ("+ xobj + ", " + yobj + ")");
-
+						child.name = getObjectName ("obj", newXobj, newYobj);
 						mapDataGroup[newX, newY].setMainInt(newXobj, newYobj, mapDataGroup [x, y].getMainInt (xobj, yobj));
 						mapDataGroup [x, y].setMainInt (xobj, yobj, 0);
 					
