@@ -340,9 +340,11 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 						if (newYobj < 0) {
 							newYobj += mapDataGroup [x, y].getCols ();
 						}
-
-						Debug.Log("new XYobj ("+ newXobj + ", " + newYobj + ")");
+							
 						Debug.Log("new XY ("+ newX + ", " + newY + ")");
+						Debug.Log("new XYobj ("+ newXobj + ", " + newYobj + ")");
+						Debug.Log("XY ("+ x + ", " + y + ")");
+						Debug.Log("XYobj ("+ xobj + ", " + yobj + ")");
 						Debug.Log ("Child has moved");
 						mapDataGroup[newX, newY].setMainInt(newXobj, newYobj, mapDataGroup [x, y].getMainInt (xobj, yobj));
 						mapDataGroup [x, y].setMainInt (xobj, yobj, 0);
