@@ -171,6 +171,14 @@ namespace AssemblyCSharp
 			return retval;
 		}
 
+		public int getMainInt(int x, int y) {
+			return array [x, y];
+		}
+
+		public void setMainInt(int x, int y, int newid) {
+			array[x,y] = newid;
+		}
+
 		public String getFloorResource(int x, int y) {
 			String retval = null;
 			int arrayID = floorarray [x, y];

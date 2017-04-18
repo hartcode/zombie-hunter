@@ -60,17 +60,17 @@ public class AsciiMapScript : MonoBehaviour
 			prefabWall = (GameObject)Resources.Load ("Main/Wall", typeof(GameObject));
 		}
 
-		LoadMap (Worldx-1, Worldy-1, -1+1, -1+1);
-		LoadMap (Worldx-1, Worldy, -1+1, 0+1);
-		LoadMap (Worldx-1, Worldy+1, -1+1, 1+1);
-		LoadMap (Worldx, Worldy-1, 0+1, -1+1);
+		LoadMap (Worldx-1, Worldy-1, -1+1, -1+1,YieldDirection.NoYield);
+		LoadMap (Worldx-1, Worldy, -1+1, 0+1,YieldDirection.NoYield);
+		LoadMap (Worldx-1, Worldy+1, -1+1, 1+1,YieldDirection.NoYield);
+		LoadMap (Worldx, Worldy-1, 0+1, -1+1,YieldDirection.NoYield);
 
-		LoadMap (Worldx, Worldy+1, 0+1, 1+1);
-		LoadMap (Worldx+1, Worldy-1, 1+1, -1+1);
-		LoadMap (Worldx+1, Worldy, 1+1, 0+1);
-		LoadMap (Worldx+1, Worldy+1, 1+1, 1+1);
+		LoadMap (Worldx, Worldy+1, 0+1, 1+1,YieldDirection.NoYield);
+		LoadMap (Worldx+1, Worldy-1, 1+1, -1+1,YieldDirection.NoYield);
+		LoadMap (Worldx+1, Worldy, 1+1, 0+1,YieldDirection.NoYield);
+		LoadMap (Worldx+1, Worldy+1, 1+1, 1+1,YieldDirection.NoYield);
 
-		LoadMap (Worldx, Worldy, 0+1, 0+1);
+		LoadMap (Worldx, Worldy, 0+1, 0+1,YieldDirection.NoYield);
 
 		player = GameObject.Find ("Player");
 		if (player == null) {
@@ -88,6 +88,11 @@ public class AsciiMapScript : MonoBehaviour
 		return retval;
 	}
 
+	void calculateXYPosition(Vector3 pos, ref int x, ref int y, int Worldx, int Worldy) {
+		x = (int)((pos.x -(MapRows * CharacterWidth * Worldx) - OriginX)/CharacterWidth);
+		y = (int)((pos.y - (MapCols * CharacterHeight * -Worldy) -OriginY) / -CharacterHeight);
+	}
+
 	void CreateMapObject (int x, int y, GameObject mapPrefab, int Worldx, int Worldy, GameObject parent)
 	{
 		if (mapPrefab != null) {
@@ -101,7 +106,7 @@ public class AsciiMapScript : MonoBehaviour
 	}
 
 
-	void LoadMap(int Worldx, int Worldy, int x, int y) {
+	void LoadMap(int Worldx, int Worldy, int x, int y, YieldDirection yieldDirection) {
 		String mapPath = getMapPath (Worldx, Worldy);
 		mapDataGroup[x, y] = mapfile.LoadFile (mapPath);
 		StartCoroutine(InstantiateMap (mapDataGroup[x, y], Worldx, Worldy));
@@ -121,8 +126,11 @@ public class AsciiMapScript : MonoBehaviour
 	}
 
 	void SaveMap(int Worldx, int Worldy, int x, int y) {
+		UnLoadMap (Worldx, Worldy, x, y);
 		String mapPath = getMapPath (Worldx, Worldy);
-		mapfile.SaveFile (mapDataGroup[x,y], mapPath);
+		if (mapDataGroup[x,y] != null) {
+			mapfile.SaveFile (mapDataGroup[x,y], mapPath);
+		}
 	}
 
 	void SaveMapThreaded(int Worldx, int Worldy, int x, int y) {
@@ -315,12 +323,14 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 					yobj = Int32.Parse (childName.Substring (xindex+1));
 					Vector3 pos = calculateTransformPosition (xobj, yobj, Worldx, Worldy);
 					if (child.transform.position != pos) {
+						int newX = 0;
+						int newY = 0;
+						calculateXYPosition (child.transform.position, ref newX, ref newY, Worldx, Worldy);
 						// child has moved
 						Debug.Log ("Child has moved");
-						if (mapDataGroup [x, y] != null) {
-							mapDataGroup [x, y].getMain (xobj, yobj);
-
-						}
+						mapDataGroup[x, y].setMainInt(newX, newY, mapDataGroup [x, y].getMainInt (xobj, yobj));
+						mapDataGroup [x, y].setMainInt (xobj, yobj, 0);
+					
 					}
 				}
 			}
@@ -350,40 +360,60 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 			Vector3 worldstart = calculateTransformPosition(0,0, Worldx, Worldy);
 			Vector3 worldend = calculateTransformPosition (MapRows, MapCols, Worldx, Worldy);
 			if (player.transform.position.x < worldstart.x) {
-				SaveMapThreaded(Worldx + 1, Worldy -1, 1 + 1, -1 + 1);
-				SaveMapThreaded(Worldx + 1, Worldy, 1 + 1, 0 + 1);
-				SaveMapThreaded(Worldx + 1, Worldy + 1, 1 + 1, 1 + 1);
+				SaveMap(Worldx + 1, Worldy -1,  2, 0);
+				SaveMap(Worldx + 1, Worldy,     2, 1);
+				SaveMap(Worldx + 1, Worldy + 1, 2, 2);
 				Worldx--;
-				LoadMapThreaded (Worldx - 1, Worldy-1, -1+1,-1+1, YieldDirection.YieldLeft);
-				LoadMapThreaded (Worldx - 1, Worldy, -1+1,0+1, YieldDirection.YieldLeft);
-				LoadMapThreaded (Worldx - 1, Worldy+1, -1+1,1+1, YieldDirection.YieldLeft);
+				for (int x = 1; x >= 0; x--) {
+					for (int y = 0; y < 3; y++) {
+						mapDataGroup [x+1, y] = mapDataGroup [x, y];
+					}
+				}
+				LoadMap (Worldx - 1, Worldy-1,  0, 0, YieldDirection.YieldLeft);
+				LoadMap (Worldx - 1, Worldy,    0, 1, YieldDirection.YieldLeft);
+				LoadMap (Worldx - 1, Worldy+1,  0, 2, YieldDirection.YieldLeft);
 			}
 			if (player.transform.position.x > worldend.x) {
-				SaveMapThreaded(Worldx - 1, Worldy -1, -1 + 1, -1 + 1);
-				SaveMapThreaded(Worldx - 1, Worldy, -1 + 1, 0 + 1);
-				SaveMapThreaded(Worldx - 1, Worldy + 1, -1 + 1, 1 + 1);
+				SaveMap(Worldx - 1, Worldy -1,  0, 0);
+				SaveMap(Worldx - 1, Worldy,     0, 1);
+				SaveMap(Worldx - 1, Worldy + 1, 0, 2);
 				Worldx++;
-				LoadMapThreaded (Worldx + 1, Worldy-1, 1+1,-1+1, YieldDirection.YieldRight);
-				LoadMapThreaded (Worldx + 1, Worldy, 1+1, 0+1, YieldDirection.YieldRight);
-				LoadMapThreaded (Worldx + 1, Worldy+1, 1+1, 1+1, YieldDirection.YieldRight);
+				for (int x = 0; x <= 1; x++) {
+					for (int y = 0; y < 3; y++) {
+						mapDataGroup [x, y] = mapDataGroup [x+1, y];
+					}
+				}
+				LoadMap (Worldx + 1, Worldy-1,  2, 0, YieldDirection.YieldRight);
+				LoadMap (Worldx + 1, Worldy,    2, 1, YieldDirection.YieldRight);
+				LoadMap (Worldx + 1, Worldy+1,  2, 2, YieldDirection.YieldRight);
 			}
 			if (player.transform.position.y > worldstart.y) {
-				SaveMapThreaded(Worldx - 1, Worldy + 1, -1 + 1, 1 + 1);
-				SaveMapThreaded(Worldx, Worldy +1    , 0 + 1, 1 + 1);
-				SaveMapThreaded(Worldx + 1, Worldy + 1, 1 + 1, 1 + 1);
+				SaveMap(Worldx - 1, Worldy + 1, 0, 2);
+				SaveMap(Worldx, Worldy +1    ,  1, 2);
+				SaveMap(Worldx + 1, Worldy + 1, 2, 2);
 				Worldy--;
-				LoadMapThreaded (Worldx - 1, Worldy - 1, -1+1,-1+1,YieldDirection.YieldUp);
-				LoadMapThreaded (Worldx, Worldy - 1, 0+1,-1+1,YieldDirection.YieldUp);
-				LoadMapThreaded (Worldx + 1, Worldy - 1,1+1,-1+1, YieldDirection.YieldUp);
+				for (int y = 1; y >= 0; y--) {
+					for (int x = 0; x < 3; x++) {
+						mapDataGroup [x, y+1] = mapDataGroup [x, y];
+					}
+				}
+				LoadMap (Worldx - 1, Worldy -1, 0, 0, YieldDirection.YieldUp);
+				LoadMap (Worldx, Worldy - 1,    1, 0, YieldDirection.YieldUp);
+				LoadMap (Worldx + 1, Worldy -1, 2, 0, YieldDirection.YieldUp);
 			}
 			if (player.transform.position.y < worldend.y) {
-				SaveMapThreaded(Worldx - 1, Worldy - 1, -1 + 1, 1 - 1);
-				SaveMapThreaded(Worldx, Worldy -1    , 0 + 1, 1 - 1);
-				SaveMapThreaded(Worldx + 1, Worldy - 1, 1 + 1, 1 - 1);
+				SaveMap(Worldx - 1, Worldy - 1, 0, 0);
+				SaveMap(Worldx, Worldy -1    ,  1, 0);
+				SaveMap(Worldx + 1, Worldy - 1, 2, 0);
 				Worldy++;
-				LoadMapThreaded (Worldx - 1, Worldy + 1,-1+1,1+1, YieldDirection.YieldDown);
-				LoadMapThreaded (Worldx, Worldy + 1,0+1,1+1, YieldDirection.YieldDown);
-				LoadMapThreaded (Worldx + 1, Worldy + 1, 1+1,1+1,YieldDirection.YieldDown);
+				for (int y = 0; y <= 1; y++) {
+					for (int x = 0; x < 3; x++) {
+						mapDataGroup [x, y] = mapDataGroup [x, y+1];
+					}
+				}
+				LoadMap (Worldx - 1, Worldy +1, 0, 2, YieldDirection.YieldDown);
+				LoadMap (Worldx, Worldy + 1,    1, 2, YieldDirection.YieldDown);
+				LoadMap (Worldx + 1, Worldy +1, 2, 2, YieldDirection.YieldDown);
 			}
 		}
 	}
