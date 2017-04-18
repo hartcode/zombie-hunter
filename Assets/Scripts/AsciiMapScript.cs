@@ -82,6 +82,20 @@ public class AsciiMapScript : MonoBehaviour
 		player.transform.position = playerPosition;
 	}
 
+	void OnDestroy() {
+		UnLoadMap (Worldx - 1, Worldy - 1, -1 + 1, -1 + 1);
+		UnLoadMap (Worldx-1, Worldy, -1+1, 0+1);
+		UnLoadMap (Worldx-1, Worldy+1, -1+1, 1+1);
+		UnLoadMap (Worldx, Worldy-1, 0+1, -1+1);
+
+		UnLoadMap (Worldx, Worldy+1, 0+1, 1+1);
+		UnLoadMap (Worldx+1, Worldy-1, 1+1, -1+1);
+		UnLoadMap (Worldx+1, Worldy, 1+1, 0+1);
+		UnLoadMap (Worldx+1, Worldy+1, 1+1, 1+1);
+
+		UnLoadMap (Worldx, Worldy, 0+1, 0+1);
+	}
+
 	Vector3 calculateTransformPosition(int x, int y, int Worldx, int Worldy) {
 		Vector3 retval;
 		retval = new Vector3 (OriginX + (x * CharacterWidth) + (MapRows * CharacterWidth * Worldx), OriginY + (-y * CharacterHeight) + (MapCols * CharacterHeight * -Worldy), 0);
@@ -310,6 +324,7 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 
 	void UnLoadMap(int Worldx, int Worldy, int x, int y) {
 		GameObject  world = GameObject.Find (getWorldName (Worldx, Worldy));
+		if (world != null) {
 		Transform worldMainT = world.transform.FindChild ("worldMain");
 		if (worldMainT != null) {
 			for (int i = 0; i < worldMainT.childCount; i++) {
@@ -332,6 +347,13 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 						newX += (int)(newXobj / mapDataGroup [x, y].getRows ());
 						newY += (int)(newYobj / mapDataGroup [x, y].getCols ());
 
+						Debug.Log ("Child has moved");
+						string newWorldName = getWorldName (Worldx + (int)(newXobj / mapDataGroup [x, y].getRows ()), Worldy + (int)(newYobj / mapDataGroup [x, y].getCols ()));
+						Debug.Log ("NewWorldName " + newWorldName);
+						GameObject  newWorld = GameObject.Find (newWorldName);
+						Transform newWorldMainT = newWorld.transform.FindChild ("worldMain");
+						child.transform.parent = newWorldMainT;
+
 						newXobj = (int)(newXobj % mapDataGroup [x, y].getRows ());
 						newYobj = (int)(newYobj % mapDataGroup [x, y].getCols ());
 						if (newXobj < 0) {
@@ -340,12 +362,11 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 						if (newYobj < 0) {
 							newYobj += mapDataGroup [x, y].getCols ();
 						}
-							
 						Debug.Log("new XY ("+ newX + ", " + newY + ")");
 						Debug.Log("new XYobj ("+ newXobj + ", " + newYobj + ")");
 						Debug.Log("XY ("+ x + ", " + y + ")");
 						Debug.Log("XYobj ("+ xobj + ", " + yobj + ")");
-						Debug.Log ("Child has moved");
+
 						mapDataGroup[newX, newY].setMainInt(newXobj, newYobj, mapDataGroup [x, y].getMainInt (xobj, yobj));
 						mapDataGroup [x, y].setMainInt (xobj, yobj, 0);
 					
@@ -354,7 +375,7 @@ IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
 			}
 		}
 
-		if (world != null) {
+
 			DestroyObject (world);
 			world = null;
 		}
