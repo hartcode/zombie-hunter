@@ -15,8 +15,8 @@ namespace AssemblyCSharp
 		}
 
 
-		public MapData LoadFile(String path) {
-			MapData retval = null;
+		public MapBlockData LoadFile(String path) {
+			MapBlockData retval = null;
 				if (path == null) {
 					throw new NullReferenceException("Parameter path cannot be null");
 				}
@@ -50,7 +50,7 @@ namespace AssemblyCSharp
 				return retval;
 		}
 
-		public void SaveFile(MapData mapData, String path) {
+		public void SaveFile(MapBlockData mapData, String path) {
 			if (mapData == null) {
 				throw new NullReferenceException("Parameter mapData cannot be null");
 			}

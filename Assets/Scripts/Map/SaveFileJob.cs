@@ -5,7 +5,7 @@ namespace AssemblyCSharp
 	public class SaveFileJob : ThreadedJob
 	{
 		
-		public MapData input;
+		public MapBlockData input;
 		public string path;
 
 

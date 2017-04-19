@@ -16,7 +16,7 @@ public class AsciiMapScript : MonoBehaviour
 	public GameObject prefabWall;
 	public String mapDataPath = "Assets/Maps/Test/";
 
-	protected MapData[,] mapDataGroup = new MapData[3,3];
+	protected MapBlockData[,] mapDataGroup = new MapBlockData[3,3];
 	protected MapFile mapfile;
 	public int Worldx = 3;
 	public int Worldy = 3;
@@ -159,11 +159,11 @@ public class AsciiMapScript : MonoBehaviour
 
 
 
-IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy) {
+	IEnumerator InstantiateMap(MapBlockData mapData, int Worldx, int Worldy) {
 		return InstantiateMap(mapData,Worldx,Worldy, YieldDirection.NoYield);
 }
 
-	IEnumerator InstantiateMap(MapData mapData, int Worldx, int Worldy, YieldDirection yieldDirection)
+	IEnumerator InstantiateMap(MapBlockData mapData, int Worldx, int Worldy, YieldDirection yieldDirection)
 	{
 		GameObject world = GameObject.Find (getWorldName (Worldx, Worldy));
 		GameObject worldFloor;

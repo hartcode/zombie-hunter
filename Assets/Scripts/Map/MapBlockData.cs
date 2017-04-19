@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AssemblyCSharp
 {
-	public class MapData
+	public class MapBlockData
 	{
 
 		int rows;
@@ -75,7 +75,7 @@ namespace AssemblyCSharp
 		int maxMainPrefabs;
 
 
-		public MapData ()
+		public MapBlockData ()
 		{
 			rows = 20;
 			cols = 20;
@@ -112,7 +112,7 @@ namespace AssemblyCSharp
 			}
 		}
 
-		public MapData(int rows, int cols, int[,] floorarray, int[,]array, String[] floorResources, String[] mainResources)
+		public MapBlockData(int rows, int cols, int[,] floorarray, int[,]array, String[] floorResources, String[] mainResources)
 		{
 			this.rows = rows;
 			this.cols = cols;

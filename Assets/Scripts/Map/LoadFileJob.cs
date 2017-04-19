@@ -10,7 +10,7 @@ namespace AssemblyCSharp
 		public int x;
 		public int y;
         public YieldDirection yieldDirection;
-		public MapData output;
+		public MapBlockData output;
 
 
 		protected override void ThreadFunction()
