@@ -1,0 +1,39 @@
+
+Map
+	Array of MapBlockViews
+	funciton MoveObjectAcrossBlock(BlockX, BlockY, newBlockX, newBlockY, newX, newY, object)
+		Remove object from old block
+		Reparent object to new block
+		Call Add object on new block
+	CharacterHeight  for transform position calculations
+	CharacterWidth
+
+MapBlockView - Prefab object
+    BlockX
+	BlockY
+	MapBlockData
+	Map
+	onStart - instantiate objects
+	MoveObject(x,y, newx, newy, object)
+	 if within this block, change position in blockviewarray, and mapBlockdata
+	 if without then call moveobjectAcrossBlock
+	RemoveObject(x,y)
+		Removes object from mapBlockData
+	AddObject(x, y, object)
+		reparent object to this block
+		add object value to mapBlockdata
+	
+MapMainObjects
+	MapBlockView
+	InitialX
+	InitialY
+	ObjectValue
+	if has moved call Block moveObject
+	if object is destroyed call removeObject
+	
+
+MapData  Rename to MapBlockData
+	Rows 
+	Cols
+	Array
+	
