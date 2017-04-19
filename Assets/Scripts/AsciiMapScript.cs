@@ -14,6 +14,7 @@ public class AsciiMapScript : MonoBehaviour
 
 	public GameObject prefabParent;
 	public GameObject prefabWall;
+	public GameObject prefabMapBlockView;
 	public String mapDataPath = "Assets/Maps/Test/";
 
 	protected MapBlockData[,] mapDataGroup = new MapBlockData[3,3];
@@ -58,6 +59,9 @@ public class AsciiMapScript : MonoBehaviour
 
 		if (prefabWall == null) {
 			prefabWall = (GameObject)Resources.Load ("Main/Wall", typeof(GameObject));
+		}
+		if (prefabMapBlockView == null) {
+			prefabMapBlockView = (GameObject)Resources.Load ("Main/MapBlockView", typeof(GameObject));
 		}
 
 		LoadMap (Worldx-1, Worldy-1, -1+1, -1+1,YieldDirection.NoYield);
@@ -107,12 +111,21 @@ public class AsciiMapScript : MonoBehaviour
 		y = (int)((pos.y - (MapCols * CharacterHeight * -Worldy) -OriginY) / -CharacterHeight);
 	}
 
-	void CreateMapObject (int x, int y, GameObject mapPrefab, int Worldx, int Worldy, GameObject parent)
+	void CreateMapObject (int x, int y, GameObject mapPrefab, int Worldx, int Worldy, GameObject parent, string resourceName, int resourceInt)
 	{
 		if (mapPrefab != null) {
 			if (parent != null) {
 				GameObject prefab = (GameObject)Instantiate (mapPrefab,calculateTransformPosition(x,y,Worldx,Worldy) , Quaternion.identity, parent.transform);
 				prefab.name = getObjectName ("obj", x, y);
+				MapPosition mapPosition = prefab.GetComponent<MapPosition> ();
+				if (mapPosition == null) {
+					throw new MissingComponentException ("Map Object is missing the MapPosition component");
+				}
+				mapPosition.originX = x;
+				mapPosition.originY = y;
+				MapValue mapValue =	prefab.AddComponent<MapValue> ();
+				mapValue.intValue = resourceInt;
+				mapValue.strValue = resourceName;
 			//	prefab.transform.localScale = new Vector3 (.05f, .05f, 1);
 			}
 		} else {
@@ -169,8 +182,17 @@ public class AsciiMapScript : MonoBehaviour
 		GameObject worldFloor;
 		GameObject worldMain;
 		if (world == null) {
-			world = new GameObject (getWorldName (Worldx, Worldy));
-			world.transform.parent = prefabParent.transform;
+			world = (GameObject)Instantiate (prefabMapBlockView,calculateTransformPosition(0,0,Worldx,Worldy) , Quaternion.identity, prefabParent.transform);
+			world.name = getWorldName (Worldx, Worldy);
+
+			MapBlockView mapBlockView = world.GetComponent<MapBlockView> ();
+			if (mapBlockView == null) {
+				throw new MissingComponentException ("Expected to find the MapBlockView Component");
+			}
+			mapBlockView.blockX = Worldx;
+			mapBlockView.blockY = Worldy;
+
+
 		/*	Vector3 worldPosition = calculateTransformPosition (0, 0, Worldx, Worldy);
 			world.transform.position = worldPosition;
 			Vector3 worldScale = new Vector3 ((float)1.25*MapRows, (float)1.25*MapCols, 1);
@@ -191,35 +213,35 @@ public class AsciiMapScript : MonoBehaviour
 				if (yieldDirection == YieldDirection.YieldRight) {
 					for (int x = 0; x < MapRows; x++) {
 						for (int y = 0; y < MapCols; y++) {
-							CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor);
+							CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor,"Main/Wall",0);
 						}
 						yield return null;
 					}
 				} else if (yieldDirection == YieldDirection.YieldLeft) {
 					for (int x = MapRows-1; x >= 0; x--) {
 						for (int y = 0; y < MapCols; y++) {
-							CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor);
+							CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor,"Main/Wall",0);
 						}
 						yield return null;
 					}
 				} else if (yieldDirection == YieldDirection.YieldDown) {
 					for (int y = 0; y < MapCols; y++) {
 						for (int x = 0; x < MapRows; x++) {
-							CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor);
+							CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor,"Main/Wall",0);
 						}
 						yield return null;
 					}
 				} else if (yieldDirection == YieldDirection.YieldUp) {
 					for (int y = MapCols-1; y >= 0; y--) {
 						for (int x = 0; x < MapRows ; x++) {
-							CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor);
+							CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor,"Main/Wall",0);
 						}
 						yield return null;
 					}
 				}else  {
 					for (int x = 0; x < MapRows ; x++) {
 						for (int y = 0; y < MapCols; y++) {
-							CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor);
+							CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor,"Main/Wall",0);
 						}
 					}
 				}
@@ -229,17 +251,17 @@ public class AsciiMapScript : MonoBehaviour
 					for (int x = 0; x < mapData.getRows (); x++) {
 						for (int y = 0; y < mapData.getCols (); y++) {
 							if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
-								CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor);
+								CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor,"Main/Wall",0);
 							} else {
 								//GameObject floorObject = mapData.getFloor (x, y);
 								GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
 								if (floorObject != null) {
-									CreateMapObject (x, y, floorObject, Worldx, Worldy, worldFloor);
+									CreateMapObject (x, y, floorObject, Worldx, Worldy, worldFloor,mapData.getFloorResource (x, y), 0);
 								}
 								//GameObject mainObject = mapData.getMain (x, y);
 								GameObject mainObject = (GameObject)Resources.Load (mapData.getMainResource (x, y), typeof(GameObject));
 								if (mainObject != null) {
-									CreateMapObject (x, y, mainObject, Worldx, Worldy, worldMain);
+									CreateMapObject (x, y, mainObject, Worldx, Worldy, worldMain,mapData.getMainResource (x, y), 0);
 								}
 							}
 						}
@@ -249,17 +271,17 @@ public class AsciiMapScript : MonoBehaviour
 					for (int x = mapData.getRows () - 1; x >= 0; x--) {
 						for (int y = 0; y < mapData.getCols (); y++) {
 							if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
-								CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor);
+								CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor,"Main/Wall",0);
 							} else {
 								//GameObject floorObject = mapData.getFloor (x, y);
 								GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
 								if (floorObject != null) {
-									CreateMapObject (x, y, floorObject, Worldx, Worldy, worldFloor);
+									CreateMapObject (x, y, floorObject, Worldx, Worldy, worldFloor,mapData.getFloorResource (x, y), 0);
 								}
 								//GameObject mainObject = mapData.getMain (x, y);
 								GameObject mainObject = (GameObject)Resources.Load (mapData.getMainResource (x, y), typeof(GameObject));
 								if (mainObject != null) {
-									CreateMapObject (x, y, mainObject, Worldx, Worldy, worldMain);
+									CreateMapObject (x, y, mainObject, Worldx, Worldy, worldMain,mapData.getMainResource (x, y), 0);
 								}
 							}
 						}
@@ -269,17 +291,17 @@ public class AsciiMapScript : MonoBehaviour
 					for (int y = 0; y < mapData.getCols (); y++) {
 						for (int x = 0; x < mapData.getRows (); x++) {
 							if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
-								CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor);
+								CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor,"Main/Wall",0);
 							} else {
 								//GameObject floorObject = mapData.getFloor (x, y);
 								GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
 								if (floorObject != null) {
-									CreateMapObject (x, y, floorObject, Worldx, Worldy, worldFloor);
+									CreateMapObject (x, y, floorObject, Worldx, Worldy, worldFloor,mapData.getFloorResource (x, y), 0);
 								}
 								//GameObject mainObject = mapData.getMain (x, y);
 								GameObject mainObject = (GameObject)Resources.Load (mapData.getMainResource (x, y), typeof(GameObject));
 								if (mainObject != null) {
-									CreateMapObject (x, y, mainObject, Worldx, Worldy, worldMain);
+									CreateMapObject (x, y, mainObject, Worldx, Worldy, worldMain,mapData.getMainResource (x, y), 0);
 								}
 							}
 						}
@@ -289,17 +311,17 @@ public class AsciiMapScript : MonoBehaviour
 					for (int y = mapData.getCols () - 1; y >= 0; y--) {
 						for (int x = 0; x < mapData.getRows (); x++) {
 							if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
-								CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor);
+								CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor,"Main/Wall",0);
 							} else {
 								//GameObject floorObject = mapData.getFloor (x, y);
 								GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
 								if (floorObject != null) {
-									CreateMapObject (x, y, floorObject, Worldx, Worldy, worldFloor);
+									CreateMapObject (x, y, floorObject, Worldx, Worldy, worldFloor,mapData.getFloorResource (x, y), 0);
 								}
 								//GameObject mainObject = mapData.getMain (x, y);
 								GameObject mainObject = (GameObject)Resources.Load (mapData.getMainResource (x, y), typeof(GameObject));
 								if (mainObject != null) {
-									CreateMapObject (x, y, mainObject, Worldx, Worldy, worldMain);
+									CreateMapObject (x, y, mainObject, Worldx, Worldy, worldMain,mapData.getMainResource (x, y), 0);
 								}
 							}
 						}
@@ -309,17 +331,17 @@ public class AsciiMapScript : MonoBehaviour
 					for (int x = 0; x < mapData.getRows (); x++) {
 						for (int y = 0; y < mapData.getCols (); y++) {
 							if (x < 0 || x == mapData.getRows () || y < 0 || y == mapData.getCols ()) {
-								CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor);
+								CreateMapObject (x, y, prefabWall, Worldx, Worldy, worldFloor,"Main/Wall",0);
 							} else {
 								//GameObject floorObject = mapData.getFloor (x, y);
 								GameObject floorObject = (GameObject)Resources.Load (mapData.getFloorResource (x, y), typeof(GameObject));
 								if (floorObject != null) {
-									CreateMapObject (x, y, floorObject, Worldx, Worldy, worldFloor);
+									CreateMapObject (x, y, floorObject, Worldx, Worldy, worldFloor, mapData.getFloorResource (x, y), 0);
 								}
 								//GameObject mainObject = mapData.getMain (x, y);
 								GameObject mainObject = (GameObject)Resources.Load (mapData.getMainResource (x, y), typeof(GameObject));
 								if (mainObject != null) {
-									CreateMapObject (x, y, mainObject, Worldx, Worldy, worldMain);
+									CreateMapObject (x, y, mainObject, Worldx, Worldy, worldMain,mapData.getMainResource (x, y), 0);
 								}
 							}
 						}

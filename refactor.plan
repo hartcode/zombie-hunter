@@ -15,6 +15,7 @@ MapBlockView - Prefab object
 	Map
 	onStart - instantiate objects
 	MoveObject(x,y, newx, newy, object)
+	 change x y in object
 	 if within this block, change position in blockviewarray, and mapBlockdata
 	 if without then call moveobjectAcrossBlock
 	RemoveObject(x,y)
@@ -22,7 +23,7 @@ MapBlockView - Prefab object
 	AddObject(x, y, object)
 		reparent object to this block
 		add object value to mapBlockdata
-	
+
 MapMainObjects
 	MapBlockView
 	InitialX
@@ -30,10 +31,9 @@ MapMainObjects
 	ObjectValue
 	if has moved call Block moveObject
 	if object is destroyed call removeObject
-	
+
 
 MapData  Rename to MapBlockData
-	Rows 
+	Rows
 	Cols
 	Array
-	
