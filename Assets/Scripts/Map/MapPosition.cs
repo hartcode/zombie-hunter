@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AssemblyCSharp;
 
 public class MapPosition : MonoBehaviour {
 
@@ -8,6 +9,7 @@ public class MapPosition : MonoBehaviour {
 	public int originY;
 	public float characterWidth = 0.08f;
 	public float characterHeight = 0.16f;
+	public MapBlockView mapBlockView;
 
 	public int currentX {
 		get { return (int)(transform.localPosition.x / characterWidth);}
@@ -23,6 +25,7 @@ public class MapPosition : MonoBehaviour {
 			if (originX != currentX || originY != currentY) {
 			// Call Move
 				Debug.Log("current " + currentX + "," + currentY);
+				mapBlockView.MoveObject (originX, originY, currentX, currentY, this.gameObject);
 			}
 			transform.hasChanged = false;
 		}
