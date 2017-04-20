@@ -131,19 +131,29 @@ public class AsciiMapScript : MonoBehaviour
 
 	void SaveMap(int Worldx, int Worldy, int x, int y) {
 		UnLoadMap (Worldx, Worldy, x, y);
-		String mapPath = getMapPath (Worldx, Worldy);
-		if (mapDataGroup[x,y] != null) {
-			mapfile.SaveFile (mapDataGroup[x,y], mapPath);
+		GameObject  world = GameObject.Find (getWorldName (Worldx, Worldy));
+		if (world != null) {
+			MapBlockView mapBlockView = world.GetComponent<MapBlockView> ();
+			if (mapBlockView != null && mapBlockView.mapBlockData != null) {
+				String mapPath = getMapPath (Worldx, Worldy);
+				mapfile.SaveFile (mapBlockView.mapBlockData, mapPath);
+			}
 		}
 	}
 
 	void SaveMapThreaded(int Worldx, int Worldy, int x, int y) {
 		UnLoadMap (Worldx, Worldy, x, y);
-		String mapPath = getMapPath (Worldx, Worldy);
-		SaveFileJob saveFileJob = new SaveFileJob ();
-		saveFileJob.input = mapDataGroup[x,y];
-		saveFileJob.path = mapPath;
-		saveFileJob.Start ();
+		GameObject  world = GameObject.Find (getWorldName (Worldx, Worldy));
+		if (world != null) {
+			MapBlockView mapBlockView = world.GetComponent<MapBlockView> ();
+			if (mapBlockView != null && mapBlockView.mapBlockData != null) {
+				String mapPath = getMapPath (Worldx, Worldy);
+				SaveFileJob saveFileJob = new SaveFileJob ();
+				saveFileJob.input = mapBlockView.mapBlockData;
+				saveFileJob.path = mapPath;
+				saveFileJob.Start ();
+			}
+		}
 	}
 
 
@@ -171,9 +181,9 @@ public class AsciiMapScript : MonoBehaviour
 
 
 	void UnLoadMap(int Worldx, int Worldy, int x, int y) {
-	/*	GameObject  world = GameObject.Find (getWorldName (Worldx, Worldy));
+		GameObject  world = GameObject.Find (getWorldName (Worldx, Worldy));
 		if (world != null) {
-		Transform worldMainT = world.transform.FindChild ("worldMain");
+	/*	Transform worldMainT = world.transform.FindChild ("worldMain");
 		if (worldMainT != null) {
 			for (int i = 0; i < worldMainT.childCount; i++) {
 				Transform child = worldMainT.GetChild (i);
@@ -222,11 +232,11 @@ public class AsciiMapScript : MonoBehaviour
 				}
 			}
 		}
-
+*/
 
 			DestroyObject (world);
 			world = null;
-		}*/
+		}
 	}
 
 
@@ -244,8 +254,8 @@ public class AsciiMapScript : MonoBehaviour
 			}
 		}
 		if (player != null) {
-			/*Vector3 worldstart = calculateTransformPosition(0,0, Worldx, Worldy);
-			Vector3 worldend = calculateTransformPosition (MapRows, MapCols, Worldx, Worldy);
+			Vector3 worldstart = calculateTransformPosition(Worldx, Worldy);
+			Vector3 worldend = new Vector3(MapRows *characterWidth ,-MapCols * characterHeight,0) + calculateTransformPosition(Worldx, Worldy);
 			if (player.transform.position.x < worldstart.x) {
 				SaveMap(Worldx + 1, Worldy -1,  2, 0);
 				SaveMap(Worldx + 1, Worldy,     2, 1);
@@ -302,7 +312,7 @@ public class AsciiMapScript : MonoBehaviour
 				LoadMap (Worldx, Worldy + 1,    1, 2, YieldDirection.YieldDown);
 				LoadMap (Worldx + 1, Worldy +1, 2, 2, YieldDirection.YieldDown);
 			}
-			*/
+
 		}
 	}
 }

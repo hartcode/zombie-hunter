@@ -6,7 +6,7 @@ namespace AssemblyCSharp {
 
 		private int blockX;
 		private int blockY;
-		private MapBlockData mapBlockData;
+		public MapBlockData mapBlockData;
 
 		public int MapRows = 20;
 		public int MapCols = 20;
