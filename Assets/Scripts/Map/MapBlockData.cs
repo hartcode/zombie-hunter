@@ -179,6 +179,14 @@ namespace AssemblyCSharp
 			array[x,y] = newid;
 		}
 
+		public int getFloorInt(int x, int y) {
+			return floorarray [x, y];
+		}
+
+		public void setFloorInt(int x, int y, int newid) {
+			floorarray[x,y] = newid;
+		}
+
 		public String getFloorResource(int x, int y) {
 			String retval = null;
 			int arrayID = floorarray [x, y];

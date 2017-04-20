@@ -31,22 +31,22 @@ namespace AssemblyCSharp {
 				// Empty map blocks will display as walls
 					for (int x = 0; x < MapRows ; x++) {
 						for (int y = 0; y < MapCols; y++) {
-						CreateMapObject (x, y, prefabWall, this.gameObject, "Main/Wall", 0);
+						CreateMapObject (x, y, prefabWall, this.gameObject, "Main/Wall", 6, MapLayer.Floor);
 						}
 					}
 			} else {
 				for (int x = 0; x < mapBlockData.getRows (); x++) {
 					for (int y = 0; y < mapBlockData.getCols (); y++) {
 						if (x < 0 || x == mapBlockData.getRows () || y < 0 || y == mapBlockData.getCols ()) {
-							CreateMapObject (x, y, prefabWall, this.gameObject, "Main/Wall", 0);
+							CreateMapObject (x, y, prefabWall, this.gameObject, "Main/Wall", 6, MapLayer.Floor);
 							} else {
 							GameObject floorObject = (GameObject)Resources.Load (mapBlockData.getFloorResource (x, y), typeof(GameObject));
 								if (floorObject != null) {
-								CreateMapObject (x, y, floorObject, this.gameObject, mapBlockData.getFloorResource (x, y), 0);
+								CreateMapObject (x, y, floorObject, this.gameObject, mapBlockData.getFloorResource (x, y), mapBlockData.getFloorInt(x, y), MapLayer.Floor);
 								}
 							GameObject mainObject = (GameObject)Resources.Load (mapBlockData.getMainResource (x, y), typeof(GameObject));
 								if (mainObject != null) {
-								CreateMapObject (x, y, mainObject, this.gameObject, mapBlockData.getMainResource (x, y), mapBlockData.getMainInt(x, y));
+								CreateMapObject (x, y, mainObject, this.gameObject, mapBlockData.getMainResource (x, y), mapBlockData.getMainInt(x, y), MapLayer.Main);
 								}
 							}
 						}
@@ -87,7 +87,16 @@ namespace AssemblyCSharp {
 					if (obj != null) {
 						obj.transform.parent = this.gameObject.transform;
 						MapValue mapValue = obj.GetComponent<MapValue> ();
-						mapBlockData.setMainInt (x, y, mapValue.intValue);
+						if (mapValue != null) {
+							switch (mapValue.layer) {
+							case MapLayer.Floor:
+								mapBlockData.setFloorInt (x, y, mapValue.intValue);
+								break;
+							case MapLayer.Main:
+								mapBlockData.setMainInt (x, y, mapValue.intValue);
+								break;
+							}
+						}
 					}
 				}
 			} else {
@@ -95,7 +104,7 @@ namespace AssemblyCSharp {
 			}
 		}
 
-		private void CreateMapObject (int x, int y, GameObject mapPrefab, GameObject parent, string resourceName, int resourceInt)
+		private void CreateMapObject (int x, int y, GameObject mapPrefab, GameObject parent, string resourceName, int resourceInt, MapLayer layer)
 		{
 			if (mapPrefab != null) {
 				if (parent != null) {
@@ -110,6 +119,7 @@ namespace AssemblyCSharp {
 					MapValue mapValue =	prefab.AddComponent<MapValue> ();
 					mapValue.intValue = resourceInt;
 					mapValue.strValue = resourceName;
+					mapValue.layer = layer;
 				}
 			} else {
 				throw new MissingReferenceException ("Map Prefab Reference Missing");

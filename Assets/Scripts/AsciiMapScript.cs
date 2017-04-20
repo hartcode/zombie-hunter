@@ -183,56 +183,6 @@ public class AsciiMapScript : MonoBehaviour
 	void UnLoadMap(int Worldx, int Worldy, int x, int y) {
 		GameObject  world = GameObject.Find (getWorldName (Worldx, Worldy));
 		if (world != null) {
-	/*	Transform worldMainT = world.transform.FindChild ("worldMain");
-		if (worldMainT != null) {
-			for (int i = 0; i < worldMainT.childCount; i++) {
-				Transform child = worldMainT.GetChild (i);
-					int xobj = 0;
-					int yobj = 0;
-					String childName = child.name;
-				int xindex = childName.IndexOf('x');
-				if (xindex >= 0) {
-					xobj = Int32.Parse (childName.Substring (3, xindex-3));
-					yobj = Int32.Parse (childName.Substring (xindex+1));
-					Vector3 pos = calculateTransformPosition (xobj, yobj, Worldx, Worldy);
-					if (child.transform.position != pos) {
-						int newXobj = 0;
-						int newYobj = 0;
-						calculateXYPosition (child.transform.position, ref newXobj, ref newYobj, Worldx, Worldy);
-						// child has moved
-						int newX = 1;
-						int newY = 1;
-						newX += (int)(newXobj / mapDataGroup [x, y].getRows ());
-						newY += (int)(newYobj / mapDataGroup [x, y].getCols ());
-
-						Debug.Log ("Child has moved");
-						string newWorldName = getWorldName (Worldx + (int)(newXobj / mapDataGroup [x, y].getRows ()), Worldy + (int)(newYobj / mapDataGroup [x, y].getCols ()));
-						Debug.Log ("NewWorldName " + newWorldName);
-						GameObject  newWorld = GameObject.Find (newWorldName);
-						Transform newWorldMainT = newWorld.transform.FindChild ("worldMain");
-						child.transform.parent = newWorldMainT;
-
-						newXobj = (int)(newXobj % mapDataGroup [x, y].getRows ());
-						newYobj = (int)(newYobj % mapDataGroup [x, y].getCols ());
-						if (newXobj < 0) {
-							newXobj += mapDataGroup [x, y].getRows ();
-						}
-						if (newYobj < 0) {
-							newYobj += mapDataGroup [x, y].getCols ();
-						}
-						Debug.Log("new XY ("+ newX + ", " + newY + ")");
-						Debug.Log("new XYobj ("+ newXobj + ", " + newYobj + ")");
-						Debug.Log("XY ("+ x + ", " + y + ")");
-						Debug.Log("XYobj ("+ xobj + ", " + yobj + ")");
-						child.name = getObjectName ("obj", newXobj, newYobj);
-						mapDataGroup[newX, newY].setMainInt(newXobj, newYobj, mapDataGroup [x, y].getMainInt (xobj, yobj));
-						mapDataGroup [x, y].setMainInt (xobj, yobj, 0);
-					
-					}
-				}
-			}
-		}
-*/
 
 			DestroyObject (world);
 			world = null;
