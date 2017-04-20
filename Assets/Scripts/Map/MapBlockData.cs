@@ -63,10 +63,8 @@ namespace AssemblyCSharp
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 		};
-
-		GameObject[] floorPrefabs;
+			
 		String[] floorResources;
-		GameObject[] mainPrefabs;
 		String[] mainResources;
 
 		int minFloorPrefabs = 0;
@@ -98,18 +96,6 @@ namespace AssemblyCSharp
 			mainResourcesArray.Add ("Main/Barrel");
 			mainResourcesArray.Add ("Main/wall");
 
-
-
-			floorPrefabs = new GameObject[floorResourcesArray.Count];
-			for (int i = 0; i < floorResourcesArray.Count; i++) {
-				floorPrefabs [i] = (GameObject)Resources.Load (floorResourcesArray[i], typeof(GameObject));
-			}
-
-
-			mainPrefabs = new GameObject[mainResourcesArray.Count];
-			for (int i = 0; i < mainResourcesArray.Count; i++) {
-				mainPrefabs [i] = (GameObject)Resources.Load (mainResourcesArray[i], typeof(GameObject));
-			}
 		}
 
 		public MapBlockData(int rows, int cols, int[,] floorarray, int[,]array, String[] floorResources, String[] mainResources)
@@ -127,7 +113,6 @@ namespace AssemblyCSharp
 			}
 
 			maxFloorPrefabs = floorResources.Length;
-			floorPrefabs = new GameObject[maxFloorPrefabs+1];
 			this.floorResources = new String[maxFloorPrefabs + 1];
 			for (int i = 0; i < maxFloorPrefabs; i++) {
 				this.floorResources[i] = floorResources[i];
@@ -135,7 +120,6 @@ namespace AssemblyCSharp
 			}
 		
 			maxMainPrefabs = mainResources.Length;
-			mainPrefabs = new GameObject[maxMainPrefabs+1];
 			this.mainResources = new String[maxMainPrefabs + 1];
 			for (int i = 0; i < maxMainPrefabs;i++) {
 				this.mainResources[i] = mainResources[i];
@@ -153,38 +137,57 @@ namespace AssemblyCSharp
 			return cols;
 		}
 
-		public GameObject getFloor(int x, int y) {
-			GameObject retval = null;
-			int arrayID = floorarray [x, y];
-			if (arrayID >= minFloorPrefabs && arrayID <= maxFloorPrefabs) {
-				retval = floorPrefabs [arrayID];
-			}
-			return retval;
-		}
-
-		public GameObject getMain(int x, int y) {
-			GameObject retval = null;
-			int arrayID = array [x, y];
-			if (arrayID >= minMainPrefabs && arrayID <= maxMainPrefabs) {
-				retval = mainPrefabs [arrayID];
-			}
-			return retval;
-		}
 
 		public int getMainInt(int x, int y) {
 			return array [x, y];
 		}
 
-		public void setMainInt(int x, int y, int newid) {
-			array[x,y] = newid;
+		public void setMainInt(int x, int y, String newid) {
+			int i = 0; 
+			// exit while if we reach the end of the array or find a match
+			while(i < maxMainPrefabs && newid != mainResources[i]) {
+				i++;
+			}
+			// check to see if we need to add the resource to the array
+			if (i >= maxMainPrefabs) {
+				// Add new resource to floorResources array
+				string[] temp = new String[maxMainPrefabs + 1];
+				for (int a = 0; a < maxMainPrefabs; a++) {
+					temp[a] = mainResources[a];
+				}
+				maxMainPrefabs++;
+				temp[maxMainPrefabs-1] = newid;
+				mainResources = temp;
+			}
+
+			// either we found the resource in the array or we added it.
+			array [x, y] = i;
 		}
 
 		public int getFloorInt(int x, int y) {
 			return floorarray [x, y];
 		}
 
-		public void setFloorInt(int x, int y, int newid) {
-			floorarray[x,y] = newid;
+		public void setFloorInt(int x, int y, String newid) {
+			int i = 0; 
+			// exit while if we reach the end of the array or find a match
+			while(i < maxFloorPrefabs && newid != floorResources[i]) {
+				i++;
+			}
+			// check to see if we need to add the resource to the array
+			if (i >= maxFloorPrefabs) {
+				// Add new resource to floorResources array
+				string[] temp = new String[maxFloorPrefabs + 1];
+				for (int a = 0; a < maxFloorPrefabs; a++) {
+					temp[a] = floorResources[a];
+				}
+				maxFloorPrefabs++;
+				temp[maxFloorPrefabs-1] = newid;
+				floorResources = temp;
+			}
+
+			// either we found the resource in the array or we added it.
+			floorarray [x, y] = i;
 		}
 
 		public String getFloorResource(int x, int y) {

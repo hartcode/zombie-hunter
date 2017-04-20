@@ -58,10 +58,10 @@ namespace AssemblyCSharp {
 		public void MoveObject(int x, int y, int newX, int newY, GameObject obj) {
 			if (isInitialized) {
 				if (mapBlockData != null) {
-					if (x >= 0 && x < mapBlockData.getRows () &&
-					   y >= 0 && y < mapBlockData.getCols ()) {
-						AddObject (x, y, obj);			
-						RemoveObject (x, y);
+					if (newX >= 0 && newX <= mapBlockData.getRows () &&
+						newY >= 0 && newY <= mapBlockData.getCols ()) {
+						AddObject (newX, newY, obj);			
+						RemoveObject (x, y, obj);
 					} else {
 						// move object to a different BlockView
 					}
@@ -71,10 +71,22 @@ namespace AssemblyCSharp {
 			}
 		}
 
-		public void RemoveObject(int x, int y) {
+		public void RemoveObject(int x, int y, GameObject obj) {
 				if (isInitialized) {
 				if (mapBlockData != null) {
-					mapBlockData.setMainInt (x, y, 0);
+					if (obj != null) {
+						MapValue mapValue = obj.GetComponent<MapValue> ();
+						if (mapValue != null) {
+							switch (mapValue.layer) {
+							case MapLayer.Floor:
+								mapBlockData.setFloorInt (x, y, null);
+								break;
+							case MapLayer.Main:
+								mapBlockData.setMainInt (x, y, null);
+								break;
+							}
+						}
+					}
 				}
 			} else {
 				throw new UnityException ("MapBlockView isn't initialized");
@@ -90,10 +102,10 @@ namespace AssemblyCSharp {
 						if (mapValue != null) {
 							switch (mapValue.layer) {
 							case MapLayer.Floor:
-								mapBlockData.setFloorInt (x, y, mapValue.intValue);
+								mapBlockData.setFloorInt (x, y, mapValue.strValue);
 								break;
 							case MapLayer.Main:
-								mapBlockData.setMainInt (x, y, mapValue.intValue);
+								mapBlockData.setMainInt (x, y, mapValue.strValue);
 								break;
 							}
 						}

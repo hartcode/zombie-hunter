@@ -160,7 +160,7 @@ public class AsciiMapScript : MonoBehaviour
 
 	IEnumerator InstantiateMap(MapBlockData mapData, int Worldx, int Worldy) {
 		return InstantiateMap(mapData,Worldx,Worldy, YieldDirection.NoYield);
-}
+    }
 
 	IEnumerator InstantiateMap(MapBlockData mapData, int Worldx, int Worldy, YieldDirection yieldDirection)
 	{
