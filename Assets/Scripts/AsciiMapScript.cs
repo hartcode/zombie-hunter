@@ -132,7 +132,7 @@ public class AsciiMapScript : MonoBehaviour
 				throw new MissingComponentException ("Expected to find the MapBlockView Component");
 			}
 			worlds [x, y] = world;
-			StartCoroutine (mapBlockView.Initialize (Worldx, Worldy, mapData, getMapPath(Worldx, Worldy)));
+			StartCoroutine (mapBlockView.Initialize (Worldx, Worldy, mapData, getMapPath(Worldx, Worldy), yieldDirection));
 
 		}
 	}

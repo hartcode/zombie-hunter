@@ -29,7 +29,7 @@ namespace AssemblyCSharp {
 
 		}
 
-		public IEnumerator Initialize (int blockX, int blockY, MapBlockData mapBlockData, String mapPath) {
+		public IEnumerator Initialize (int blockX, int blockY, MapBlockData mapBlockData, String mapPath, YieldDirection yieldDirection) {
 			this.blockX = blockX;
 			this.blockY = blockY;
 			this.mapBlockData = mapBlockData;
@@ -46,24 +46,107 @@ namespace AssemblyCSharp {
 				// Empty map blocks will display as walls
 				CreateMapObject (MapRows/2, MapCols/2, prefabWorldWall, this.gameObject, "Main/WorldWall", 6, MapLayer.Floor);
 			} else {
-				for (int x = 0; x < mapBlockData.getRows (); x++) {
-					for (int y = 0; y < mapBlockData.getCols (); y++) {
-						if (x < 0 || x == mapBlockData.getRows () || y < 0 || y == mapBlockData.getCols ()) {
-							CreateMapObject (x, y, prefabWall, this.gameObject, "Main/Wall", 6, MapLayer.Floor);
+
+				if (yieldDirection == YieldDirection.YieldRight) {
+					for (int x = 0; x < mapBlockData.getRows (); x++) {
+						for (int y = 0; y < mapBlockData.getCols (); y++) {
+							if (x < 0 || x == mapBlockData.getRows () || y < 0 || y == mapBlockData.getCols ()) {
+								CreateMapObject (x, y, prefabWall, this.gameObject, "Main/Wall", 6, MapLayer.Floor);
 							} else {
-							GameObject floorObject = (GameObject)Resources.Load (mapBlockData.getFloorResource (x, y), typeof(GameObject));
+								//GameObject floorObject = mapData.getFloor (x, y);
+								GameObject floorObject = (GameObject)Resources.Load (mapBlockData.getFloorResource (x, y), typeof(GameObject));
 								if (floorObject != null) {
-								CreateMapObject (x, y, floorObject, this.gameObject, mapBlockData.getFloorResource (x, y), mapBlockData.getFloorInt(x, y), MapLayer.Floor);
+									CreateMapObject (x, y, floorObject, this.gameObject, mapBlockData.getFloorResource (x, y), mapBlockData.getFloorInt(x, y), MapLayer.Floor);
 								}
-							GameObject mainObject = (GameObject)Resources.Load (mapBlockData.getMainResource (x, y), typeof(GameObject));
+								//GameObject mainObject = mapData.getMain (x, y);
+								GameObject mainObject = (GameObject)Resources.Load (mapBlockData.getMainResource (x, y), typeof(GameObject));
 								if (mainObject != null) {
-								CreateMapObject (x, y, mainObject, this.gameObject, mapBlockData.getMainResource (x, y), mapBlockData.getMainInt(x, y), MapLayer.Main);
+									CreateMapObject (x, y, mainObject, this.gameObject, mapBlockData.getMainResource (x, y), mapBlockData.getMainInt(x, y), MapLayer.Main);
 								}
 							}
 						}
-					yield return null;
+						yield return null;
 					}
-				yield return null;
+				} else if (yieldDirection == YieldDirection.YieldLeft) {
+					for (int x = mapBlockData.getRows () - 1; x >= 0; x--) {
+						for (int y = 0; y < mapBlockData.getCols (); y++) {
+							if (x < 0 || x == mapBlockData.getRows () || y < 0 || y == mapBlockData.getCols ()) {
+								CreateMapObject (x, y, prefabWall, this.gameObject, "Main/Wall", 6, MapLayer.Floor);
+							} else {
+								//GameObject floorObject = mapData.getFloor (x, y);
+								GameObject floorObject = (GameObject)Resources.Load (mapBlockData.getFloorResource (x, y), typeof(GameObject));
+								if (floorObject != null) {
+									CreateMapObject (x, y, floorObject, this.gameObject, mapBlockData.getFloorResource (x, y), mapBlockData.getFloorInt(x, y), MapLayer.Floor);
+								}
+								//GameObject mainObject = mapData.getMain (x, y);
+								GameObject mainObject = (GameObject)Resources.Load (mapBlockData.getMainResource (x, y), typeof(GameObject));
+								if (mainObject != null) {
+									CreateMapObject (x, y, mainObject, this.gameObject, mapBlockData.getMainResource (x, y), mapBlockData.getMainInt(x, y), MapLayer.Main);
+								}
+							}
+						}
+						yield return null;
+					}
+				} else if (yieldDirection == YieldDirection.YieldDown) {
+					for (int y = 0; y < mapBlockData.getCols (); y++) {
+						for (int x = 0; x < mapBlockData.getRows (); x++) {
+							if (x < 0 || x == mapBlockData.getRows () || y < 0 || y == mapBlockData.getCols ()) {
+								CreateMapObject (x, y, prefabWall, this.gameObject, "Main/Wall", 6, MapLayer.Floor);
+							} else {
+								//GameObject floorObject = mapData.getFloor (x, y);
+								GameObject floorObject = (GameObject)Resources.Load (mapBlockData.getFloorResource (x, y), typeof(GameObject));
+								if (floorObject != null) {
+									CreateMapObject (x, y, floorObject, this.gameObject, mapBlockData.getFloorResource (x, y), mapBlockData.getFloorInt(x, y), MapLayer.Floor);
+								}
+								//GameObject mainObject = mapData.getMain (x, y);
+								GameObject mainObject = (GameObject)Resources.Load (mapBlockData.getMainResource (x, y), typeof(GameObject));
+								if (mainObject != null) {
+									CreateMapObject (x, y, mainObject, this.gameObject, mapBlockData.getMainResource (x, y), mapBlockData.getMainInt(x, y), MapLayer.Main);
+								}
+							}
+						}
+						yield return null;
+					}
+				} else if (yieldDirection == YieldDirection.YieldUp) {
+					for (int y = mapBlockData.getCols () - 1; y >= 0; y--) {
+						for (int x = 0; x < mapBlockData.getRows (); x++) {
+							if (x < 0 || x == mapBlockData.getRows () || y < 0 || y == mapBlockData.getCols ()) {
+								CreateMapObject (x, y, prefabWall, this.gameObject, "Main/Wall", 6, MapLayer.Floor);
+							} else {
+								//GameObject floorObject = mapData.getFloor (x, y);
+								GameObject floorObject = (GameObject)Resources.Load (mapBlockData.getFloorResource (x, y), typeof(GameObject));
+								if (floorObject != null) {
+									CreateMapObject (x, y, floorObject, this.gameObject, mapBlockData.getFloorResource (x, y), mapBlockData.getFloorInt(x, y), MapLayer.Floor);
+								}
+								//GameObject mainObject = mapData.getMain (x, y);
+								GameObject mainObject = (GameObject)Resources.Load (mapBlockData.getMainResource (x, y), typeof(GameObject));
+								if (mainObject != null) {
+									CreateMapObject (x, y, mainObject, this.gameObject, mapBlockData.getMainResource (x, y), mapBlockData.getMainInt(x, y), MapLayer.Main);
+								}
+							}
+						}
+						yield return null;
+					}
+				} else {
+					for (int x = 0; x < mapBlockData.getRows (); x++) {
+						for (int y = 0; y < mapBlockData.getCols (); y++) {
+							if (x < 0 || x == mapBlockData.getRows () || y < 0 || y == mapBlockData.getCols ()) {
+								CreateMapObject (x, y, prefabWall, this.gameObject, "Main/Wall", 6, MapLayer.Floor);
+							} else {
+								//GameObject floorObject = mapData.getFloor (x, y);
+								GameObject floorObject = (GameObject)Resources.Load (mapBlockData.getFloorResource (x, y), typeof(GameObject));
+								if (floorObject != null) {
+									CreateMapObject (x, y, floorObject, this.gameObject, mapBlockData.getFloorResource (x, y), mapBlockData.getFloorInt(x, y), MapLayer.Floor);
+								}
+								//GameObject mainObject = mapData.getMain (x, y);
+								GameObject mainObject = (GameObject)Resources.Load (mapBlockData.getMainResource (x, y), typeof(GameObject));
+								if (mainObject != null) {
+									CreateMapObject (x, y, mainObject, this.gameObject, mapBlockData.getMainResource (x, y), mapBlockData.getMainInt(x, y), MapLayer.Main);
+								}
+							}
+						}
+					}
+				}
 			}
 			isInitialized = true;
 		}
