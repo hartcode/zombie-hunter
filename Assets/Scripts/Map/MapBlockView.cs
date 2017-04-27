@@ -145,6 +145,7 @@ namespace AssemblyCSharp {
 								}
 							}
 						}
+						yield return null;
 					}
 				}
 			}
