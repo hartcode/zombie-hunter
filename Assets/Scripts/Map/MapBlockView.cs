@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
+using System;
 using UnityEngine;
+
 namespace AssemblyCSharp {
 	public class MapBlockView : MonoBehaviour {
 
@@ -12,11 +15,17 @@ namespace AssemblyCSharp {
 		public int MapCols = 20;
 		public float characterWidth = 0.08f;
 		public float characterHeight = 0.16f;
-
+		protected MapFile mapfile;
+		public String mapDataPath = "Assets/Maps/Test/";
 
 		private GameObject prefabWall;
 		private bool isInitialized = false;
 		//private Map map;
+
+		void Start ()
+		{
+			mapfile = new MapFile ();
+		}
 
 		public void Initialize (int blockX, int blockY, MapBlockData mapBlockData) {
 			this.blockX = blockX;
@@ -142,6 +151,39 @@ namespace AssemblyCSharp {
 			Vector3 retval;
 			retval = new Vector3 ((x * characterWidth), (-y * characterHeight), 0);
 			return retval;
+		}
+
+		String getMapPath(int x, int y) {
+			StringBuilder sb = new StringBuilder (mapDataPath);
+			sb.Append ("map");
+			sb.Append (x);
+			sb.Append ("x");
+			sb.Append (y);
+			sb.Append(".txt");
+			return sb.ToString ();
+		}
+
+		void OnDisable() {
+			SaveMap(blockX, blockY);
+			DestroyObject (this.gameObject);
+		}
+
+		void SaveMap(int Worldx, int Worldy) {
+			if (this.mapBlockData != null) {
+				String mapPath = getMapPath (Worldx, Worldy);
+				mapfile.SaveFile (this.mapBlockData, mapPath);
+			}
+			
+		}
+
+		void SaveMapThreaded(int Worldx, int Worldy) {
+			if (this.mapBlockData != null) {
+				String mapPath = getMapPath (Worldx, Worldy);
+				SaveFileJob saveFileJob = new SaveFileJob ();
+				saveFileJob.input = this.mapBlockData;
+				saveFileJob.path = mapPath;
+				saveFileJob.Start ();
+			}
 		}
 	}
 }

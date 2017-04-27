@@ -82,20 +82,6 @@ public class AsciiMapScript : MonoBehaviour
 		player.transform.position = playerPosition;
 	}
 
-	void OnDisable() {
-		SaveMap (Worldx - 1, Worldy - 1, -1 + 1, -1 + 1);
-		SaveMap (Worldx-1, Worldy, -1+1, 0+1);
-		SaveMap (Worldx-1, Worldy+1, -1+1, 1+1);
-		SaveMap (Worldx, Worldy-1, 0+1, -1+1);
-
-		SaveMap (Worldx, Worldy+1, 0+1, 1+1);
-		SaveMap (Worldx+1, Worldy-1, 1+1, -1+1);
-		SaveMap (Worldx+1, Worldy, 1+1, 0+1);
-		SaveMap (Worldx+1, Worldy+1, 1+1, 1+1);
-
-		SaveMap (Worldx, Worldy, 0+1, 0+1);
-	}
-
 	Vector3 calculateTransformPosition(int Worldx, int Worldy) {
 		Vector3 retval;
 		retval = new Vector3 ((MapRows * characterWidth * Worldx), (MapCols * characterHeight * -Worldy), 0);
@@ -129,35 +115,6 @@ public class AsciiMapScript : MonoBehaviour
 		loadFileJob.Start ();
 	}
 
-	void SaveMap(int Worldx, int Worldy, int x, int y) {
-		UnLoadMap (Worldx, Worldy, x, y);
-		GameObject  world = GameObject.Find (getWorldName (Worldx, Worldy));
-		if (world != null) {
-			MapBlockView mapBlockView = world.GetComponent<MapBlockView> ();
-			if (mapBlockView != null && mapBlockView.mapBlockData != null) {
-				String mapPath = getMapPath (Worldx, Worldy);
-				mapfile.SaveFile (mapBlockView.mapBlockData, mapPath);
-			}
-		}
-	}
-
-	void SaveMapThreaded(int Worldx, int Worldy, int x, int y) {
-		UnLoadMap (Worldx, Worldy, x, y);
-		GameObject  world = GameObject.Find (getWorldName (Worldx, Worldy));
-		if (world != null) {
-			MapBlockView mapBlockView = world.GetComponent<MapBlockView> ();
-			if (mapBlockView != null && mapBlockView.mapBlockData != null) {
-				String mapPath = getMapPath (Worldx, Worldy);
-				SaveFileJob saveFileJob = new SaveFileJob ();
-				saveFileJob.input = mapBlockView.mapBlockData;
-				saveFileJob.path = mapPath;
-				saveFileJob.Start ();
-			}
-		}
-	}
-
-
-
 	IEnumerator InstantiateMap(MapBlockData mapData, int Worldx, int Worldy) {
 		return InstantiateMap(mapData,Worldx,Worldy, YieldDirection.NoYield);
     }
@@ -183,7 +140,6 @@ public class AsciiMapScript : MonoBehaviour
 	void UnLoadMap(int Worldx, int Worldy, int x, int y) {
 		GameObject  world = GameObject.Find (getWorldName (Worldx, Worldy));
 		if (world != null) {
-
 			DestroyObject (world);
 			world = null;
 		}
@@ -207,9 +163,9 @@ public class AsciiMapScript : MonoBehaviour
 			Vector3 worldstart = calculateTransformPosition(Worldx, Worldy);
 			Vector3 worldend = new Vector3(MapRows *characterWidth ,-MapCols * characterHeight,0) + calculateTransformPosition(Worldx, Worldy);
 			if (player.transform.position.x < worldstart.x) {
-				SaveMap(Worldx + 1, Worldy -1,  2, 0);
-				SaveMap(Worldx + 1, Worldy,     2, 1);
-				SaveMap(Worldx + 1, Worldy + 1, 2, 2);
+				UnLoadMap(Worldx + 1, Worldy -1,  2, 0);
+				UnLoadMap(Worldx + 1, Worldy,     2, 1);
+				UnLoadMap(Worldx + 1, Worldy + 1, 2, 2);
 				Worldx--;
 				for (int x = 1; x >= 0; x--) {
 					for (int y = 0; y < 3; y++) {
@@ -221,9 +177,9 @@ public class AsciiMapScript : MonoBehaviour
 				LoadMap (Worldx - 1, Worldy+1,  0, 2, YieldDirection.YieldLeft);
 			}
 			if (player.transform.position.x > worldend.x) {
-				SaveMap(Worldx - 1, Worldy -1,  0, 0);
-				SaveMap(Worldx - 1, Worldy,     0, 1);
-				SaveMap(Worldx - 1, Worldy + 1, 0, 2);
+				UnLoadMap(Worldx - 1, Worldy -1,  0, 0);
+				UnLoadMap(Worldx - 1, Worldy,     0, 1);
+				UnLoadMap(Worldx - 1, Worldy + 1, 0, 2);
 				Worldx++;
 				for (int x = 0; x <= 1; x++) {
 					for (int y = 0; y < 3; y++) {
@@ -235,9 +191,9 @@ public class AsciiMapScript : MonoBehaviour
 				LoadMap (Worldx + 1, Worldy+1,  2, 2, YieldDirection.YieldRight);
 			}
 			if (player.transform.position.y > worldstart.y) {
-				SaveMap(Worldx - 1, Worldy + 1, 0, 2);
-				SaveMap(Worldx, Worldy +1    ,  1, 2);
-				SaveMap(Worldx + 1, Worldy + 1, 2, 2);
+				UnLoadMap(Worldx - 1, Worldy + 1, 0, 2);
+				UnLoadMap(Worldx, Worldy +1    ,  1, 2);
+				UnLoadMap(Worldx + 1, Worldy + 1, 2, 2);
 				Worldy--;
 				for (int y = 1; y >= 0; y--) {
 					for (int x = 0; x < 3; x++) {
@@ -249,9 +205,9 @@ public class AsciiMapScript : MonoBehaviour
 				LoadMap (Worldx + 1, Worldy -1, 2, 0, YieldDirection.YieldUp);
 			}
 			if (player.transform.position.y < worldend.y) {
-				SaveMap(Worldx - 1, Worldy - 1, 0, 0);
-				SaveMap(Worldx, Worldy -1    ,  1, 0);
-				SaveMap(Worldx + 1, Worldy - 1, 2, 0);
+				UnLoadMap(Worldx - 1, Worldy - 1, 0, 0);
+				UnLoadMap(Worldx, Worldy -1    ,  1, 0);
+				UnLoadMap(Worldx + 1, Worldy - 1, 2, 0);
 				Worldy++;
 				for (int y = 0; y <= 1; y++) {
 					for (int x = 0; x < 3; x++) {
