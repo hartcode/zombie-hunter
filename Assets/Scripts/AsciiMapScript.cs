@@ -16,7 +16,7 @@ public class AsciiMapScript : MonoBehaviour
 	public GameObject prefabMapBlockView;
 	public String mapDataPath = "Assets/Maps/Test/";
 
-	protected MapBlockData[,] mapDataGroup = new MapBlockData[3,3];
+	protected GameObject[,] worlds = new GameObject[3,3];
 	protected MapFile mapfile;
 	public int Worldx = 3;
 	public int Worldy = 3;
@@ -98,8 +98,8 @@ public class AsciiMapScript : MonoBehaviour
 
 	void LoadMap(int Worldx, int Worldy, int x, int y, YieldDirection yieldDirection) {
 		String mapPath = getMapPath (Worldx, Worldy);
-		mapDataGroup[x, y] = mapfile.LoadFile (mapPath);
-		StartCoroutine(InstantiateMap (mapDataGroup[x, y], Worldx, Worldy));
+
+		InstantiateMap (mapfile.LoadFile (mapPath), Worldx, Worldy, x, y);
 	}
 
 	void LoadMapThreaded(int Worldx, int Worldy, int x, int y, YieldDirection yieldDirection) {
@@ -115,11 +115,11 @@ public class AsciiMapScript : MonoBehaviour
 		loadFileJob.Start ();
 	}
 
-	IEnumerator InstantiateMap(MapBlockData mapData, int Worldx, int Worldy) {
-		return InstantiateMap(mapData,Worldx,Worldy, YieldDirection.NoYield);
+	void InstantiateMap(MapBlockData mapData, int Worldx, int Worldy, int x, int y) {
+		InstantiateMap(mapData,Worldx,Worldy, x, y, YieldDirection.NoYield);
     }
 
-	IEnumerator InstantiateMap(MapBlockData mapData, int Worldx, int Worldy, YieldDirection yieldDirection)
+	void InstantiateMap(MapBlockData mapData, int Worldx, int Worldy, int x, int y, YieldDirection yieldDirection)
 	{
 		GameObject world = GameObject.Find (getWorldName (Worldx, Worldy));
 		if (world == null) {
@@ -131,14 +131,15 @@ public class AsciiMapScript : MonoBehaviour
 			if (mapBlockView == null) {
 				throw new MissingComponentException ("Expected to find the MapBlockView Component");
 			}
-			mapBlockView.Initialize (Worldx, Worldy, mapData);
-			yield return null;
+			worlds [x, y] = world;
+			StartCoroutine (mapBlockView.Initialize (Worldx, Worldy, mapData, getMapPath(Worldx, Worldy)));
+
 		}
 	}
 
 
 	void UnLoadMap(int Worldx, int Worldy, int x, int y) {
-		GameObject  world = GameObject.Find (getWorldName (Worldx, Worldy));
+		GameObject world = worlds [x, y];
 		if (world != null) {
 			DestroyObject (world);
 			world = null;
@@ -152,10 +153,7 @@ public class AsciiMapScript : MonoBehaviour
 			foreach (LoadFileJob loadFileJob in lfj.ToArray()) {
 				if (loadFileJob.Update ()) {
 					lfj.Remove (loadFileJob);
-					Debug.Log (loadFileJob.x);
-					Debug.Log (loadFileJob.y);
-					mapDataGroup[loadFileJob.x,loadFileJob.y] = loadFileJob.output;
-					StartCoroutine (InstantiateMap (loadFileJob.output, loadFileJob.Worldx, loadFileJob.Worldy, loadFileJob.yieldDirection));
+					InstantiateMap (loadFileJob.output, loadFileJob.Worldx, loadFileJob.Worldy, loadFileJob.x, loadFileJob.y, loadFileJob.yieldDirection);
 				}
 			}
 		}
@@ -169,12 +167,12 @@ public class AsciiMapScript : MonoBehaviour
 				Worldx--;
 				for (int x = 1; x >= 0; x--) {
 					for (int y = 0; y < 3; y++) {
-						mapDataGroup [x+1, y] = mapDataGroup [x, y];
+						worlds [x+1, y] = worlds [x, y];
 					}
 				}
-				LoadMap (Worldx - 1, Worldy-1,  0, 0, YieldDirection.YieldLeft);
-				LoadMap (Worldx - 1, Worldy,    0, 1, YieldDirection.YieldLeft);
-				LoadMap (Worldx - 1, Worldy+1,  0, 2, YieldDirection.YieldLeft);
+				LoadMapThreaded (Worldx - 1, Worldy-1,  0, 0, YieldDirection.YieldLeft);
+				LoadMapThreaded (Worldx - 1, Worldy,    0, 1, YieldDirection.YieldLeft);
+				LoadMapThreaded (Worldx - 1, Worldy+1,  0, 2, YieldDirection.YieldLeft);
 			}
 			if (player.transform.position.x > worldend.x) {
 				UnLoadMap(Worldx - 1, Worldy -1,  0, 0);
@@ -183,12 +181,12 @@ public class AsciiMapScript : MonoBehaviour
 				Worldx++;
 				for (int x = 0; x <= 1; x++) {
 					for (int y = 0; y < 3; y++) {
-						mapDataGroup [x, y] = mapDataGroup [x+1, y];
+						worlds [x, y] = worlds [x+1, y];
 					}
 				}
-				LoadMap (Worldx + 1, Worldy-1,  2, 0, YieldDirection.YieldRight);
-				LoadMap (Worldx + 1, Worldy,    2, 1, YieldDirection.YieldRight);
-				LoadMap (Worldx + 1, Worldy+1,  2, 2, YieldDirection.YieldRight);
+				LoadMapThreaded (Worldx + 1, Worldy-1,  2, 0, YieldDirection.YieldRight);
+				LoadMapThreaded (Worldx + 1, Worldy,    2, 1, YieldDirection.YieldRight);
+				LoadMapThreaded (Worldx + 1, Worldy+1,  2, 2, YieldDirection.YieldRight);
 			}
 			if (player.transform.position.y > worldstart.y) {
 				UnLoadMap(Worldx - 1, Worldy + 1, 0, 2);
@@ -197,12 +195,12 @@ public class AsciiMapScript : MonoBehaviour
 				Worldy--;
 				for (int y = 1; y >= 0; y--) {
 					for (int x = 0; x < 3; x++) {
-						mapDataGroup [x, y+1] = mapDataGroup [x, y];
+						worlds [x, y+1] = worlds [x, y];
 					}
 				}
-				LoadMap (Worldx - 1, Worldy -1, 0, 0, YieldDirection.YieldUp);
-				LoadMap (Worldx, Worldy - 1,    1, 0, YieldDirection.YieldUp);
-				LoadMap (Worldx + 1, Worldy -1, 2, 0, YieldDirection.YieldUp);
+				LoadMapThreaded (Worldx - 1, Worldy -1, 0, 0, YieldDirection.YieldUp);
+				LoadMapThreaded (Worldx, Worldy - 1,    1, 0, YieldDirection.YieldUp);
+				LoadMapThreaded (Worldx + 1, Worldy -1, 2, 0, YieldDirection.YieldUp);
 			}
 			if (player.transform.position.y < worldend.y) {
 				UnLoadMap(Worldx - 1, Worldy - 1, 0, 0);
@@ -211,12 +209,12 @@ public class AsciiMapScript : MonoBehaviour
 				Worldy++;
 				for (int y = 0; y <= 1; y++) {
 					for (int x = 0; x < 3; x++) {
-						mapDataGroup [x, y] = mapDataGroup [x, y+1];
+						worlds [x, y] = worlds [x, y+1];
 					}
 				}
-				LoadMap (Worldx - 1, Worldy +1, 0, 2, YieldDirection.YieldDown);
-				LoadMap (Worldx, Worldy + 1,    1, 2, YieldDirection.YieldDown);
-				LoadMap (Worldx + 1, Worldy +1, 2, 2, YieldDirection.YieldDown);
+				LoadMapThreaded (Worldx - 1, Worldy +1, 0, 2, YieldDirection.YieldDown);
+				LoadMapThreaded (Worldx, Worldy + 1,    1, 2, YieldDirection.YieldDown);
+				LoadMapThreaded (Worldx + 1, Worldy +1, 2, 2, YieldDirection.YieldDown);
 			}
 
 		}

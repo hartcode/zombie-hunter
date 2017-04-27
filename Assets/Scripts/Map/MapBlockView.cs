@@ -15,8 +15,8 @@ namespace AssemblyCSharp {
 		public int MapCols = 20;
 		public float characterWidth = 0.08f;
 		public float characterHeight = 0.16f;
+		protected string mapPath;
 		protected MapFile mapfile;
-		public String mapDataPath = "Assets/Maps/Test/";
 
 		private GameObject prefabWall;
 		private bool isInitialized = false;
@@ -27,10 +27,11 @@ namespace AssemblyCSharp {
 			mapfile = new MapFile ();
 		}
 
-		public void Initialize (int blockX, int blockY, MapBlockData mapBlockData) {
+		public IEnumerator Initialize (int blockX, int blockY, MapBlockData mapBlockData, String mapPath) {
 			this.blockX = blockX;
 			this.blockY = blockY;
-			this.mapBlockData = mapBlockData;				
+			this.mapBlockData = mapBlockData;
+			this.mapPath = mapPath;
 
 			if (prefabWall == null) {
 				prefabWall = (GameObject)Resources.Load ("Main/Wall", typeof(GameObject));
@@ -42,6 +43,7 @@ namespace AssemblyCSharp {
 						for (int y = 0; y < MapCols; y++) {
 						CreateMapObject (x, y, prefabWall, this.gameObject, "Main/Wall", 6, MapLayer.Floor);
 						}
+					yield return null;
 					}
 			} else {
 				for (int x = 0; x < mapBlockData.getRows (); x++) {
@@ -60,6 +62,7 @@ namespace AssemblyCSharp {
 							}
 						}
 					}
+				yield return null;
 			}
 			isInitialized = true;
 		}
@@ -153,24 +156,13 @@ namespace AssemblyCSharp {
 			return retval;
 		}
 
-		String getMapPath(int x, int y) {
-			StringBuilder sb = new StringBuilder (mapDataPath);
-			sb.Append ("map");
-			sb.Append (x);
-			sb.Append ("x");
-			sb.Append (y);
-			sb.Append(".txt");
-			return sb.ToString ();
-		}
-
 		void OnDisable() {
-			SaveMap(blockX, blockY);
+			SaveMapThreaded(blockX, blockY);
 			DestroyObject (this.gameObject);
 		}
 
 		void SaveMap(int Worldx, int Worldy) {
 			if (this.mapBlockData != null) {
-				String mapPath = getMapPath (Worldx, Worldy);
 				mapfile.SaveFile (this.mapBlockData, mapPath);
 			}
 			
@@ -178,7 +170,6 @@ namespace AssemblyCSharp {
 
 		void SaveMapThreaded(int Worldx, int Worldy) {
 			if (this.mapBlockData != null) {
-				String mapPath = getMapPath (Worldx, Worldy);
 				SaveFileJob saveFileJob = new SaveFileJob ();
 				saveFileJob.input = this.mapBlockData;
 				saveFileJob.path = mapPath;
