@@ -24,6 +24,8 @@ public class AsciiMapScript : MonoBehaviour
 	protected int MapRows = 20;
 	protected GameObject player;
 	protected ArrayList lfj = new ArrayList ();
+	private Vector3 worldstart;
+	private Vector3 worldend;
 
 	String getMapPath(int x, int y) {
 		StringBuilder sb = new StringBuilder (mapDataPath);
@@ -51,7 +53,8 @@ public class AsciiMapScript : MonoBehaviour
 	void Start ()
 	{
 		mapfile = new MapFile();
-
+		worldstart = calculateTransformPosition(Worldx, Worldy);
+		worldend = new Vector3(MapRows *characterWidth ,-MapCols * characterHeight,0) + calculateTransformPosition(Worldx, Worldy);
 		if (prefabParent == null) {
 			prefabParent = GameObject.Find ("AsciiMapCharacters");
 		}
@@ -158,13 +161,13 @@ public class AsciiMapScript : MonoBehaviour
 			}
 		}
 		if (player != null) {
-			Vector3 worldstart = calculateTransformPosition(Worldx, Worldy);
-			Vector3 worldend = new Vector3(MapRows *characterWidth ,-MapCols * characterHeight,0) + calculateTransformPosition(Worldx, Worldy);
 			if (player.transform.position.x < worldstart.x) {
 				UnLoadMap(Worldx + 1, Worldy -1,  2, 0);
 				UnLoadMap(Worldx + 1, Worldy,     2, 1);
 				UnLoadMap(Worldx + 1, Worldy + 1, 2, 2);
 				Worldx--;
+				worldstart = calculateTransformPosition(Worldx, Worldy);
+				worldend = new Vector3(MapRows *characterWidth ,-MapCols * characterHeight,0) + calculateTransformPosition(Worldx, Worldy);
 				for (int x = 1; x >= 0; x--) {
 					for (int y = 0; y < 3; y++) {
 						worlds [x+1, y] = worlds [x, y];
@@ -179,6 +182,8 @@ public class AsciiMapScript : MonoBehaviour
 				UnLoadMap(Worldx - 1, Worldy,     0, 1);
 				UnLoadMap(Worldx - 1, Worldy + 1, 0, 2);
 				Worldx++;
+				worldstart = calculateTransformPosition(Worldx, Worldy);
+				worldend = new Vector3(MapRows *characterWidth ,-MapCols * characterHeight,0) + calculateTransformPosition(Worldx, Worldy);
 				for (int x = 0; x <= 1; x++) {
 					for (int y = 0; y < 3; y++) {
 						worlds [x, y] = worlds [x+1, y];
@@ -193,6 +198,8 @@ public class AsciiMapScript : MonoBehaviour
 				UnLoadMap(Worldx, Worldy +1    ,  1, 2);
 				UnLoadMap(Worldx + 1, Worldy + 1, 2, 2);
 				Worldy--;
+				worldstart = calculateTransformPosition(Worldx, Worldy);
+				worldend = new Vector3(MapRows *characterWidth ,-MapCols * characterHeight,0) + calculateTransformPosition(Worldx, Worldy);
 				for (int y = 1; y >= 0; y--) {
 					for (int x = 0; x < 3; x++) {
 						worlds [x, y+1] = worlds [x, y];
@@ -207,6 +214,8 @@ public class AsciiMapScript : MonoBehaviour
 				UnLoadMap(Worldx, Worldy -1    ,  1, 0);
 				UnLoadMap(Worldx + 1, Worldy - 1, 2, 0);
 				Worldy++;
+				worldstart = calculateTransformPosition(Worldx, Worldy);
+				worldend = new Vector3(MapRows *characterWidth ,-MapCols * characterHeight,0) + calculateTransformPosition(Worldx, Worldy);
 				for (int y = 0; y <= 1; y++) {
 					for (int x = 0; x < 3; x++) {
 						worlds [x, y] = worlds [x, y+1];
