@@ -19,12 +19,14 @@ namespace AssemblyCSharp {
 		protected MapFile mapfile;
 
 		private GameObject prefabWall;
+		private GameObject prefabWorldWall;
 		private bool isInitialized = false;
 		//private Map map;
 
 		void Start ()
 		{
-			mapfile = new MapFile ();
+			
+
 		}
 
 		public IEnumerator Initialize (int blockX, int blockY, MapBlockData mapBlockData, String mapPath) {
@@ -32,19 +34,17 @@ namespace AssemblyCSharp {
 			this.blockY = blockY;
 			this.mapBlockData = mapBlockData;
 			this.mapPath = mapPath;
-
-			if (prefabWall == null) {
-				prefabWall = (GameObject)Resources.Load ("Main/Wall", typeof(GameObject));
+			this.mapfile = new MapFile ();
+			if (this.prefabWall == null) {
+				this.prefabWall = (GameObject)Resources.Load ("Main/Wall", typeof(GameObject));
+			}
+			if (this.prefabWorldWall == null) {
+				this.prefabWorldWall = (GameObject)Resources.Load ("Main/worldwall", typeof(GameObject));
 			}
 
 			if (mapBlockData == null) {
 				// Empty map blocks will display as walls
-					for (int x = 0; x < MapRows ; x++) {
-						for (int y = 0; y < MapCols; y++) {
-						CreateMapObject (x, y, prefabWall, this.gameObject, "Main/Wall", 6, MapLayer.Floor);
-						}
-					yield return null;
-					}
+				CreateMapObject (MapRows/2, MapCols/2, prefabWorldWall, this.gameObject, "Main/WorldWall", 6, MapLayer.Floor);
 			} else {
 				for (int x = 0; x < mapBlockData.getRows (); x++) {
 					for (int y = 0; y < mapBlockData.getCols (); y++) {
@@ -61,6 +61,7 @@ namespace AssemblyCSharp {
 								}
 							}
 						}
+					yield return null;
 					}
 				yield return null;
 			}
@@ -134,12 +135,11 @@ namespace AssemblyCSharp {
 				if (parent != null) {
 					GameObject prefab = (GameObject)Instantiate (mapPrefab,parent.transform.position + calculateTransformPosition(x,y) , Quaternion.identity, parent.transform);
 					MapPosition mapPosition = prefab.GetComponent<MapPosition> ();
-					if (mapPosition == null) {
-						throw new MissingComponentException ("Map Object is missing the MapPosition component");
+					if (mapPosition != null) {
+						mapPosition.originX = x;
+						mapPosition.originY = y;
+						mapPosition.mapBlockView = this;
 					}
-					mapPosition.originX = x;
-					mapPosition.originY = y;
-					mapPosition.mapBlockView = this;
 					MapValue mapValue =	prefab.AddComponent<MapValue> ();
 					mapValue.intValue = resourceInt;
 					mapValue.strValue = resourceName;

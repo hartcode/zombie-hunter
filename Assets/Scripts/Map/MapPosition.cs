@@ -22,12 +22,14 @@ public class MapPosition : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
 		if (transform.hasChanged) {
-			if (originX != currentX || originY != currentY) {
+			int curX = currentX;
+			int curY = currentY;
+			if (originX != curX || originY != curY) {
 			// Call Move
-				Debug.Log("current " + currentX + "," + currentY + " was " + originX + " , " + originY);
-				mapBlockView.MoveObject (originX, originY, currentX, currentY, this.gameObject);
-				originX = currentX;
-				originY = currentY;
+				Debug.Log("current " + curX + "," + curY + " was " + originX + " , " + originY);
+				mapBlockView.MoveObject (originX, originY, curX, curY, this.gameObject);
+				originX = curX;
+				originY = curY;
 			}
 			transform.hasChanged = false;
 		}
