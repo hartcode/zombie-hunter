@@ -6,7 +6,7 @@ using System;
 
 public class AsciiMapScript : MonoBehaviour
 {
-
+	public ResourceManager resourceManager = null;
 	public float OriginX;
 	public float OriginY;
 	public float characterWidth;
@@ -53,6 +53,7 @@ public class AsciiMapScript : MonoBehaviour
 	void Start ()
 	{
 		mapfile = new MapFile();
+		resourceManager = new ResourceManager ();
 		worldstart = calculateTransformPosition(Worldx, Worldy);
 		worldend = new Vector3(MapRows *characterWidth ,-MapCols * characterHeight,0) + calculateTransformPosition(Worldx, Worldy);
 		if (prefabParent == null) {
@@ -135,7 +136,7 @@ public class AsciiMapScript : MonoBehaviour
 				throw new MissingComponentException ("Expected to find the MapBlockView Component");
 			}
 			worlds [x, y] = world;
-			StartCoroutine (mapBlockView.Initialize (Worldx, Worldy, mapData, getMapPath(Worldx, Worldy), yieldDirection));
+			StartCoroutine (mapBlockView.Initialize (Worldx, Worldy, mapData, getMapPath(Worldx, Worldy), yieldDirection, resourceManager));
 
 		}
 	}
