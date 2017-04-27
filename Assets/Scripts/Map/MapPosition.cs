@@ -12,11 +12,11 @@ public class MapPosition : MonoBehaviour {
 	public MapBlockView mapBlockView;
 
 	public int currentX {
-		get { return (int)(transform.localPosition.x / characterWidth);}
+		get { return Mathf.RoundToInt(transform.localPosition.x / characterWidth);}
 	}
 
 	public int currentY {
-		get { return (int)(transform.localPosition.y / characterHeight);}
+		get { return Mathf.RoundToInt(transform.localPosition.y / -characterHeight);}
 	}
 
 	// Update is called once per frame
@@ -24,8 +24,10 @@ public class MapPosition : MonoBehaviour {
 		if (transform.hasChanged) {
 			if (originX != currentX || originY != currentY) {
 			// Call Move
-				Debug.Log("current " + currentX + "," + currentY);
+				Debug.Log("current " + currentX + "," + currentY + " was " + originX + " , " + originY);
 				mapBlockView.MoveObject (originX, originY, currentX, currentY, this.gameObject);
+				originX = currentX;
+				originY = currentY;
 			}
 			transform.hasChanged = false;
 		}
