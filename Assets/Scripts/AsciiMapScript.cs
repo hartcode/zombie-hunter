@@ -234,13 +234,13 @@ public class AsciiMapScript : MonoBehaviour
 	{
 		int x = 0;
 		int y = 0;
-		int newWorldX = 0;
-		int newWorldY = 0;
+		int newWorldX = 1;
+		int newWorldY = 1;
 		if (newX < 0) {
 			newWorldX -= 1;
 			x = MapRows + newX;
 		}
-		if (newX > MapRows) {
+		if (newX >= MapRows) {
 			newWorldX += 1;
 			x = newX - MapRows;
 		}
@@ -248,13 +248,14 @@ public class AsciiMapScript : MonoBehaviour
 			newWorldY -= 1;
 			y = MapCols + newY;
 		}
-		if (newY > MapCols) {
+		if (newY >= MapCols) {
 			newWorldY += 1;
 			y = newY - MapCols;
 		}
 		GameObject newWorld = worlds[newWorldX ,newWorldY];
 		MapBlockView mapBlockView = newWorld.GetComponent<MapBlockView> ();
 		if (mapBlockView != null) {
+			
 			mapBlockView.AddObject (x, y, obj);
 		}
 

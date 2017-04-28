@@ -173,8 +173,8 @@ namespace AssemblyCSharp
 		{
 			if (isInitialized) {
 				if (mapBlockData != null) {
-					if (newX >= 0 && newX <= mapBlockData.getRows () &&
-					    newY >= 0 && newY <= mapBlockData.getCols ()) {
+					if (newX >= 0 && newX < mapBlockData.getRows () &&
+					    newY >= 0 && newY < mapBlockData.getCols ()) {
 						AddObject (newX, newY, obj);			
 						RemoveObject (x, y, obj);
 					} else {
@@ -217,6 +217,14 @@ namespace AssemblyCSharp
 				if (mapBlockData != null) {
 					if (obj != null) {
 						obj.transform.parent = this.gameObject.transform;
+						MapPosition mapPosition = obj.GetComponent<MapPosition> ();
+						if (mapPosition != null) {
+							mapPosition.originX = x;
+							mapPosition.originY = y;
+							mapPosition.mapBlockView = this;
+						}
+						obj.transform.localPosition = calculateTransformPosition (x, y);
+						obj.transform.position = calculateTransformPosition (x, y)
 						MapValue mapValue = obj.GetComponent<MapValue> ();
 						if (mapValue != null) {
 							switch (mapValue.layer) {
