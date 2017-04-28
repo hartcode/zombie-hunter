@@ -20,6 +20,7 @@ namespace AssemblyCSharp
 		protected ResourceManager resourceManager = null;
 		protected string mapPath;
 		protected MapFile mapfile;
+		protected AsciiMapScript asciiMapScript = null;
 
 		private GameObject prefabWall;
 		private GameObject prefabWorldWall;
@@ -32,13 +33,14 @@ namespace AssemblyCSharp
 
 		}
 
-		public IEnumerator Initialize (int blockX, int blockY, MapBlockData mapBlockData, String mapPath, YieldDirection yieldDirection, ResourceManager resourceManager)
+		public IEnumerator Initialize (int blockX, int blockY, MapBlockData mapBlockData, String mapPath, YieldDirection yieldDirection, ResourceManager resourceManager, AsciiMapScript asciiMapScript)
 		{
 			this.blockX = blockX;
 			this.blockY = blockY;
 			this.mapBlockData = mapBlockData;
 			this.mapPath = mapPath;
 			this.resourceManager = resourceManager;
+			this.asciiMapScript = asciiMapScript;
 			this.mapfile = new MapFile ();
 			if (this.prefabWall == null) {
 				this.prefabWall = resourceManager.getGameObject ("Main/Wall");
@@ -177,6 +179,8 @@ namespace AssemblyCSharp
 						RemoveObject (x, y, obj);
 					} else {
 						// move object to a different BlockView
+						this.asciiMapScript.MoveObject(newX, newY, obj);
+						RemoveObject (x, y, obj);
 					}
 				}
 			} else {

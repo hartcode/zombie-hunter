@@ -136,7 +136,7 @@ public class AsciiMapScript : MonoBehaviour
 				throw new MissingComponentException ("Expected to find the MapBlockView Component");
 			}
 			worlds [x, y] = world;
-			StartCoroutine (mapBlockView.Initialize (Worldx, Worldy, mapData, getMapPath(Worldx, Worldy), yieldDirection, resourceManager));
+			StartCoroutine (mapBlockView.Initialize (Worldx, Worldy, mapData, getMapPath(Worldx, Worldy), yieldDirection, resourceManager, this));
 
 		}
 	}
@@ -228,5 +228,35 @@ public class AsciiMapScript : MonoBehaviour
 			}
 
 		}
+	}
+
+	public void MoveObject (int newX, int newY, GameObject obj)
+	{
+		int x = 0;
+		int y = 0;
+		int newWorldX = 0;
+		int newWorldY = 0;
+		if (newX < 0) {
+			newWorldX -= 1;
+			x = MapRows + newX;
+		}
+		if (newX > MapRows) {
+			newWorldX += 1;
+			x = newX - MapRows;
+		}
+		if (newY < 0) {
+			newWorldY -= 1;
+			y = MapCols + newY;
+		}
+		if (newY > MapCols) {
+			newWorldY += 1;
+			y = newY - MapCols;
+		}
+		GameObject newWorld = worlds[newWorldX ,newWorldY];
+		MapBlockView mapBlockView = newWorld.GetComponent<MapBlockView> ();
+		if (mapBlockView != null) {
+			mapBlockView.AddObject (x, y, obj);
+		}
+
 	}
 }
