@@ -232,8 +232,8 @@ public class AsciiMapScript : MonoBehaviour
 
 	public void MoveObject (int newX, int newY, GameObject obj)
 	{
-		int x = 0;
-		int y = 0;
+		int x = newX;
+		int y = newY;
 		int newWorldX = 1;
 		int newWorldY = 1;
 		if (newX < 0) {

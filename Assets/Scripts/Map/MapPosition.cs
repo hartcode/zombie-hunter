@@ -26,7 +26,6 @@ public class MapPosition : MonoBehaviour {
 			int curY = currentY;
 			if (originX != curX || originY != curY) {
 			// Call Move
-				Debug.Log("current " + curX + "," + curY + " was " + originX + " , " + originY);
 				mapBlockView.MoveObject (originX, originY, curX, curY, this.gameObject);
 				originX = curX;
 				originY = curY;

@@ -183,8 +183,6 @@ namespace AssemblyCSharp
 						RemoveObject (x, y, obj);
 					}
 				}
-			} else {
-				throw new UnityException ("MapBlockView isn't initialized");
 			}
 		}
 
@@ -193,15 +191,17 @@ namespace AssemblyCSharp
 			if (isInitialized) {
 				if (mapBlockData != null) {
 					if (obj != null) {
-						MapValue mapValue = obj.GetComponent<MapValue> ();
-						if (mapValue != null) {
-							switch (mapValue.layer) {
-							case MapLayer.Floor:
-								mapBlockData.setFloorInt (x, y, null);
-								break;
-							case MapLayer.Main:
-								mapBlockData.setMainInt (x, y, null);
-								break;
+						if (x >= 0 && x < MapRows && y >= 0 && y < MapCols) {
+							MapValue mapValue = obj.GetComponent<MapValue> ();
+							if (mapValue != null) {
+								switch (mapValue.layer) {
+								case MapLayer.Floor:
+									mapBlockData.setFloorInt (x, y, null);
+									break;
+								case MapLayer.Main:
+									mapBlockData.setMainInt (x, y, null);
+									break;
+								}
 							}
 						}
 					}
@@ -216,15 +216,17 @@ namespace AssemblyCSharp
 			if (isInitialized) {
 				if (mapBlockData != null) {
 					if (obj != null) {
-						obj.transform.parent = this.gameObject.transform;
-						MapPosition mapPosition = obj.GetComponent<MapPosition> ();
-						if (mapPosition != null) {
-							mapPosition.originX = x;
-							mapPosition.originY = y;
-							mapPosition.mapBlockView = this;
+						if (obj.transform.parent != this.gameObject.transform) {
+							obj.transform.parent = this.gameObject.transform;
+							//obj.transform.localPosition = calculateTransformPosition (x, y);
+
+							MapPosition mapPosition = obj.GetComponent<MapPosition> ();
+							if (mapPosition != null) {
+								mapPosition.originX = x;
+								mapPosition.originY = y;
+								mapPosition.mapBlockView = this;
+							}
 						}
-						obj.transform.localPosition = calculateTransformPosition (x, y);
-						obj.transform.position = calculateTransformPosition (x, y)
 						MapValue mapValue = obj.GetComponent<MapValue> ();
 						if (mapValue != null) {
 							switch (mapValue.layer) {
