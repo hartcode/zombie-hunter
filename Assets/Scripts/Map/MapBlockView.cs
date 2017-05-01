@@ -51,7 +51,7 @@ namespace AssemblyCSharp
 
 			if (mapBlockData == null) {
 				// Empty map blocks will display as walls
-				CreateMapObject (MapRows / 2, MapCols / 2, prefabWorldWall, this.gameObject, "Main/WorldWall", 6, MapLayer.Floor);
+				CreateMapObject ((MapRows / 2), (MapCols / 2), prefabWorldWall, this.gameObject, "Main/WorldWall", 6, MapLayer.Floor);
 			} else {
 
 				if (yieldDirection == YieldDirection.YieldRight) {

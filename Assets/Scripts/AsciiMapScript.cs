@@ -16,10 +16,15 @@ public class AsciiMapScript : MonoBehaviour
 	public GameObject prefabMapBlockView;
 	public String mapDataPath = "Assets/Maps/Test/";
 
-	protected GameObject[,] worlds = new GameObject[3,3];
+	private static int DisplayBlocksXSize = 5;  // specifies a 3x3 array of world blocks to hold in memory
+	private static int DisplayBlocksYSize = 5; 
+	private int DisplayBlocksXCenter = 2; // specifies the position in the world block array that is the center block
+	private int DisplayBlocksYCenter = 2;
+
+	protected GameObject[,] worlds = new GameObject[DisplayBlocksXSize,DisplayBlocksYSize];
 	protected MapFile mapfile;
-	public int Worldx = 3;
-	public int Worldy = 3;
+  	public int Worldx = 3;  // World Starting Block
+	public int Worldy = 3;  // World Starting Block
 	protected int MapCols = 20;
 	protected int MapRows = 20;
 	protected GameObject player;
@@ -64,17 +69,13 @@ public class AsciiMapScript : MonoBehaviour
 			prefabMapBlockView = (GameObject)Resources.Load ("Main/MapBlockView", typeof(GameObject));
 		}
 
-		LoadMap (Worldx-1, Worldy-1, -1+1, -1+1,YieldDirection.NoYield);
-		LoadMap (Worldx-1, Worldy, -1+1, 0+1,YieldDirection.NoYield);
-		LoadMap (Worldx-1, Worldy+1, -1+1, 1+1,YieldDirection.NoYield);
-		LoadMap (Worldx, Worldy-1, 0+1, -1+1,YieldDirection.NoYield);
-
-		LoadMap (Worldx, Worldy+1, 0+1, 1+1,YieldDirection.NoYield);
-		LoadMap (Worldx+1, Worldy-1, 1+1, -1+1,YieldDirection.NoYield);
-		LoadMap (Worldx+1, Worldy, 1+1, 0+1,YieldDirection.NoYield);
-		LoadMap (Worldx+1, Worldy+1, 1+1, 1+1,YieldDirection.NoYield);
-
-		LoadMap (Worldx, Worldy, 0+1, 0+1,YieldDirection.NoYield);
+		for (int x = 0; x < DisplayBlocksXSize; x++) {
+			int worldxx = Worldx - ((DisplayBlocksXSize - 1) /2) + x;
+			for (int y = 0; y < DisplayBlocksYSize; y++) {
+				int worldyy = Worldy - ((DisplayBlocksYSize - 1) /2) + y;
+				LoadMap (worldxx, worldyy, x, y, YieldDirection.NoYield);
+			}
+		}
 
 		player = GameObject.Find ("Player");
 		if (player == null) {
@@ -162,69 +163,84 @@ public class AsciiMapScript : MonoBehaviour
 			}
 		}
 		if (player != null) {
-			if (player.transform.position.x < worldstart.x) {
-				UnLoadMap(Worldx + 1, Worldy -1,  2, 0);
-				UnLoadMap(Worldx + 1, Worldy,     2, 1);
-				UnLoadMap(Worldx + 1, Worldy + 1, 2, 2);
+			if (player.transform.position.x < worldstart.x) {  // Player moves Left
+
+				for (int y = 0; y < DisplayBlocksYSize; y++) {
+					int worldyy = Worldy - ((DisplayBlocksYSize - 1) /2) + y;
+					UnLoadMap(Worldx + ((DisplayBlocksXSize - 1) /2), worldyy,  DisplayBlocksXCenter + ((DisplayBlocksXSize - 1) /2), y);
+				}
 				Worldx--;
 				worldstart = calculateTransformPosition(Worldx, Worldy);
 				worldend = new Vector3(MapRows *characterWidth ,-MapCols * characterHeight,0) + calculateTransformPosition(Worldx, Worldy);
-				for (int x = 1; x >= 0; x--) {
-					for (int y = 0; y < 3; y++) {
+				for (int x = DisplayBlocksXSize-2; x >= 0; x--) {
+					for (int y = 0; y < DisplayBlocksYSize; y++) {
 						worlds [x+1, y] = worlds [x, y];
 					}
 				}
-				LoadMapThreaded (Worldx - 1, Worldy-1,  0, 0, YieldDirection.YieldLeft);
-				LoadMapThreaded (Worldx - 1, Worldy,    0, 1, YieldDirection.YieldLeft);
-				LoadMapThreaded (Worldx - 1, Worldy+1,  0, 2, YieldDirection.YieldLeft);
+
+				for (int y = 0; y < DisplayBlocksYSize; y++) {
+					int worldyy = Worldy - ((DisplayBlocksYSize - 1) /2) + y;
+					LoadMapThreaded(Worldx - ((DisplayBlocksXSize - 1) /2), worldyy,  DisplayBlocksXCenter - ((DisplayBlocksXSize - 1) / 2), y, YieldDirection.YieldLeft);
+				}
 			}
-			if (player.transform.position.x > worldend.x) {
-				UnLoadMap(Worldx - 1, Worldy -1,  0, 0);
-				UnLoadMap(Worldx - 1, Worldy,     0, 1);
-				UnLoadMap(Worldx - 1, Worldy + 1, 0, 2);
+			if (player.transform.position.x > worldend.x) { // Player Moves Right
+				for (int y = 0; y < DisplayBlocksYSize; y++) {
+					int worldyy = Worldy - ((DisplayBlocksYSize - 1) /2) + y;
+					UnLoadMap(Worldx - ((DisplayBlocksXSize - 1) /2), worldyy,  DisplayBlocksXCenter - ((DisplayBlocksXSize - 1) /2), y);
+				}
 				Worldx++;
 				worldstart = calculateTransformPosition(Worldx, Worldy);
 				worldend = new Vector3(MapRows *characterWidth ,-MapCols * characterHeight,0) + calculateTransformPosition(Worldx, Worldy);
-				for (int x = 0; x <= 1; x++) {
-					for (int y = 0; y < 3; y++) {
+				for (int x = 0; x <= DisplayBlocksXSize-2; x++) {
+					for (int y = 0; y < DisplayBlocksYSize; y++) {
 						worlds [x, y] = worlds [x+1, y];
 					}
 				}
-				LoadMapThreaded (Worldx + 1, Worldy-1,  2, 0, YieldDirection.YieldRight);
-				LoadMapThreaded (Worldx + 1, Worldy,    2, 1, YieldDirection.YieldRight);
-				LoadMapThreaded (Worldx + 1, Worldy+1,  2, 2, YieldDirection.YieldRight);
+				for (int y = 0; y < DisplayBlocksYSize; y++) {
+					int worldyy = Worldy - ((DisplayBlocksYSize - 1) /2) + y;
+					LoadMapThreaded(Worldx + ((DisplayBlocksXSize - 1) /2), worldyy,  DisplayBlocksXCenter + ((DisplayBlocksXSize - 1) / 2), y, YieldDirection.YieldRight);
+				}
 			}
 			if (player.transform.position.y > worldstart.y) {
-				UnLoadMap(Worldx - 1, Worldy + 1, 0, 2);
-				UnLoadMap(Worldx, Worldy +1    ,  1, 2);
-				UnLoadMap(Worldx + 1, Worldy + 1, 2, 2);
+				for (int x = 0; x < DisplayBlocksXSize; x++) {
+					int worldxx = Worldx - ((DisplayBlocksXSize - 1) /2) + x;
+					UnLoadMap(worldxx,Worldy + ((DisplayBlocksYSize - 1) /2),  x, DisplayBlocksYCenter + ((DisplayBlocksYSize - 1) /2));
+				}
+
+				UnLoadMap(Worldx - 1, Worldy + 1, DisplayBlocksXCenter-1, DisplayBlocksYCenter+1);
+				UnLoadMap(Worldx, Worldy +1    ,  DisplayBlocksXCenter, DisplayBlocksYCenter+1);
+				UnLoadMap(Worldx + 1, Worldy + 1, DisplayBlocksXCenter+1, DisplayBlocksYCenter+1);
 				Worldy--;
 				worldstart = calculateTransformPosition(Worldx, Worldy);
 				worldend = new Vector3(MapRows *characterWidth ,-MapCols * characterHeight,0) + calculateTransformPosition(Worldx, Worldy);
-				for (int y = 1; y >= 0; y--) {
-					for (int x = 0; x < 3; x++) {
+				for (int y = DisplayBlocksYSize-2; y >= 0; y--) {
+					for (int x = 0; x < DisplayBlocksXSize; x++) {
 						worlds [x, y+1] = worlds [x, y];
 					}
 				}
-				LoadMapThreaded (Worldx - 1, Worldy -1, 0, 0, YieldDirection.YieldUp);
-				LoadMapThreaded (Worldx, Worldy - 1,    1, 0, YieldDirection.YieldUp);
-				LoadMapThreaded (Worldx + 1, Worldy -1, 2, 0, YieldDirection.YieldUp);
+				for (int x = 0; x < DisplayBlocksXSize; x++) {
+					int worldxx = Worldx - ((DisplayBlocksXSize - 1) /2) + x;
+					LoadMapThreaded(worldxx, Worldy - ((DisplayBlocksYSize - 1) /2), x,  DisplayBlocksYCenter - ((DisplayBlocksYSize - 1) / 2), YieldDirection.YieldUp);
+				}
 			}
 			if (player.transform.position.y < worldend.y) {
-				UnLoadMap(Worldx - 1, Worldy - 1, 0, 0);
-				UnLoadMap(Worldx, Worldy -1    ,  1, 0);
-				UnLoadMap(Worldx + 1, Worldy - 1, 2, 0);
+				for (int x = 0; x < DisplayBlocksXSize; x++) {
+					int worldxx = Worldx - ((DisplayBlocksXSize - 1) /2) + x;
+					UnLoadMap(worldxx,Worldy - ((DisplayBlocksYSize - 1) /2),  x, DisplayBlocksYCenter - ((DisplayBlocksYSize - 1) /2));
+				}
+
 				Worldy++;
 				worldstart = calculateTransformPosition(Worldx, Worldy);
 				worldend = new Vector3(MapRows *characterWidth ,-MapCols * characterHeight,0) + calculateTransformPosition(Worldx, Worldy);
-				for (int y = 0; y <= 1; y++) {
-					for (int x = 0; x < 3; x++) {
+				for (int y = 0; y <= DisplayBlocksYSize-2; y++) {
+					for (int x = 0; x < DisplayBlocksXSize; x++) {
 						worlds [x, y] = worlds [x, y+1];
 					}
 				}
-				LoadMapThreaded (Worldx - 1, Worldy +1, 0, 2, YieldDirection.YieldDown);
-				LoadMapThreaded (Worldx, Worldy + 1,    1, 2, YieldDirection.YieldDown);
-				LoadMapThreaded (Worldx + 1, Worldy +1, 2, 2, YieldDirection.YieldDown);
+				for (int x = 0; x < DisplayBlocksXSize; x++) {
+					int worldxx = Worldx - ((DisplayBlocksXSize - 1) /2) + x;
+					LoadMapThreaded(worldxx, Worldy + ((DisplayBlocksYSize - 1) /2), x,  DisplayBlocksYCenter + ((DisplayBlocksYSize - 1) / 2), YieldDirection.YieldUp);
+				}
 			}
 
 		}
@@ -234,8 +250,8 @@ public class AsciiMapScript : MonoBehaviour
 	{
 		int x = newX;
 		int y = newY;
-		int newWorldX = 1;
-		int newWorldY = 1;
+		int newWorldX = DisplayBlocksXCenter;  // Center X 
+		int newWorldY = DisplayBlocksYCenter;  // Center Y
 		if (newX < 0) {
 			newWorldX -= 1;
 			x = MapRows + newX;
