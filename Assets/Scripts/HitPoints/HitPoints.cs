@@ -9,6 +9,8 @@ public class HitPoints : MonoBehaviour {
 	protected float killTime;
 	public float duration = 1.0f;
 	private bool kill = false;
+
+	public MapPosition mapPosition;
 	public void heal (int points)
 	{
 		if (points < 0) {
@@ -47,6 +49,9 @@ public class HitPoints : MonoBehaviour {
 			float t = (Time.time - killTime);
 			
 			if (t > duration) {
+				if (mapPosition != null) {
+					mapPosition.removeFromMap ();
+				}
 				DestroyObject (this.gameObject);
 			}
 		}

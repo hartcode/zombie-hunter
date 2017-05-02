@@ -100,9 +100,6 @@ public class AsciiMapScript : MonoBehaviour
 		y = (int)((pos.y - (MapCols * characterHeight * -Worldy) -OriginY) / -characterHeight);
 	}
 
-
-
-
 	void LoadMap(int Worldx, int Worldy, int x, int y, YieldDirection yieldDirection) {
 		String saveMapPath = getMapPath (Worldx, Worldy,saveMapDataPath);
 		MapBlockData mapdata = mapfile.LoadFile (saveMapPath);

@@ -33,4 +33,9 @@ public class MapPosition : MonoBehaviour {
 			transform.hasChanged = false;
 		}
 	}
+		
+	public void removeFromMap ()
+	{
+		mapBlockView.RemoveObject (originX, originY, this.gameObject);
+	}
 }
