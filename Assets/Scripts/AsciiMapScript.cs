@@ -14,7 +14,9 @@ public class AsciiMapScript : MonoBehaviour
 
 	public GameObject prefabParent;
 	public GameObject prefabMapBlockView;
-	public String mapDataPath = "Assets/Maps/World/Level1/";
+	public static String mapName = "Level1";
+	protected String mapDataPath = "Maps/World/"+mapName+"/";
+	protected String saveMapDataPath = "SavedGames/Maps/World/"+mapName+"/";
 
 	private static int DisplayBlocksXSize = 5;  // specifies a 3x3 array of world blocks to hold in memory
 	private static int DisplayBlocksYSize = 5; 
