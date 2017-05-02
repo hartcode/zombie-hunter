@@ -218,7 +218,6 @@ namespace AssemblyCSharp
 					if (obj != null) {
 						if (obj.transform.parent != this.gameObject.transform) {
 							obj.transform.parent = this.gameObject.transform;
-							//obj.transform.localPosition = calculateTransformPosition (x, y);
 
 							MapPosition mapPosition = obj.GetComponent<MapPosition> ();
 							if (mapPosition != null) {
