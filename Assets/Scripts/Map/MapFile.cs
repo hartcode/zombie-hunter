@@ -57,6 +57,12 @@ namespace AssemblyCSharp
 			if (path == null) {
 				throw new NullReferenceException("Parameter path cannot be null");
 			}
+				// Create folder structure or saving will fail
+			if (!File.Exists (path)) {
+				string dirname = Path.GetDirectoryName (path);
+				Directory.CreateDirectory (dirname);
+			}
+
 				FileStream stream = null;
 				BinaryWriter writer = null;
 				try {

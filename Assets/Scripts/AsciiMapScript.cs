@@ -34,8 +34,8 @@ public class AsciiMapScript : MonoBehaviour
 	private Vector3 worldstart;
 	private Vector3 worldend;
 
-	String getMapPath(int x, int y) {
-		StringBuilder sb = new StringBuilder (mapDataPath);
+	String getMapPath(int x, int y, String mapPath) {
+		StringBuilder sb = new StringBuilder (mapPath);
 		sb.Append ("map");
 		sb.Append (x);
 		sb.Append ("x");
@@ -104,13 +104,13 @@ public class AsciiMapScript : MonoBehaviour
 
 
 	void LoadMap(int Worldx, int Worldy, int x, int y, YieldDirection yieldDirection) {
-		String mapPath = getMapPath (Worldx, Worldy);
+		String mapPath = getMapPath (Worldx, Worldy,mapDataPath);
 
 		InstantiateMap (mapfile.LoadFile (mapPath), Worldx, Worldy, x, y);
 	}
 
 	void LoadMapThreaded(int Worldx, int Worldy, int x, int y, YieldDirection yieldDirection) {
-		String mapPath = getMapPath (Worldx, Worldy);
+		String mapPath = getMapPath (Worldx, Worldy, mapDataPath);
 		LoadFileJob loadFileJob = new LoadFileJob ();
 		loadFileJob.Worldx = Worldx;
 		loadFileJob.Worldy = Worldy;
@@ -139,7 +139,7 @@ public class AsciiMapScript : MonoBehaviour
 				throw new MissingComponentException ("Expected to find the MapBlockView Component");
 			}
 			worlds [x, y] = world;
-			StartCoroutine (mapBlockView.Initialize (Worldx, Worldy, mapData, getMapPath(Worldx, Worldy), yieldDirection, resourceManager, this));
+			StartCoroutine (mapBlockView.Initialize (Worldx, Worldy, mapData, getMapPath(Worldx, Worldy, saveMapDataPath), yieldDirection, resourceManager, this));
 
 		}
 	}
