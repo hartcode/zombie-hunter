@@ -206,15 +206,12 @@ public class AsciiMapScript : MonoBehaviour
 					LoadMapThreaded(Worldx + ((DisplayBlocksXSize - 1) /2), worldyy,  DisplayBlocksXCenter + ((DisplayBlocksXSize - 1) / 2), y, YieldDirection.YieldRight);
 				}
 			}
-			if (player.transform.position.y > worldstart.y) {
+			if (player.transform.position.y > worldstart.y) {  // Player moves up
 				for (int x = 0; x < DisplayBlocksXSize; x++) {
 					int worldxx = Worldx - ((DisplayBlocksXSize - 1) /2) + x;
 					UnLoadMap(worldxx,Worldy + ((DisplayBlocksYSize - 1) /2),  x, DisplayBlocksYCenter + ((DisplayBlocksYSize - 1) /2));
 				}
-
-				UnLoadMap(Worldx - 1, Worldy + 1, DisplayBlocksXCenter-1, DisplayBlocksYCenter+1);
-				UnLoadMap(Worldx, Worldy +1    ,  DisplayBlocksXCenter, DisplayBlocksYCenter+1);
-				UnLoadMap(Worldx + 1, Worldy + 1, DisplayBlocksXCenter+1, DisplayBlocksYCenter+1);
+					
 				Worldy--;
 				worldstart = calculateTransformPosition(Worldx, Worldy);
 				worldend = new Vector3(MapRows *characterWidth ,-MapCols * characterHeight,0) + calculateTransformPosition(Worldx, Worldy);
@@ -228,7 +225,7 @@ public class AsciiMapScript : MonoBehaviour
 					LoadMapThreaded(worldxx, Worldy - ((DisplayBlocksYSize - 1) /2), x,  DisplayBlocksYCenter - ((DisplayBlocksYSize - 1) / 2), YieldDirection.YieldUp);
 				}
 			}
-			if (player.transform.position.y < worldend.y) {
+			if (player.transform.position.y < worldend.y) { // player moves down
 				for (int x = 0; x < DisplayBlocksXSize; x++) {
 					int worldxx = Worldx - ((DisplayBlocksXSize - 1) /2) + x;
 					UnLoadMap(worldxx,Worldy - ((DisplayBlocksYSize - 1) /2),  x, DisplayBlocksYCenter - ((DisplayBlocksYSize - 1) /2));
