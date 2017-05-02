@@ -104,19 +104,25 @@ public class AsciiMapScript : MonoBehaviour
 
 
 	void LoadMap(int Worldx, int Worldy, int x, int y, YieldDirection yieldDirection) {
-		String mapPath = getMapPath (Worldx, Worldy,mapDataPath);
-
-		InstantiateMap (mapfile.LoadFile (mapPath), Worldx, Worldy, x, y);
+		String saveMapPath = getMapPath (Worldx, Worldy,saveMapDataPath);
+		MapBlockData mapdata = mapfile.LoadFile (saveMapPath);
+		if (mapdata == null) {
+			String mapPath = getMapPath (Worldx, Worldy,mapDataPath);
+			mapdata = mapfile.LoadFile (mapPath);
+		}
+		InstantiateMap (mapdata, Worldx, Worldy, x, y);
 	}
 
 	void LoadMapThreaded(int Worldx, int Worldy, int x, int y, YieldDirection yieldDirection) {
+		String saveMapPath = getMapPath (Worldx, Worldy, saveMapDataPath);
 		String mapPath = getMapPath (Worldx, Worldy, mapDataPath);
 		LoadFileJob loadFileJob = new LoadFileJob ();
 		loadFileJob.Worldx = Worldx;
 		loadFileJob.Worldy = Worldy;
 		loadFileJob.x = x;
 		loadFileJob.y = y;
-		loadFileJob.input = mapPath;
+		loadFileJob.input = saveMapPath;
+		loadFileJob.input2 = mapPath;
 		loadFileJob.yieldDirection = yieldDirection;
 		lfj.Add (loadFileJob);
 		loadFileJob.Start ();
