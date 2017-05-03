@@ -160,7 +160,9 @@ namespace AssemblyCSharp
 			}
 
 			// either we found the resource in the array or we added it.
-			array [x, y] = i;
+			if (x >= 0 && x < getRows () && y >= 0 && y < getCols ()) {
+				array [x, y] = i;
+			}
 		}
 
 		public int getFloorInt(int x, int y) {
@@ -186,7 +188,9 @@ namespace AssemblyCSharp
 			}
 
 			// either we found the resource in the array or we added it.
-			floorarray [x, y] = i;
+			if (x >= 0 && x < getRows () && y >= 0 && y < getCols ()) {
+				floorarray [x, y] = i;
+			}
 		}
 
 		public String getFloorResource(int x, int y) {
