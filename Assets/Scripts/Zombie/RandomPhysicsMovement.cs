@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using AssemblyCSharp;
 
 public class RandomPhysicsMovement : MonoBehaviour {
 
@@ -12,6 +13,7 @@ public class RandomPhysicsMovement : MonoBehaviour {
 
 	public int DirectionStepTime = 40;
 	private int directionStep = 0;
+
 
 	void Start () {
 		myrigidbody2D = GetComponent<Rigidbody2D> ();
