@@ -167,6 +167,8 @@ namespace AssemblyCSharp
 				}
 			}
 			isInitialized = true;
+			// Spawn a zombie
+			CreateMapObject (5, 10, resourceManager.getGameObject ("main/zombie"), this.gameObject, "main/zombie", 7, MapLayer.Main);
 		}
 
 		public void MoveObject (int x, int y, int newX, int newY, GameObject obj)
@@ -255,7 +257,11 @@ namespace AssemblyCSharp
 						mapPosition.originY = y;
 						mapPosition.mapBlockView = this;
 					}
-					MapValue mapValue =	prefab.AddComponent<MapValue> ();
+
+					MapValue mapValue = prefab.GetComponent<MapValue> ();
+					if (mapValue == null) {
+						mapValue =	prefab.AddComponent<MapValue> ();
+					}
 					mapValue.intValue = resourceInt;
 					mapValue.strValue = resourceName;
 					mapValue.layer = layer;

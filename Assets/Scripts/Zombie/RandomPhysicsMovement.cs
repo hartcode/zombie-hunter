@@ -14,7 +14,6 @@ public class RandomPhysicsMovement : MonoBehaviour {
 	public int DirectionStepTime = 40;
 	private int directionStep = 0;
 
-
 	void Start () {
 		myrigidbody2D = GetComponent<Rigidbody2D> ();
 		if (myrigidbody2D == null) {

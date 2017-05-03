@@ -40,6 +40,7 @@ namespace AssemblyCSharp
 		// mainResources [4] = "Main/Box";
 		// mainResources [5] = "Main/Barrel";
 		// mainResources [6] = "Main/wall";
+		// mainResources [7] = "Main/zombie";
 
 		int[,] array =  new [,] {
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -116,14 +117,12 @@ namespace AssemblyCSharp
 			this.floorResources = new String[maxFloorPrefabs + 1];
 			for (int i = 0; i < maxFloorPrefabs; i++) {
 				this.floorResources[i] = floorResources[i];
-				//floorPrefabs[i] = (GameObject)Resources.Load (floorResources[i], typeof(GameObject));
 			}
 		
 			maxMainPrefabs = mainResources.Length;
 			this.mainResources = new String[maxMainPrefabs + 1];
 			for (int i = 0; i < maxMainPrefabs;i++) {
 				this.mainResources[i] = mainResources[i];
-				//mainPrefabs[i] = (GameObject)Resources.Load (mainResources[i], typeof(GameObject));
 			}
 
 		}
