@@ -34,6 +34,21 @@ public class AsciiMapScript : MonoBehaviour
 	private Vector3 worldstart;
 	private Vector3 worldend;
 
+	// checks if a position in the map is open
+	public bool isMapPositionOpen(int x, int y)
+	{
+		bool retval = false;
+		int worldx = x / MapCols;
+		int worldy = y / MapRows;
+
+		this.asciiMapScript.
+		retval = this.mapBlockData.getMainInt (x, y) == 0 || this.mapBlockData.getFloorInt (x, y) != 3;
+
+		return retval;
+	}
+
+
+
 	String getMapPath(int x, int y, String mapPath) {
 		StringBuilder sb = new StringBuilder (mapPath);
 		sb.Append ("map");

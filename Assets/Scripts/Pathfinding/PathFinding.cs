@@ -5,30 +5,14 @@ namespace AssemblyCSharp
 {
     class PathFinding
     {
-		MapBlockData mapBlockData = null;
+		AsciiMapScript asciiMapScript = null;
 
-		public PathFinding(MapBlockData mapBlockData) {
-			this.mapBlockData = mapBlockData;
+		public PathFinding(AsciiMapScript asciiMapScript) {
+			this.asciiMapScript = asciiMapScript;
 		}
    
 
-		// checks if a position in the map is open
-		bool isMapPositionOpen(int x, int y)
-		{
-			bool retval = false;
-			if (x >= 0 && x < this.mapBlockData.getRows() && y >= 0 && y < this.mapBlockData.getCols())
-			{
-				retval = this.mapBlockData.getMainInt (x, y) == 0 || this.mapBlockData.getFloorInt (x, y) != 3;
-			}
-			else
-			{
-				// mapPosition is on another map
-			}
-
-			return retval;
-		}
-
-
+	
 		// Gets a list of open positions around the given node
 		List<MapNode> getOpenNodesAround(MapNode node)
 		{
