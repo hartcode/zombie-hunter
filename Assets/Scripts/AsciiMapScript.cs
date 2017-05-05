@@ -35,15 +35,18 @@ public class AsciiMapScript : MonoBehaviour
 	private Vector3 worldend;
 
 	// checks if a position in the map is open
-	public bool isMapPositionOpen(int x, int y)
+	public bool isMapPositionOpen(int screenSpaceX, int screenSpaceY)
 	{
 		bool retval = false;
-		int worldx = x / MapCols;
-		int worldy = y / MapRows;
+		int worldsx = ((screenSpaceX / MapRows) - Worldx) + DisplayBlocksXCenter;
+		int worldsy = ((screenSpaceY / MapCols) - Worldx) + DisplayBlocksYCenter;
+		int x = screenSpaceX % MapRows;
+		int y = screenSpaceY % MapCols;
+		if (worldsx >= 0 && worldsx < DisplayBlocksXSize && worldsy >= 0 && worldsy < DisplayBlocksYSize) {
+			MapBlockView mapBlockView = this.worlds [worldsx, worldsy].GetComponent<MapBlockView> ();
 
-		this.asciiMapScript.
-		retval = this.mapBlockData.getMainInt (x, y) == 0 || this.mapBlockData.getFloorInt (x, y) != 3;
-
+			retval = mapBlockView.mapBlockData.getMainInt (x, y) == 0 || mapBlockView.mapBlockData.getFloorInt (x, y) != 3;
+		}
 		return retval;
 	}
 

@@ -19,6 +19,14 @@ public class MapPosition : MonoBehaviour {
 		get { return Mathf.RoundToInt(transform.localPosition.y / -characterHeight);}
 	}
 
+	public int screenCurrentX {
+		get { return Mathf.RoundToInt(transform.localPosition.x / characterWidth) + (this.mapBlockView.blockX * this.mapBlockView.MapRows);}
+	}
+
+	public int screenCurrentY {
+		get { return Mathf.RoundToInt(transform.localPosition.y / -characterHeight) + (this.mapBlockView.blockY * this.mapBlockView.MapCols);}
+	}
+
 	// Update is called once per frame
 	void FixedUpdate () {
 		if (transform.hasChanged) {

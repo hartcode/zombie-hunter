@@ -3,18 +3,17 @@ using System.Collections.Generic;
 
 namespace AssemblyCSharp
 {
-    class PathFinding
+    public class PathFinding
     {
 		AsciiMapScript asciiMapScript = null;
 
 		public PathFinding(AsciiMapScript asciiMapScript) {
 			this.asciiMapScript = asciiMapScript;
 		}
-   
-
+  
 	
 		// Gets a list of open positions around the given node
-		List<MapNode> getOpenNodesAround(MapNode node)
+		List<MapNode> getOpenNodesAround(MapNode screenSpaceNode)
 		{
 			List<MapNode> retval = new List<MapNode>();
 			for (int x = -1; x <= 1; x++)
@@ -25,11 +24,11 @@ namespace AssemblyCSharp
 					{
 						if (x == 0 || y == 0)
 						{
-							if (isMapPositionOpen(node.x + x, node.y + y))
+							if (this.asciiMapScript.isMapPositionOpen(screenSpaceNode.x + x, screenSpaceNode.y + y))
 							{
 								MapNode newNode = new MapNode();
-								newNode.x = node.x + x;
-								newNode.y = node.y + y;
+								newNode.x = screenSpaceNode.x + x;
+								newNode.y = screenSpaceNode.y + y;
 								retval.Add(newNode);
 							}
 						}
@@ -41,20 +40,20 @@ namespace AssemblyCSharp
 
 
 		// Pathfinding Algorithm
-		public List<MapNode> pathFinding(MapNode start, MapNode end, int maxCounter = 20)
+		public List<MapNode> pathFinding(MapNode screenSpaceStart, MapNode screenSpacEnd, int maxCounter = 20)
 		{
 			List<MapNode> retval = new List<MapNode>();
 			List<AStarNode> main = new List<AStarNode>();
 			AStarNode lastNode = null;
 			int counter = 0;
-			AStarNode startNode = new AStarNode (start, counter);
+			AStarNode startNode = new AStarNode (screenSpaceStart, counter);
 			main.Add(startNode);
 
 			bool found = false;
 			for (int i = 0; i < main.Count; i++)
 			{
 				AStarNode node = main[i];
-				if (end.x == node.x && end.y == node.y)
+				if (screenSpacEnd.x == node.x && screenSpacEnd.y == node.y)
 				{
 					found = true;
 				}
@@ -93,7 +92,7 @@ namespace AssemblyCSharp
 					for (int i = 0; i < main.Count; i++)
 					{
 						AStarNode node = main[i];
-						if (end.x == node.x && end.y == node.y)
+						if (screenSpacEnd.x == node.x && screenSpacEnd.y == node.y)
 						{
 							found = true;
 							retval.Add(node);

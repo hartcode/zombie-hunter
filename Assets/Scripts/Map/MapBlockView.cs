@@ -9,8 +9,8 @@ namespace AssemblyCSharp
 	public class MapBlockView : MonoBehaviour
 	{
 
-		private int blockX;
-		private int blockY;
+		public int blockX;
+		public int blockY;
 		public MapBlockData mapBlockData;
 
 		public int MapRows = 20;
@@ -168,7 +168,7 @@ namespace AssemblyCSharp
 			}
 			isInitialized = true;
 			// Spawn a zombie
-			CreateMapObject (5, 10, resourceManager.getGameObject ("main/zombie"), this.gameObject, "main/zombie", 7, MapLayer.Main);
+			//CreateMapObject (5, 10, resourceManager.getGameObject ("main/zombie"), this.gameObject, "main/zombie", 7, MapLayer.Main);
 		}
 
 		public void MoveObject (int x, int y, int newX, int newY, GameObject obj)
