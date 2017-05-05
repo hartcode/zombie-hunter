@@ -68,7 +68,7 @@ public class PathFindingMovement : MonoBehaviour {
 					playery);
 			}
 			if ((movementPath == null || movementPath.Count == 0) && pathFinding != null && currentGoal != null) {
-				movementPath = pathFinding.pathFinding (new MapNode (mapPosition.screenCurrentX, mapPosition.screenCurrentY), currentGoal, 10);
+				movementPath = pathFinding.pathFinding (new MapNode (mapPosition.screenCurrentX, mapPosition.screenCurrentY), currentGoal, 20);
 
 			}
 			if (movementGoal == null && movementPath.Count > 0) {
@@ -96,7 +96,7 @@ public class PathFindingMovement : MonoBehaviour {
 				if (mapPosition.screenCurrentX == movementGoal.x && mapPosition.screenCurrentY == movementGoal.y) {
 					direction = new Vector2 ();
 					movementGoal = null;
-					movementPath = null;
+					//movementPath = null;
 				}
 			} 
 
