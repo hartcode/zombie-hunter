@@ -168,7 +168,9 @@ namespace AssemblyCSharp
 			}
 			isInitialized = true;
 			// Spawn a zombie
-			//CreateMapObject (5, 10, resourceManager.getGameObject ("main/zombie"), this.gameObject, "main/zombie", 7, MapLayer.Main);
+			if (blockX == 3 && blockY == 3 && this != null) {
+				CreateMapObject (5, 10, resourceManager.getGameObject ("main/zombie"), this.gameObject, "main/zombie", 7, MapLayer.Main);
+			}
 		}
 
 		public void MoveObject (int x, int y, int newX, int newY, GameObject obj)
@@ -265,6 +267,12 @@ namespace AssemblyCSharp
 					mapValue.intValue = resourceInt;
 					mapValue.strValue = resourceName;
 					mapValue.layer = layer;
+
+					PathFindingMovement pathFindingMovement = prefab.GetComponent<PathFindingMovement> ();
+					if (pathFindingMovement != null) {
+						pathFindingMovement.setAsciiMapScript (this.asciiMapScript);
+						pathFindingMovement.player = this.asciiMapScript.player;
+					}
 				}
 			} else {
 				throw new MissingReferenceException ("Map Prefab Reference Missing");

@@ -20,11 +20,19 @@ public class MapPosition : MonoBehaviour {
 	}
 
 	public int screenCurrentX {
-		get { return Mathf.RoundToInt(transform.localPosition.x / characterWidth) + (this.mapBlockView.blockX * this.mapBlockView.MapRows);}
+		get { 
+			int x = this.currentX;
+			x += (this.mapBlockView.blockX * this.mapBlockView.MapRows);
+			return x;
+		}
 	}
 
 	public int screenCurrentY {
-		get { return Mathf.RoundToInt(transform.localPosition.y / -characterHeight) + (this.mapBlockView.blockY * this.mapBlockView.MapCols);}
+		get { 
+			int y = this.currentY;
+			y += (this.mapBlockView.blockY * this.mapBlockView.MapCols);
+			return y;
+		}
 	}
 
 	// Update is called once per frame

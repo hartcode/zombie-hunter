@@ -14,6 +14,7 @@ public class AsciiMapScript : MonoBehaviour
 
 	public GameObject prefabParent;
 	public GameObject prefabMapBlockView;
+	public GameObject player;
 	public static String mapName = "Level1";
 	protected String mapDataPath = "Maps/World/"+mapName+"/";
 	protected String saveMapDataPath = "SavedGames/Maps/World/"+mapName+"/";
@@ -29,7 +30,6 @@ public class AsciiMapScript : MonoBehaviour
 	public int Worldy = 3;  // World Starting Block
 	protected int MapCols = 20;
 	protected int MapRows = 20;
-	protected GameObject player;
 	protected ArrayList lfj = new ArrayList ();
 	private Vector3 worldstart;
 	private Vector3 worldend;
@@ -38,14 +38,18 @@ public class AsciiMapScript : MonoBehaviour
 	public bool isMapPositionOpen(int screenSpaceX, int screenSpaceY)
 	{
 		bool retval = false;
-		int worldsx = ((screenSpaceX / MapRows) - Worldx) + DisplayBlocksXCenter;
-		int worldsy = ((screenSpaceY / MapCols) - Worldx) + DisplayBlocksYCenter;
+		int worldsx = ((screenSpaceX / MapRows) - (Worldx)) + DisplayBlocksXCenter;
+		int worldsy = ((screenSpaceY / MapCols) - (Worldy)) + DisplayBlocksYCenter;
 		int x = screenSpaceX % MapRows;
 		int y = screenSpaceY % MapCols;
 		if (worldsx >= 0 && worldsx < DisplayBlocksXSize && worldsy >= 0 && worldsy < DisplayBlocksYSize) {
-			MapBlockView mapBlockView = this.worlds [worldsx, worldsy].GetComponent<MapBlockView> ();
-
-			retval = mapBlockView.mapBlockData.getMainInt (x, y) == 0 || mapBlockView.mapBlockData.getFloorInt (x, y) != 3;
+			GameObject world = this.worlds [worldsx, worldsy];
+			if (world != null) {
+				MapBlockView mapBlockView = world.GetComponent<MapBlockView> ();
+				if (mapBlockView != null && mapBlockView.mapBlockData != null) {
+					retval = mapBlockView.mapBlockData.getMainInt (x, y) == 0 || mapBlockView.mapBlockData.getFloorInt (x, y) != 3;
+				}
+			}
 		}
 		return retval;
 	}
@@ -105,6 +109,7 @@ public class AsciiMapScript : MonoBehaviour
 		// throw the player in the center of the map.
 		Vector3 playerPosition = new Vector3(10 *characterWidth ,-10 * characterHeight,0) + calculateTransformPosition(Worldx, Worldy);
 		player.transform.position = playerPosition;
+
 	}
 
 	Vector3 calculateTransformPosition(int Worldx, int Worldy) {
