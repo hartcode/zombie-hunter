@@ -18,17 +18,13 @@ public class PathFindingMovement : MonoBehaviour {
 	protected MapNode movementGoal = null;
 	protected List<MapNode> movementPath = null;
 	public GameObject player = null;
-	public int playerx;
-	public int playery;
-	public int lastplayerx;
-	public int lastplayery;
-
-	public int movex;
-	public int movey;
-	public int posx;
-	public int posy;
-
-
+	protected int playerx;
+	protected int playery;
+	protected int lastplayerx;
+	protected int lastplayery;
+	public bool showInspectorPath = false;
+	protected List<GameObject> inspectorPathObjects = new List<GameObject> ();
+	public GameObject inspectorPrefab;
 
 	void Start () {
 		setAsciiMapScript(asciiMapScript);
@@ -55,30 +51,46 @@ public class PathFindingMovement : MonoBehaviour {
 		moveStep++;
 	
 		if (moveStep == MoveStepTime) {
+			// Get the players position
 			if (player != null && this.asciiMapScript != null) {
 				lastplayerx = playerx;
 				lastplayery = playery;
 				playerx = Mathf.RoundToInt (player.transform.localPosition.x / this.asciiMapScript.characterWidth);
 				playery = Mathf.RoundToInt (player.transform.localPosition.y / -this.asciiMapScript.characterHeight);
+				// if player has moved trigger a new path find
 				if (playerx != lastplayerx || playery != lastplayery) {
+					currentGoal = new MapNode (playerx,	playery);
 					movementPath = null;
 					movementGoal = null;
+					// clean up inspector objects
+					foreach (GameObject go in inspectorPathObjects) {
+						DestroyObject (go);
+					}
+					inspectorPathObjects.Clear ();
 				}
-				currentGoal = new MapNode (playerx,
-					playery);
 			}
+			// we don't currently have a path, so lets go find one.
 			if ((movementPath == null || movementPath.Count == 0) && pathFinding != null && currentGoal != null) {
 				movementPath = pathFinding.pathFinding (new MapNode (mapPosition.screenCurrentX, mapPosition.screenCurrentY), currentGoal, 20);
-
+				if (showInspectorPath && movementPath != null) {
+					foreach (MapNode node in movementPath) {
+						GameObject prefab = (GameObject)Instantiate (inspectorPrefab, new Vector3(node.x * this.asciiMapScript.characterWidth, node.y * -this.asciiMapScript.characterHeight, 0), Quaternion.identity);
+						this.inspectorPathObjects.Add (prefab);
+					}	
+				}
 			}
+			// if we have a path and need to pull a direction to move in from the path
 			if (movementGoal == null && movementPath.Count > 0) {
 				movementGoal = movementPath [0];
 				movementPath.RemoveAt (0);
-				movex = movementGoal.x;
-				movey = movementGoal.y;
+				// remove inspector object
+				if (inspectorPathObjects.Count > 0) {
+					DestroyObject (inspectorPathObjects [0]);
+					inspectorPathObjects.RemoveAt (0);
+				}
 			}
-			posx = mapPosition.screenCurrentX;
-			posy = mapPosition.screenCurrentY;
+
+			// calculate the direction we need to move in
 			if (movementGoal != null) {
 				int dirx = 0;
 				int diry = 0;
@@ -96,7 +108,6 @@ public class PathFindingMovement : MonoBehaviour {
 				if (mapPosition.screenCurrentX == movementGoal.x && mapPosition.screenCurrentY == movementGoal.y) {
 					direction = new Vector2 ();
 					movementGoal = null;
-					//movementPath = null;
 				}
 			} 
 
