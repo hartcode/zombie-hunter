@@ -54,6 +54,7 @@ public class PathFindingMovement : MonoBehaviour {
 	void FixedUpdate () {
 		if (pathFindingJob.Update ()) {
 			// if pathfinding is finished
+			this.movementPath= this.pathFindingJob.outputPath;
 			isPathfinding = false;
 			if (showInspectorPath && movementPath != null) {
 				foreach (MapNode node in movementPath) {

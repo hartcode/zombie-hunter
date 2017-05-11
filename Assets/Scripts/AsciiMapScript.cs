@@ -46,7 +46,7 @@ public class AsciiMapScript : MonoBehaviour
 		if (worldsx >= 0 && worldsx < DisplayBlocksXSize && worldsy >= 0 && worldsy < DisplayBlocksYSize) {
 				MapBlockView mapBlockView = this.mapBlocks [worldsx, worldsy];
 				if (mapBlockView != null && mapBlockView.mapBlockData != null) {
-					retval = mapBlockView.mapBlockData.getMainInt (x, y) == 0 || mapBlockView.mapBlockData.getFloorInt (x, y) != 3;
+				retval = mapBlockView.mapBlockData.getMainResource (x, y) == "" && mapBlockView.mapBlockData.getFloorResource (x, y) != "Flooring/Water";
 				}
 		}
 		return retval;
