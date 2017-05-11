@@ -169,7 +169,8 @@ namespace AssemblyCSharp
 			isInitialized = true;
 			// Spawn a zombie
 			if (blockX == 3 && blockY == 3 && this != null) {
-				CreateMapObject (5, 10, resourceManager.getGameObject ("main/zombie"), this.gameObject, "main/zombie", 7, MapLayer.Main);
+			//	CreateMapObject (5, 10, resourceManager.getGameObject ("main/zombie"), this.gameObject, "main/zombie", 7, MapLayer.Main);
+			//	CreateMapObject (5, 5, resourceManager.getGameObject ("main/npc"), this.gameObject, "main/npc", 7, MapLayer.Main);
 			}
 		}
 
