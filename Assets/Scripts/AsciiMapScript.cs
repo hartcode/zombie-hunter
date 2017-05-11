@@ -25,6 +25,7 @@ public class AsciiMapScript : MonoBehaviour
 	private int DisplayBlocksYCenter = 2;
 
 	protected GameObject[,] worlds = new GameObject[DisplayBlocksXSize,DisplayBlocksYSize];
+	protected MapBlockView[,] mapBlocks = new MapBlockView[DisplayBlocksXSize,DisplayBlocksYSize];
 	protected MapFile mapfile;
   	public int Worldx = 3;  // World Starting Block
 	public int Worldy = 3;  // World Starting Block
@@ -43,13 +44,10 @@ public class AsciiMapScript : MonoBehaviour
 		int x = screenSpaceX % MapRows;
 		int y = screenSpaceY % MapCols;
 		if (worldsx >= 0 && worldsx < DisplayBlocksXSize && worldsy >= 0 && worldsy < DisplayBlocksYSize) {
-			GameObject world = this.worlds [worldsx, worldsy];
-			if (world != null) {
-				MapBlockView mapBlockView = world.GetComponent<MapBlockView> ();
+				MapBlockView mapBlockView = this.mapBlocks [worldsx, worldsy];
 				if (mapBlockView != null && mapBlockView.mapBlockData != null) {
 					retval = mapBlockView.mapBlockData.getMainInt (x, y) == 0 || mapBlockView.mapBlockData.getFloorInt (x, y) != 3;
 				}
-			}
 		}
 		return retval;
 	}
@@ -165,6 +163,7 @@ public class AsciiMapScript : MonoBehaviour
 				throw new MissingComponentException ("Expected to find the MapBlockView Component");
 			}
 			worlds [x, y] = world;
+			this.mapBlocks [x, y] = mapBlockView;
 			StartCoroutine (mapBlockView.Initialize (Worldx, Worldy, mapData, getMapPath(Worldx, Worldy, saveMapDataPath), yieldDirection, resourceManager, this));
 
 		}
@@ -203,6 +202,7 @@ public class AsciiMapScript : MonoBehaviour
 				for (int x = DisplayBlocksXSize-2; x >= 0; x--) {
 					for (int y = 0; y < DisplayBlocksYSize; y++) {
 						worlds [x+1, y] = worlds [x, y];
+						this.mapBlocks [x + 1, y] = this.mapBlocks [x, y];
 					}
 				}
 
@@ -222,6 +222,7 @@ public class AsciiMapScript : MonoBehaviour
 				for (int x = 0; x <= DisplayBlocksXSize-2; x++) {
 					for (int y = 0; y < DisplayBlocksYSize; y++) {
 						worlds [x, y] = worlds [x+1, y];
+						this.mapBlocks [x, y] = this.mapBlocks [x+1, y];
 					}
 				}
 				for (int y = 0; y < DisplayBlocksYSize; y++) {
@@ -241,6 +242,7 @@ public class AsciiMapScript : MonoBehaviour
 				for (int y = DisplayBlocksYSize-2; y >= 0; y--) {
 					for (int x = 0; x < DisplayBlocksXSize; x++) {
 						worlds [x, y+1] = worlds [x, y];
+						this.mapBlocks [x, y+1] = this.mapBlocks [x, y+1];
 					}
 				}
 				for (int x = 0; x < DisplayBlocksXSize; x++) {
@@ -260,6 +262,7 @@ public class AsciiMapScript : MonoBehaviour
 				for (int y = 0; y <= DisplayBlocksYSize-2; y++) {
 					for (int x = 0; x < DisplayBlocksXSize; x++) {
 						worlds [x, y] = worlds [x, y+1];
+						this.mapBlocks [x, y] = this.mapBlocks [x, y+1];
 					}
 				}
 				for (int x = 0; x < DisplayBlocksXSize; x++) {

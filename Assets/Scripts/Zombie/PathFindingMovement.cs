@@ -25,6 +25,8 @@ public class PathFindingMovement : MonoBehaviour {
 	public bool showInspectorPath = false;
 	protected List<GameObject> inspectorPathObjects = new List<GameObject> ();
 	public GameObject inspectorPrefab;
+	protected bool isPathfinding = false;
+	protected PathFindingJob pathFindingJob = new PathFindingJob();
 
 	void Start () {
 		setAsciiMapScript(asciiMapScript);
@@ -38,16 +40,28 @@ public class PathFindingMovement : MonoBehaviour {
 		if (mapPosition == null) {
 			throw new MissingComponentException ("Missing MapPosition Component");
 		}
+	
 	}
 
 	public void setAsciiMapScript(AsciiMapScript asciiMapScript) {
 		if (asciiMapScript != null) {
 			this.asciiMapScript = asciiMapScript;
-			pathFinding = new PathFinding (asciiMapScript);
+			pathFinding = new PathFinding (asciiMapScript);	
+			this.pathFindingJob.pathFinding = this.pathFinding;
 		}
 	}
 		
 	void FixedUpdate () {
+		if (pathFindingJob.Update ()) {
+			// if pathfinding is finished
+			isPathfinding = false;
+			if (showInspectorPath && movementPath != null) {
+				foreach (MapNode node in movementPath) {
+					GameObject prefab = (GameObject)Instantiate (inspectorPrefab, new Vector3 (node.x * this.asciiMapScript.characterWidth, node.y * -this.asciiMapScript.characterHeight, 0), Quaternion.identity);
+					this.inspectorPathObjects.Add (prefab);
+				}	
+			}
+		}
 		moveStep++;
 	
 		if (moveStep == MoveStepTime) {
@@ -70,17 +84,19 @@ public class PathFindingMovement : MonoBehaviour {
 				}
 			}
 			// we don't currently have a path, so lets go find one.
-			if ((movementPath == null || movementPath.Count == 0) && pathFinding != null && currentGoal != null) {
-				movementPath = pathFinding.pathFinding (new MapNode (mapPosition.screenCurrentX, mapPosition.screenCurrentY), currentGoal, 20);
-				if (showInspectorPath && movementPath != null) {
-					foreach (MapNode node in movementPath) {
-						GameObject prefab = (GameObject)Instantiate (inspectorPrefab, new Vector3(node.x * this.asciiMapScript.characterWidth, node.y * -this.asciiMapScript.characterHeight, 0), Quaternion.identity);
-						this.inspectorPathObjects.Add (prefab);
-					}	
-				}
+			if (!isPathfinding && (movementPath == null || movementPath.Count == 0) && pathFinding != null && currentGoal != null) {
+				isPathfinding = true;
+				pathFindingJob.inputStartX = mapPosition.screenCurrentX;
+				pathFindingJob.inputStartY = mapPosition.screenCurrentY;
+				pathFindingJob.inputEndX = currentGoal.x;
+				pathFindingJob.inputEndY = currentGoal.y;
+				pathFindingJob.maxCounter = 10;
+				pathFindingJob.Start ();
 			}
+				
+
 			// if we have a path and need to pull a direction to move in from the path
-			if (movementGoal == null && movementPath.Count > 0) {
+			if (movementGoal == null && movementPath != null && movementPath.Count > 0) {
 				movementGoal = movementPath [0];
 				movementPath.RemoveAt (0);
 				// remove inspector object
