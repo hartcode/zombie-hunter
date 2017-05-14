@@ -36,6 +36,7 @@ namespace AssemblyCSharp
 				OnFinished ();
 				isStarted = false;
 				retval = true;
+				IsDone = false;
 			}
 			return retval;
 		}

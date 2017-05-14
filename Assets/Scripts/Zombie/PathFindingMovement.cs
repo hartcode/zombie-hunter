@@ -48,6 +48,7 @@ public class PathFindingMovement : MonoBehaviour {
 			this.asciiMapScript = asciiMapScript;
 			pathFinding = new PathFinding (asciiMapScript);	
 			this.pathFindingJob.pathFinding = this.pathFinding;
+			isPathfinding = false;
 		}
 	}
 		
@@ -77,6 +78,7 @@ public class PathFindingMovement : MonoBehaviour {
 					currentGoal = new MapNode (playerx,	playery);
 					movementPath = null;
 					movementGoal = null;
+					direction = new Vector2 ();
 					// clean up inspector objects
 					foreach (GameObject go in inspectorPathObjects) {
 						DestroyObject (go);
@@ -123,9 +125,12 @@ public class PathFindingMovement : MonoBehaviour {
 					diry = 1;
 				}
 				direction = new Vector2 (dirx, diry);
-				if (mapPosition.screenCurrentX == movementGoal.x && mapPosition.screenCurrentY == movementGoal.y) {
+				if (mapPosition.screenCurrentX == movementGoal.x &&
+				    mapPosition.screenCurrentY == movementGoal.y) {
+					Move ();
 					direction = new Vector2 ();
 					movementGoal = null;
+
 				}
 			} 
 

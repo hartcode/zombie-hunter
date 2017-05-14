@@ -35,6 +35,8 @@ public class AsciiMapScript : MonoBehaviour
 	private Vector3 worldstart;
 	private Vector3 worldend;
 
+	public Boolean AutoSave = false;
+
 	// checks if a position in the map is open
 	public bool isMapPositionOpen(int screenSpaceX, int screenSpaceY)
 	{
@@ -162,6 +164,7 @@ public class AsciiMapScript : MonoBehaviour
 			if (mapBlockView == null) {
 				throw new MissingComponentException ("Expected to find the MapBlockView Component");
 			}
+			mapBlockView.AutoSave = AutoSave;
 			worlds [x, y] = world;
 			this.mapBlocks [x, y] = mapBlockView;
 			StartCoroutine (mapBlockView.Initialize (Worldx, Worldy, mapData, getMapPath(Worldx, Worldy, saveMapDataPath), yieldDirection, resourceManager, this));

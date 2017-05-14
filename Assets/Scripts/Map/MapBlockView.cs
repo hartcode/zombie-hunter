@@ -25,7 +25,7 @@ namespace AssemblyCSharp
 		private GameObject prefabWall;
 		private GameObject prefabWorldWall;
 		private bool isInitialized = false;
-
+		public bool AutoSave = false;
 
 		void Start ()
 		{
@@ -303,7 +303,7 @@ namespace AssemblyCSharp
 
 		void SaveMapThreaded (int Worldx, int Worldy)
 		{
-			if (this.mapBlockData != null) {
+			if (this.AutoSave && this.mapBlockData != null) {
 				SaveFileJob saveFileJob = new SaveFileJob ();
 				saveFileJob.input = this.mapBlockData;
 				saveFileJob.path = mapPath;
