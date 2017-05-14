@@ -84,6 +84,7 @@ public class PathFindingMovement : MonoBehaviour {
 					inspectorPathObjects.Clear ();
 				}
 			}
+
 			// we don't currently have a path, so lets go find one.
 			if (!isPathfinding && (movementPath == null || movementPath.Count == 0) && pathFinding != null && currentGoal != null) {
 				isPathfinding = true;

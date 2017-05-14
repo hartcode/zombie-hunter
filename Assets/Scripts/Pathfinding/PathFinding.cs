@@ -50,14 +50,20 @@ namespace AssemblyCSharp
 			main.Add(startNode);
 
 			bool found = false;
+			int lowest = Int32.MaxValue;
+			MapNode foundNode = null;
 			for (int i = 0; i < main.Count; i++)
 			{
 				AStarNode node = main[i];
 				if (screenSpacEnd.x == node.x && screenSpacEnd.y == node.y)
 				{
-					found = true;
+					if (lowest > node.Counter) {
+						foundNode = node;
+					}
 				}
 			}
+			found = foundNode != null;
+
 			while (!found)
 			{
 				counter++;
