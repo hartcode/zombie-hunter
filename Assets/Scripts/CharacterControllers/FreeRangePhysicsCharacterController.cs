@@ -5,6 +5,7 @@ public class FreeRangePhysicsCharacterController : MyCharacterController
 {
 	private Rigidbody2D myrigidbody2D;
 
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();

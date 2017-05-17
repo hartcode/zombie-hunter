@@ -17,7 +17,6 @@ namespace AssemblyCSharp
 		public int MapCols = 20;
 		public float characterWidth = 0.08f;
 		public float characterHeight = 0.16f;
-		protected ResourceManager resourceManager = null;
 		protected string mapPath;
 		protected MapFile mapfile;
 		protected AsciiMapScript asciiMapScript = null;
@@ -33,20 +32,19 @@ namespace AssemblyCSharp
 
 		}
 
-		public IEnumerator Initialize (int blockX, int blockY, MapBlockData mapBlockData, String mapPath, YieldDirection yieldDirection, ResourceManager resourceManager, AsciiMapScript asciiMapScript)
+		public IEnumerator Initialize (int blockX, int blockY, MapBlockData mapBlockData, String mapPath, YieldDirection yieldDirection, AsciiMapScript asciiMapScript)
 		{
 			this.blockX = blockX;
 			this.blockY = blockY;
 			this.mapBlockData = mapBlockData;
 			this.mapPath = mapPath;
-			this.resourceManager = resourceManager;
 			this.asciiMapScript = asciiMapScript;
 			this.mapfile = new MapFile ();
 			if (this.prefabWall == null) {
-				this.prefabWall = resourceManager.getGameObject ("Main/Wall");
+				this.prefabWall = ResourceManager.Instance.getGameObject ("Main/Wall");
 			}
 			if (this.prefabWorldWall == null) {
-				this.prefabWorldWall = resourceManager.getGameObject ("Main/worldwall");
+				this.prefabWorldWall = ResourceManager.Instance.getGameObject ("Main/worldwall");
 			}
 
 			if (mapBlockData == null) {
@@ -62,12 +60,12 @@ namespace AssemblyCSharp
 									CreateMapObject (x, y, prefabWall, this.gameObject, "Main/Wall", 6, MapLayer.Floor);
 								} else {
 									//GameObject floorObject = mapData.getFloor (x, y);
-									GameObject floorObject = resourceManager.getGameObject (mapBlockData.getFloorResource (x, y));
+									GameObject floorObject = ResourceManager.Instance.getGameObject (mapBlockData.getFloorResource (x, y));
 									if (floorObject != null) {
 										CreateMapObject (x, y, floorObject, this.gameObject, mapBlockData.getFloorResource (x, y), mapBlockData.getFloorInt (x, y), MapLayer.Floor);
 									}
 									//GameObject mainObject = mapData.getMain (x, y);
-									GameObject mainObject = resourceManager.getGameObject (mapBlockData.getMainResource (x, y));
+									GameObject mainObject = ResourceManager.Instance.getGameObject (mapBlockData.getMainResource (x, y));
 									if (mainObject != null) {
 										CreateMapObject (x, y, mainObject, this.gameObject, mapBlockData.getMainResource (x, y), mapBlockData.getMainInt (x, y), MapLayer.Main);
 									}
@@ -84,12 +82,12 @@ namespace AssemblyCSharp
 									CreateMapObject (x, y, prefabWall, this.gameObject, "Main/Wall", 6, MapLayer.Floor);
 								} else {
 									//GameObject floorObject = mapData.getFloor (x, y);
-									GameObject floorObject = resourceManager.getGameObject (mapBlockData.getFloorResource (x, y));
+									GameObject floorObject = ResourceManager.Instance.getGameObject (mapBlockData.getFloorResource (x, y));
 									if (floorObject != null) {
 										CreateMapObject (x, y, floorObject, this.gameObject, mapBlockData.getFloorResource (x, y), mapBlockData.getFloorInt (x, y), MapLayer.Floor);
 									}
 									//GameObject mainObject = mapData.getMain (x, y);
-									GameObject mainObject = resourceManager.getGameObject (mapBlockData.getMainResource (x, y));
+									GameObject mainObject = ResourceManager.Instance.getGameObject (mapBlockData.getMainResource (x, y));
 									if (mainObject != null) {
 										CreateMapObject (x, y, mainObject, this.gameObject, mapBlockData.getMainResource (x, y), mapBlockData.getMainInt (x, y), MapLayer.Main);
 									}
@@ -106,12 +104,12 @@ namespace AssemblyCSharp
 									CreateMapObject (x, y, prefabWall, this.gameObject, "Main/Wall", 6, MapLayer.Floor);
 								} else {
 									//GameObject floorObject = mapData.getFloor (x, y);
-									GameObject floorObject = resourceManager.getGameObject (mapBlockData.getFloorResource (x, y));
+									GameObject floorObject = ResourceManager.Instance.getGameObject (mapBlockData.getFloorResource (x, y));
 									if (floorObject != null) {
 										CreateMapObject (x, y, floorObject, this.gameObject, mapBlockData.getFloorResource (x, y), mapBlockData.getFloorInt (x, y), MapLayer.Floor);
 									}
 									//GameObject mainObject = mapData.getMain (x, y);
-									GameObject mainObject = resourceManager.getGameObject (mapBlockData.getMainResource (x, y));
+									GameObject mainObject = ResourceManager.Instance.getGameObject (mapBlockData.getMainResource (x, y));
 									if (mainObject != null) {
 										CreateMapObject (x, y, mainObject, this.gameObject, mapBlockData.getMainResource (x, y), mapBlockData.getMainInt (x, y), MapLayer.Main);
 									}
@@ -128,12 +126,12 @@ namespace AssemblyCSharp
 									CreateMapObject (x, y, prefabWall, this.gameObject, "Main/Wall", 6, MapLayer.Floor);
 								} else {
 									//GameObject floorObject = mapData.getFloor (x, y);
-									GameObject floorObject = resourceManager.getGameObject (mapBlockData.getFloorResource (x, y));
+									GameObject floorObject = ResourceManager.Instance.getGameObject (mapBlockData.getFloorResource (x, y));
 									if (floorObject != null) {
 										CreateMapObject (x, y, floorObject, this.gameObject, mapBlockData.getFloorResource (x, y), mapBlockData.getFloorInt (x, y), MapLayer.Floor);
 									}
 									//GameObject mainObject = mapData.getMain (x, y);
-									GameObject mainObject = resourceManager.getGameObject (mapBlockData.getMainResource (x, y));
+									GameObject mainObject = ResourceManager.Instance.getGameObject (mapBlockData.getMainResource (x, y));
 									if (mainObject != null) {
 										CreateMapObject (x, y, mainObject, this.gameObject, mapBlockData.getMainResource (x, y), mapBlockData.getMainInt (x, y), MapLayer.Main);
 									}
@@ -150,12 +148,12 @@ namespace AssemblyCSharp
 									CreateMapObject (x, y, prefabWall, this.gameObject, "Main/Wall", 6, MapLayer.Floor);
 								} else {
 									//GameObject floorObject = mapData.getFloor (x, y);
-									GameObject floorObject = resourceManager.getGameObject (mapBlockData.getFloorResource (x, y));
+									GameObject floorObject = ResourceManager.Instance.getGameObject (mapBlockData.getFloorResource (x, y));
 									if (floorObject != null) {
 										CreateMapObject (x, y, floorObject, this.gameObject, mapBlockData.getFloorResource (x, y), mapBlockData.getFloorInt (x, y), MapLayer.Floor);
 									}
 									//GameObject mainObject = mapData.getMain (x, y);
-									GameObject mainObject = resourceManager.getGameObject (mapBlockData.getMainResource (x, y));
+									GameObject mainObject = ResourceManager.Instance.getGameObject (mapBlockData.getMainResource (x, y));
 									if (mainObject != null) {
 										CreateMapObject (x, y, mainObject, this.gameObject, mapBlockData.getMainResource (x, y), mapBlockData.getMainInt (x, y), MapLayer.Main);
 									}
@@ -169,8 +167,8 @@ namespace AssemblyCSharp
 			isInitialized = true;
 			// Spawn a zombie
 			if (blockX == 3 && blockY == 3 && this != null) {
-				CreateMapObject (5, 10, resourceManager.getGameObject ("main/zombie"), this.gameObject, "main/zombie", 7, MapLayer.Main);
-			//	CreateMapObject (5, 5, resourceManager.getGameObject ("main/npc"), this.gameObject, "main/npc", 7, MapLayer.Main);
+				CreateMapObject (5, 10, ResourceManager.Instance.getGameObject ("main/zombie"), this.gameObject, "main/zombie", 7, MapLayer.Main);
+				//	CreateMapObject (5, 5, ResourceManager.Instance.getGameObject ("main/npc"), this.gameObject, "main/npc", 7, MapLayer.Main);
 			}
 		}
 
@@ -268,12 +266,6 @@ namespace AssemblyCSharp
 					mapValue.intValue = resourceInt;
 					mapValue.strValue = resourceName;
 					mapValue.layer = layer;
-
-					PathFindingMovement pathFindingMovement = prefab.GetComponent<PathFindingMovement> ();
-					if (pathFindingMovement != null) {
-						pathFindingMovement.setAsciiMapScript (this.asciiMapScript);
-						pathFindingMovement.player = this.asciiMapScript.player;
-					}
 				}
 			} else {
 				throw new MissingReferenceException ("Map Prefab Reference Missing");

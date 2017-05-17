@@ -6,31 +6,24 @@ using System.Collections.Generic;
 public class PathFindingMovement : MonoBehaviour {
 
 	public float characterSpeed = 1.5f;
-	private Rigidbody2D myrigidbody2D;
-	public Vector2 direction;
-
+	public bool showInspectorPath = false;
+	protected GameObject inspectorPrefab;
 	public int MoveStepTime = 10;
-	private int moveStep = 0;
-	public AsciiMapScript asciiMapScript = null;
+
+	protected Vector2 direction;
+	protected int moveStep = 0;
 	protected PathFinding pathFinding = null;
 	protected MapPosition mapPosition = null;
 	protected MapNode currentGoal = null;
 	protected MapNode movementGoal = null;
 	protected List<MapNode> movementPath = null;
-	public GameObject player = null;
-	protected int playerx;
-	protected int playery;
-	protected int lastplayerx;
-	protected int lastplayery;
-	public bool showInspectorPath = false;
 	protected List<GameObject> inspectorPathObjects = new List<GameObject> ();
-	public GameObject inspectorPrefab;
 	protected bool isPathfinding = false;
 	protected PathFindingJob pathFindingJob = new PathFindingJob();
 
-	void Start () {
-		setAsciiMapScript(asciiMapScript);
+	private Rigidbody2D myrigidbody2D;
 
+	void Start () {
 		myrigidbody2D = GetComponent<Rigidbody2D> ();
 		if (myrigidbody2D == null) {
 			throw new MissingComponentException ("Missing Rigidbody2D Component");
@@ -41,17 +34,31 @@ public class PathFindingMovement : MonoBehaviour {
 			throw new MissingComponentException ("Missing MapPosition Component");
 		}
 	
+		inspectorPrefab = ResourceManager.Instance.getGameObject ("Inspector/pathFindingInspector");
+
+		pathFinding = new PathFinding();	
+		this.pathFindingJob.pathFinding = this.pathFinding;
+		isPathfinding = false;
+
+		MessageManager.Instance.AddListener (this, "playerHasMoved");
 	}
 
-	public void setAsciiMapScript(AsciiMapScript asciiMapScript) {
-		if (asciiMapScript != null) {
-			this.asciiMapScript = asciiMapScript;
-			pathFinding = new PathFinding (asciiMapScript);	
-			this.pathFindingJob.pathFinding = this.pathFinding;
-			isPathfinding = false;
+	void playerHasMoved(Component component) {
+		Player player = component.GetComponent<Player>();
+		if (player != null) {	
+			// The Player has moved get a new position
+			currentGoal = new MapNode (player.playerx,	player.playery);
+			movementPath = null;
+			movementGoal = null;
+			direction = new Vector2 ();
+			// clean up inspector objects
+			foreach (GameObject go in inspectorPathObjects) {
+				DestroyObject (go);
+			}
+			inspectorPathObjects.Clear ();
 		}
 	}
-		
+
 	void FixedUpdate () {
 		if (pathFindingJob.Update ()) {
 			// if pathfinding is finished
@@ -59,7 +66,7 @@ public class PathFindingMovement : MonoBehaviour {
 			isPathfinding = false;
 			if (showInspectorPath && movementPath != null) {
 				foreach (MapNode node in movementPath) {
-					GameObject prefab = (GameObject)Instantiate (inspectorPrefab, new Vector3 (node.x * this.asciiMapScript.characterWidth, node.y * -this.asciiMapScript.characterHeight, 0), Quaternion.identity);
+					GameObject prefab = (GameObject)Instantiate (inspectorPrefab, new Vector3 (node.x * AsciiMapScript.Instance.characterWidth, node.y * -AsciiMapScript.Instance.characterHeight, 0), Quaternion.identity);
 					this.inspectorPathObjects.Add (prefab);
 				}	
 			}
@@ -67,26 +74,6 @@ public class PathFindingMovement : MonoBehaviour {
 		moveStep++;
 	
 		if (moveStep == MoveStepTime) {
-			// Get the players position
-			if (player != null && this.asciiMapScript != null) {
-				lastplayerx = playerx;
-				lastplayery = playery;
-				playerx = Mathf.RoundToInt (player.transform.localPosition.x / this.asciiMapScript.characterWidth);
-				playery = Mathf.RoundToInt (player.transform.localPosition.y / -this.asciiMapScript.characterHeight);
-				// if player has moved trigger a new path find
-				if (playerx != lastplayerx || playery != lastplayery) {
-					currentGoal = new MapNode (playerx,	playery);
-					movementPath = null;
-					movementGoal = null;
-					direction = new Vector2 ();
-					// clean up inspector objects
-					foreach (GameObject go in inspectorPathObjects) {
-						DestroyObject (go);
-					}
-					inspectorPathObjects.Clear ();
-				}
-			}
-
 			// we don't currently have a path, so lets go find one.
 			if (!isPathfinding && (movementPath == null || movementPath.Count == 0) && pathFinding != null && currentGoal != null) {
 				isPathfinding = true;

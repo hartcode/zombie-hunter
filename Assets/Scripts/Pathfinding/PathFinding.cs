@@ -5,13 +5,6 @@ namespace AssemblyCSharp
 {
     public class PathFinding
     {
-		AsciiMapScript asciiMapScript = null;
-
-		public PathFinding(AsciiMapScript asciiMapScript) {
-			this.asciiMapScript = asciiMapScript;
-		}
-  
-	
 		// Gets a list of open positions around the given node
 		List<MapNode> getOpenNodesAround(MapNode screenSpaceNode)
 		{
@@ -24,7 +17,7 @@ namespace AssemblyCSharp
 					{
 						if (x == 0 || y == 0)
 						{
-							if (this.asciiMapScript.isMapPositionOpen(screenSpaceNode.x + x, screenSpaceNode.y + y))
+							if (AsciiMapScript.Instance.isMapPositionOpen(screenSpaceNode.x + x, screenSpaceNode.y + y))
 							{
 								MapNode newNode = new MapNode();
 								newNode.x = screenSpaceNode.x + x;

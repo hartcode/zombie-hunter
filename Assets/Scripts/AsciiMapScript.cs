@@ -6,7 +6,6 @@ using System;
 
 public class AsciiMapScript : MonoBehaviour
 {
-	public ResourceManager resourceManager = null;
 	public float OriginX;
 	public float OriginY;
 	public float characterWidth;
@@ -34,6 +33,26 @@ public class AsciiMapScript : MonoBehaviour
 	protected ArrayList lfj = new ArrayList ();
 	private Vector3 worldstart;
 	private Vector3 worldend;
+
+	private static AsciiMapScript instance = null;
+
+	public static AsciiMapScript Instance {
+		get {
+			if (!instance) {
+				instance = new AsciiMapScript ();
+			}
+			return instance;
+		}
+	}
+
+	void Awake ()
+	{
+		if (instance) {
+			DestroyImmediate (gameObject);
+			return;
+		}
+		instance = this;
+	}
 
 	public Boolean AutoSave = false;
 
@@ -82,7 +101,6 @@ public class AsciiMapScript : MonoBehaviour
 	void Start ()
 	{
 		mapfile = new MapFile();
-		resourceManager = new ResourceManager ();
 		worldstart = calculateTransformPosition(Worldx, Worldy);
 		worldend = new Vector3(MapRows *characterWidth ,-MapCols * characterHeight,0) + calculateTransformPosition(Worldx, Worldy);
 		if (prefabParent == null) {
@@ -109,7 +127,6 @@ public class AsciiMapScript : MonoBehaviour
 		// throw the player in the center of the map.
 		Vector3 playerPosition = new Vector3(10 *characterWidth ,-10 * characterHeight,0) + calculateTransformPosition(Worldx, Worldy);
 		player.transform.position = playerPosition;
-
 	}
 
 	Vector3 calculateTransformPosition(int Worldx, int Worldy) {
@@ -167,7 +184,7 @@ public class AsciiMapScript : MonoBehaviour
 			mapBlockView.AutoSave = AutoSave;
 			worlds [x, y] = world;
 			this.mapBlocks [x, y] = mapBlockView;
-			StartCoroutine (mapBlockView.Initialize (Worldx, Worldy, mapData, getMapPath(Worldx, Worldy, saveMapDataPath), yieldDirection, resourceManager, this));
+			StartCoroutine (mapBlockView.Initialize (Worldx, Worldy, mapData, getMapPath(Worldx, Worldy, saveMapDataPath), yieldDirection, this));
 
 		}
 	}

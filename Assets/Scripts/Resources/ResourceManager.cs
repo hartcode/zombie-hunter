@@ -2,11 +2,29 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace AssemblyCSharp
-{
-	public class ResourceManager
+	public class ResourceManager : MonoBehaviour
 	{
-		Dictionary<String, GameObject> dict = null;
+		private static ResourceManager instance = null;
+		protected Dictionary<String, GameObject> dict = null;
+
+		public static ResourceManager Instance {
+			get {
+				if (!instance) {
+					instance = new ResourceManager ();
+				}
+				return instance;
+			}
+		}
+
+		void Awake ()
+		{
+			if (instance) {
+				DestroyImmediate (gameObject);
+				return;
+			}
+			instance = this;
+		}
+
 		public ResourceManager ()
 		{
 			dict = new Dictionary<String, GameObject> ();
@@ -21,5 +39,3 @@ namespace AssemblyCSharp
 			return retval;
 		}
 	}
-}
-
