@@ -14,7 +14,7 @@ public class MenuCursorMover : MonoBehaviour {
 
 	private Vector3 start = new Vector3 (-0.65f, -.4f, 0f);
 	private Vector3 bottom = new Vector3(-0.65f, -.8f, 0f);
-	private int position = 0;
+	private int position = 1;
 
 	void Start() {
 		startTime = Time.time;
@@ -31,21 +31,21 @@ public class MenuCursorMover : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		if (!go && Time.time - startTime > delay) {
 			go = true;
 			flashColor.change = true;
 			position1.change = true;
 		}
 		if (go) {
-			if (Input.GetKey ("down")) {
+			if (Input.GetAxis("Vertical") < 0) {
 				transform.localPosition = bottom;
 				position = 2;
 				flashColor.Restart ();
 				position2.Restart();
 				position1.change = false;
 			}
-			if (Input.GetKey ("up")) {
+			if (Input.GetAxis("Vertical") > 0) {
 				transform.localPosition = start;
 				position = 1;
 				flashColor.Restart ();

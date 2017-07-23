@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class FireableObject: MonoBehaviour
 {
 
@@ -33,6 +34,7 @@ public class FireableObject: MonoBehaviour
 		// so we don't want to destroy the bullet when that happens.
 		if (!coll.gameObject.CompareTag (ShooterTag)) {
 			Destroy (gameObject);
+
 		}
 	}
 

@@ -8,9 +8,9 @@ namespace AssemblyCSharp.Map.v0
 	public class MapFileIO : IMapFileIO
 	{
 
-		public MapData LoadFile (BinaryReader reader)
+		public MapBlockData LoadFile (BinaryReader reader)
 		{
-			MapData retval = null;
+			MapBlockData retval = null;
 			if (reader == null) {
 				throw new NullReferenceException ("Parameter reader cannot be null");
 			}
@@ -44,12 +44,12 @@ namespace AssemblyCSharp.Map.v0
 				}
 			}
 
-			retval = new MapData (rows, cols, floorarray, array, floorResources, mainResources);
+			retval = new MapBlockData (rows, cols, floorarray, array, floorResources, mainResources);
 
 			return retval;
 		}
 
-		public void SaveFile (MapData mapData, BinaryWriter writer)
+		public void SaveFile (MapBlockData mapData, BinaryWriter writer)
 		{
 			if (mapData == null) {
 				throw new NullReferenceException ("Parameter mapData cannot be null");
@@ -73,7 +73,6 @@ namespace AssemblyCSharp.Map.v0
 						} else {
 							floorarray [x, y] = floorResources.IndexOf (floorResource);
 						}
-
 
 					String mainResource = mapData.getMainResource (x, y);
 						if (!mainResources.Contains (mainResource)) {

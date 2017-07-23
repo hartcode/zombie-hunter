@@ -10,23 +10,23 @@ public class FreeRangeCharacterController : MyCharacterController
 	{
 		float vertical = 0;
 		float horizontal = 0;
-		if (Input.GetKey ("up")) {
+		if (Input.GetAxis("Vertical") > 0) {
 			vertical = 1;
 			direction = new Vector3 (horizontal, vertical, 0);
 			movingDirection = new Vector3 (0, 1, 0);
 			Move ();
-		} else if (Input.GetKey ("down")) {
+		} else if (Input.GetAxis("Vertical") < 0) {
 			vertical = -1;
 			direction = new Vector3 (horizontal, vertical, 0);
 			movingDirection = new Vector3 (0, -1, 0);
 			Move ();
 		}
-		if (Input.GetKey ("left")) {
+		if (Input.GetAxis("Horizontal") < 0) {
 			horizontal = -1;
 			direction = new Vector3 (horizontal, vertical, 0);
 			movingDirection = new Vector3 (-1, 0, 0);
 			Move ();
-		} else if (Input.GetKey ("right")) {
+		} else if (Input.GetAxis("Horizontal") > 0) {
 			horizontal = 1;
 			direction = new Vector3 (horizontal, vertical, 0);
 			movingDirection = new Vector3 (1, 0, 0);

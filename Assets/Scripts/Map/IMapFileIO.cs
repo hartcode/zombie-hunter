@@ -5,7 +5,7 @@ namespace AssemblyCSharp
 {
 	public interface IMapFileIO
 	{
-		MapData LoadFile(BinaryReader reader);
-		void SaveFile(MapData mapData, BinaryWriter writer);
+		MapBlockData LoadFile(BinaryReader reader);
+		void SaveFile(MapBlockData mapData, BinaryWriter writer);
 	}
 }
