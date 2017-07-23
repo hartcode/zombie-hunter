@@ -5,6 +5,7 @@ public class FreeRangeCharacterController : MyCharacterController
 {
 	private Vector3 movingDirection;
 	protected Vector3 lastposition;
+	public bool UseY = true;
 	// Update is called once per frame
 	void FixedUpdate ()
 	{
@@ -13,12 +14,20 @@ public class FreeRangeCharacterController : MyCharacterController
 		if (Input.GetAxis("Vertical") > 0) {
 			vertical = 1;
 			direction = new Vector3 (horizontal, vertical, 0);
-			movingDirection = new Vector3 (0, 1, 0);
+			if (UseY) {
+				movingDirection = new Vector3 (0, 1, 0);
+			} else {
+				movingDirection = new Vector3 (0, 0, 1);
+			}
 			Move ();
 		} else if (Input.GetAxis("Vertical") < 0) {
 			vertical = -1;
 			direction = new Vector3 (horizontal, vertical, 0);
-			movingDirection = new Vector3 (0, -1, 0);
+			if (UseY) {
+				movingDirection = new Vector3 (0, -1, 0);
+			} else {
+				movingDirection = new Vector3 (0, 0, -1);
+			}
 			Move ();
 		}
 		if (Input.GetAxis("Horizontal") < 0) {
