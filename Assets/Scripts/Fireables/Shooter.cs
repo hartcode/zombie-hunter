@@ -16,6 +16,7 @@ public class Shooter : MonoBehaviour {
 	public float FireSpeed = 2;
 	float lastFireTime;
 	ChangeColor colorChange;
+	public Vector3 direction;
 
 	// Use this for initialization
 	void Start () {
@@ -34,7 +35,10 @@ public class Shooter : MonoBehaviour {
 	void FixedUpdate () {
 		float currentTime = Time.time;
 		if (currentTime - lastFireTime > (FireSpeed) && bullet == null && Input.GetButton("Fire1") && myrenderer.isVisible) {
-			Vector3 direction = new Vector3(controller.direction.x, controller.direction.y, 0);
+			float characterWidth = asciiMap.characterWidth;
+			float characterHeight = asciiMap.characterHeight;
+
+			direction = new Vector3(controller.direction.x, controller.direction.y, 0);
 			if (direction.x > 0) {
 				direction.x = 1;
 			} else if (direction.x < 0) {
@@ -45,14 +49,17 @@ public class Shooter : MonoBehaviour {
 			} else if (direction.y < 0) {
 				direction.y = -1;
 			}
-			GameObject prefab = (GameObject)Instantiate (prefabBullet, gameObject.transform.position, Quaternion.identity,prefabParent.transform);
+			Vector3 fireableStartPosition = new Vector3(gameObject.transform.position.x + (direction.x*characterWidth), gameObject.transform.position.y + (direction.y*characterHeight), 0);
+			GameObject prefab = (GameObject)Instantiate (prefabBullet, fireableStartPosition, Quaternion.identity,prefabParent.transform);
 			bullet = prefab.GetComponent<FireableObject> ();
 			bullet.Fire (direction);
 			//if (!audio.isPlaying) {
 				aaudio.PlayOneShot (fireSound, 0.1F);
 			//}
 			lastFireTime = Time.time;
-			colorChange.Restart ();
+			if (colorChange != null) {
+				colorChange.Restart ();
+			}
 		}
 		// make sure the audio stops if the bullet stops
 		if (bullet == null && aaudio.isPlaying) {

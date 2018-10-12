@@ -164,6 +164,8 @@ public class AsciiMapScript : MonoBehaviour
 			if (mapBlockView == null) {
 				throw new MissingComponentException ("Expected to find the MapBlockView Component");
 			}
+			mapBlockView.characterHeight = characterHeight;
+			mapBlockView.characterWidth = characterWidth;
 			mapBlockView.AutoSave = AutoSave;
 			worlds [x, y] = world;
 			this.mapBlocks [x, y] = mapBlockView;
