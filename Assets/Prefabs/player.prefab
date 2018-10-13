@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 92000010206238246}
   - component: {fileID: 124000010752072140}
   - component: {fileID: 81000013414054018}
+  - component: {fileID: 114181516232378982}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -59,8 +60,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011798221636}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.0500001, y: -7.1, z: 0}
-  m_LocalScale: {x: 1.25, y: 1.25, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4000012754455178}
   m_Father: {fileID: 0}
@@ -72,13 +73,13 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010573586146}
-  m_LocalRotation: {x: 0, y: 0, z: 0.38268343, w: 0.92387956}
-  m_LocalPosition: {x: 1, y: -1, z: -10}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4000012657094288}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 45}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &20000013474506204
 Camera:
   m_ObjectHideFlags: 1
@@ -99,11 +100,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
+  near clip plane: 0
+  far clip plane: 0.01
   field of view: 20
-  orthographic: 0
-  orthographic size: 1.5
+  orthographic: 1
+  orthographic size: 0.49776787
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -155,14 +156,14 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.08, y: 0.16}
+    oldSize: {x: 1, y: 2}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.08, y: 0.16}
+  m_Size: {x: 1, y: 2}
   m_EdgeRadius: 0
 --- !u!81 &81000013414054018
 AudioListener:
@@ -285,7 +286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSpeed: 1.5
-  direction: {x: 0, y: 1, z: 0}
+  direction: {x: -0.04837679, y: 0, z: 0}
 --- !u!114 &114000011193158852
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -302,7 +303,7 @@ MonoBehaviour:
     type: 2}
   WaitTime: 0.2
   characterController: {fileID: 114000010841240332}
-  raycastDistance: 0.16
+  raycastDistance: 1
 --- !u!114 &114000012596502092
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -318,10 +319,25 @@ MonoBehaviour:
   prefabParent: {fileID: 0}
   prefabBullet: {fileID: 1000011731385530, guid: babbafb0edd9e854da2613cb1c805b89,
     type: 2}
-  myrenderer: {fileID: 0}
+  myrenderer: {fileID: 212000011196308878}
   asciiMap: {fileID: 0}
-  fireSound: {fileID: 0}
+  fireSound: {fileID: 8300000, guid: bd90552a0adcf49c9b564d1745dee578, type: 3}
   FireSpeed: 2
+  direction: {x: 0, y: 1, z: 0}
+--- !u!114 &114181516232378982
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010573586146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceceee33b8d482e40836f216086bf26b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  referenceOrthographicSize: 8
+  referencePixelsPerUnit: 8
+  overrides: []
 --- !u!124 &124000010752072140
 Behaviour:
   m_ObjectHideFlags: 1
