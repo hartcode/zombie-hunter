@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4000010324102456}
   - component: {fileID: 50000012375526302}
-  - component: {fileID: 114000013814830022}
   - component: {fileID: 82972025641246102}
   - component: {fileID: 114063462965504120}
   - component: {fileID: 70819001823532482}
@@ -64,6 +63,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1806472199600738
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4651607622217462}
+  - component: {fileID: 114442909791746550}
+  - component: {fileID: 61461723875450354}
+  m_Layer: 9
+  m_Name: Examinable
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &4000010324102456
 Transform:
   m_ObjectHideFlags: 1
@@ -76,6 +92,7 @@ Transform:
   m_Children:
   - {fileID: 4319777233565222}
   - {fileID: 4477909206758700}
+  - {fileID: 4651607622217462}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -105,6 +122,19 @@ Transform:
   m_Father: {fileID: 4000010324102456}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4651607622217462
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1806472199600738}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4000010324102456}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &50000012375526302
 Rigidbody2D:
   serializedVersion: 4
@@ -131,6 +161,31 @@ BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1595148308023700}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 2}
+  m_EdgeRadius: 0
+--- !u!61 &61461723875450354
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1806472199600738}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -260,19 +315,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &114000013814830022
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012399226074}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13066966896de2b4cb0d2b9b76cb8200, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Title: A Column
-  Description: This looks like an old support column or possibly a marker.
 --- !u!114 &114063462965504120
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -302,6 +344,19 @@ MonoBehaviour:
   characterWidth: 1
   characterHeight: 2
   mapBlockView: {fileID: 0}
+--- !u!114 &114442909791746550
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1806472199600738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13066966896de2b4cb0d2b9b76cb8200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Title: A Column
+  Description: This looks like an old support column or possibly a marker.
 --- !u!212 &212031991477439590
 SpriteRenderer:
   m_ObjectHideFlags: 1
