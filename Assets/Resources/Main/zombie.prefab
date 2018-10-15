@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 82791986837767262}
   - component: {fileID: 114217722306575608}
   - component: {fileID: 114107785835165496}
+  - component: {fileID: 70006192032388528}
   m_Layer: 0
   m_Name: zombie
   m_TagString: Untagged
@@ -226,7 +227,7 @@ BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013199439202}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 6200000, guid: 13407d6e50662584e988a0d79150de18, type: 2}
   m_IsTrigger: 0
@@ -245,6 +246,21 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 2}
   m_EdgeRadius: 0
+--- !u!70 &70006192032388528
+CapsuleCollider2D:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013199439202}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1, y: 2}
+  m_Direction: 0
 --- !u!70 &70044876448984370
 CapsuleCollider2D:
   m_ObjectHideFlags: 1
@@ -419,7 +435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f4486186a16515438d9763c5ba2c401, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterSpeed: 1.5
+  characterSpeed: 15
   MoveStepTime: 10
   DirectionStepTime: 40
 --- !u!114 &114000013498639416
@@ -491,12 +507,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddb98209327b141509972d2311b84fd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterSpeed: 1.5
+  characterSpeed: 15
   direction: {x: 0, y: 0}
   MoveStepTime: 10
   asciiMapScript: {fileID: 0}
   player: {fileID: 0}
-  showInspectorPath: 0
+  showInspectorPath: 1
   inspectorPrefab: {fileID: 1879399854488414, guid: 4bb58c8791610459ea3e191046ebb4b5,
     type: 2}
 --- !u!198 &198000010263589212
