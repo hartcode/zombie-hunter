@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff0d0b71969437f419fbbcd854a8c1ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireableSpeed: 2
+  fireableSpeed: 16
   ShooterTag: Player
 --- !u!212 &212000012984869254
 SpriteRenderer:

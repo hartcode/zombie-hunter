@@ -258,7 +258,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.08, y: 0.16}
+  m_Size: {x: 1, y: 2}
   m_Direction: 0
 --- !u!82 &82477570778382102
 AudioSource:
@@ -631,7 +631,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1.5
+      scalar: 15
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -5072,7 +5072,7 @@ ParticleSystemRenderer:
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
-  m_MaxParticleSize: 0.006
+  m_MaxParticleSize: 0.003
   m_CameraVelocityScale: 0
   m_VelocityScale: 0
   m_LengthScale: 2
