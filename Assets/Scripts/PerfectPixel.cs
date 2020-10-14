@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 [System.Serializable]
